@@ -1,0 +1,96 @@
+h2 {
+  text-align: center;
+  padding: 25px 0 50px 0;
+}
+
+.null {
+  text-align: center;
+}
+
+.card-container {
+  margin: 0 100px 50px 100px ;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); 
+  gap: 20px; 
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  height: 480px; 
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+.figure-image {
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.card-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 10px; 
+  height: 100px; 
+}
+
+.figure-series {
+  font-size: 12px;
+}
+
+.figure-name {
+  font-size: 16px;
+}
+
+.figure-series, .figure-name {
+  margin: 0;
+  line-height: 1.2;
+  font-weight: bold;
+  font-family: Lato; //change font
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; 
+  -moz-box-orient: vertical; 
+  -moz-line-clamp: 2; 
+  -ms-box-orient: vertical; 
+  -ms-line-clamp: 2; 
+  line-clamp: 2; 
+  box-orient: vertical; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-actions {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.card-actions button {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: #696969;
+  transition: background-color 0.3s ease; 
+
+  &.active {
+      background-color: #ff4081;
+  }
+}
+
+.card-actions mat-icon {
+  color: white; /* Default icon color */
+}
+  

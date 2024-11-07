@@ -1,0 +1,42 @@
+<mat-toolbar>
+    <a routerLink="figures-showcase" class="figures-showcase">
+        <span>Collectible Figurines</span>
+    </a>
+
+    <div class="spacer"></div>
+
+    <!-- <div class="search-container">
+         <mat-form-field class="search-input" appearance="outline">
+            <input placeholder="Szukaj..." [(ngModel)]="searchTerm" (input)="searchFigures()">
+        </mat-form-field> 
+        <input type="text" placeholder="Szukaj..." [(ngModel)]="searchTerm" (input)="searchFigures()" class="search-input">
+         <button class="search-button" (click)="searchFigures()">
+            <mat-icon>search</mat-icon>
+        </button>
+    </div> -->
+    <div class="search-container">
+        <mat-form-field class="search-input">
+            <input matInput placeholder="Szukaj..." [(ngModel)]="searchTerm" (input)="searchFigures()">
+        </mat-form-field>        
+        <!-- <div class="search-input">
+            <input placeholder="Szukaj..." [(ngModel)]="searchTerm" (input)="searchFigures()">
+        </div>    -->
+    </div>
+    
+    <div class="profile-language">
+        <button mat-icon-button class="profile-icon">
+            <mat-icon fontIcon="person"></mat-icon>
+        </button>
+        <div class="vertical-divider"></div>
+        <button mat-button class="language-button">PL</button>
+    </div>
+</mat-toolbar>
+
+<mat-toolbar class="menu-toolbar">
+    <nav>
+        <a mat-button routerLink="">Nowości</a>
+        <a mat-button routerLink="">Kategorie</a>
+        <a mat-button routerLink="fandoms">Fandomy</a>
+        <a mat-button routerLink="">Ekskluzywne</a>
+    </nav>
+</mat-toolbar>

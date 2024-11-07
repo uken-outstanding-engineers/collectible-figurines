@@ -1,0 +1,67 @@
+<div class="container">
+    <mat-card class="card">
+        <div class="form-content">
+            <div 
+                class="login-section" 
+                [ngClass]="{ 'slide-up': !showSignUp, 'flex-signup-active': showSignUp }"
+            >
+                <div *ngIf="!showSignUp()" class="form-group">
+                    <mat-form-field appearance="fill" class="half-width">
+                        <mat-label>Username</mat-label>
+                        <input matInput id="username" type="text" />
+                    </mat-form-field>
+                </div>
+                <div *ngIf="!showSignUp()" class="form-group">
+                    <mat-form-field appearance="fill" class="half-width">
+                        <mat-label>Password</mat-label>
+                        <input matInput id="password" type="password" />
+                    </mat-form-field>
+                </div>
+                <button mat-raised-button color="primary" class="login-button" (click)="showLoginForm()">
+                    Log In
+                    <mat-icon fontIcon="person"></mat-icon>
+                </button>
+            </div>
+
+            <div class="divider-container">
+                <div class="divider"></div>
+            </div>
+  
+            <div 
+                class="signup-section" 
+                [ngClass]="{ 'slide-up': !showSignUp, 'flex-signup-active': showSignUp }"
+            >
+                <div *ngIf="showSignUp()" class="form-group">
+                    <mat-form-field appearance="fill" class="half-width">
+                        <mat-label>Username</mat-label>
+                        <input matInput id="signup-username" type="text" />
+                    </mat-form-field>
+                </div>
+                <div *ngIf="showSignUp()" class="form-group">
+                    <mat-form-field appearance="fill" class="half-width">
+                        <mat-label>Email</mat-label>
+                        <input matInput id="signup-email" type="email" />
+                    </mat-form-field>
+                </div>
+                <div *ngIf="showSignUp()" class="form-group">
+                    <mat-form-field appearance="fill" class="half-width">
+                        <mat-label>Password</mat-label>
+                        <input matInput id="signup-password" type="password" />
+                    </mat-form-field>
+                </div>
+                <div *ngIf="showSignUp()" class="form-group">    
+                    <mat-form-field appearance="fill" class="half-width">
+                        <mat-label>Confirm Password</mat-label>
+                        <input matInput id="signup-confirm-password" type="password" />
+                    </mat-form-field>
+                </div>
+                <button mat-raised-button color="accent" class="signup-button" (click)="showSignUpForm()">
+                    Sign Up
+                    <mat-icon fontIcon="person_add"></mat-icon> 
+                </button>
+            </div>
+            
+        </div>
+    </mat-card>
+</div>
+  
