@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +16,7 @@ import { FandomService } from '../fandoms/fandom.service';
 
 interface FunkoNode {
   name: string;
+  id?: number;
   checked?: boolean; 
   children?: FunkoNode[]; 
 }
@@ -74,6 +76,8 @@ export class FiguresShowcaseComponent implements OnInit {
   dataFilters = new MatTreeFlatDataSource<FunkoNode, FunkoFlatNode>(this.treeControl, this.treeFlattener);
   hasChild = (_: number, node: FunkoFlatNode) => node.expandable;
 
+  selectedFilters: string[] = [];
+
   figures: Figure[] = [];
   filteredFigures: Figure[] = [];
   paginatedFigures: Figure[] = [];
@@ -105,13 +109,19 @@ export class FiguresShowcaseComponent implements OnInit {
     },
   ];
 
-  constructor(private figureService: FigureService, private fandomService: FandomService,) {
+  constructor(
+    private figureService: FigureService, 
+    private fandomService: FandomService,
+    private route: ActivatedRoute,
+  ) {
     //this.dataFilters.data = TREE_DATA;
   }
 
+  fandomId: number | undefined; 
+
   ngOnInit(): void {
     this.loadTreeData();
-    this.loadFigures();
+    //this.loadFigures();
     
     //Fandoms
     this.fandomService.getFandoms().subscribe(fandoms => {
@@ -123,6 +133,28 @@ export class FiguresShowcaseComponent implements OnInit {
       this.figures = data;
       this.filterFigures();
     });
+
+    this.TREE_DATA = this.TREE_DATA; 
+
+    this.route.queryParams.subscribe(params => {
+      const fandomId = params['fandomId'];
+      if (fandomId) {
+        this.TREE_DATA.forEach(category => {
+          category.children?.forEach(node => {
+            if (node.id == fandomId) {
+              //node.checked = true;
+              this.onCheckboxChange(node);
+            }
+          });
+        });
+      }
+    });
+    // this.route.queryParams.subscribe((params) => {
+      
+    //   this.fandomId = +params['fandomId']; 
+    //   //console.log(this.fandomId);
+    // });
+    //console.log(this.TREE_DATA);
   }
 
   loadTreeData(): void {
@@ -130,7 +162,7 @@ export class FiguresShowcaseComponent implements OnInit {
       const licenseNode = this.TREE_DATA.find(node => node.name === 'LICENCJA');
       if (licenseNode) {
         licenseNode.children = fandoms.map(fandom => ({
-          id: fandom.id, // dodaj id
+          id: fandom.id,
           name: fandom.name,
           checked: false,
         }));
@@ -195,58 +227,42 @@ export class FiguresShowcaseComponent implements OnInit {
   //   this.filterFigures(); // Uruchamiamy filtrowanie
   // }
 
-  selectedFandoms: any[] = []; // Tablica wybranych fandomów
+  selectedFandoms: any[] = []; 
 
   onFandomChange(fandom: any): void {
     const index = this.selectedFandoms.indexOf(fandom);
     
-    if (index === -1) {
-      // Jeśli fandom nie jest w tablicy, dodaj go
-      this.selectedFandoms.push(fandom);
-    } else {
-      // Jeśli już jest, usuń go
-      this.selectedFandoms.splice(index, 1);
-    }
-
-    console.log("Selected fandoms:", this.selectedFandoms);
-    this.filterFigures(); // Uruchamiamy filtrowanie
+    // if (index === -1) {
+    //   this.selectedFandoms.push(fandom);
+    // } else {
+    //   this.selectedFandoms.splice(index, 1);
+    // }
+  
+    //console.log("Selected fandoms:", this.selectedFandoms);
+    this.filterFigures(); 
   }
 
   
   filterFigures(): void {
-    const selectedFilters = this.treeControl.dataNodes
-      .filter(node => node.checked)
-      .map(node => node.name);
-  
+    const selectedFilters = this.selectedFilters; 
+    
     const filteredData = this.figures.filter(figure => {
-      const matchesFandom = this.selectedFandom
-        ? figure.fandomId === this.fandoms.find(fandom => fandom.name === this.selectedFandom)?.id
-        : true;
-  
       const matchesFilters = selectedFilters.length > 0 ? (
         (selectedFilters.includes('Chase') && figure.chase) ||
         (selectedFilters.includes('Glow in Dark') && figure.glowInDark) ||
         (selectedFilters.includes('Flocked') && figure.flocked) ||
-        (selectedFilters.includes('Exclusive') && figure.exclusive)
+        (selectedFilters.includes('Exclusive') && figure.exclusive) ||
+        (selectedFilters.some(filter => 
+          this.fandoms.some(fandom => fandom.name === filter && fandom.id === figure.fandomId)
+        ))
       ) : true;
-  
-      return matchesFandom && matchesFilters;
+      return matchesFilters;
     });
-
-    // console.log("Selected filters:", selectedFilters);
-    // console.log("Selected fandom:", this.selectedFandom);
-    // console.log("Fandoms:", this.fandoms);
-    // console.log("Figures before filtering:", this.figures);
-    // console.log("Filtered figures:", filteredData);
-
   
-    this.filteredFigures = filteredData;
-    this.currentPage = 0;
+    this.filteredFigures = filteredData; 
     this.paginate();
   }
   
-  
-
   getFigureCount(node: FunkoFlatNode): number {
     if (node.name === 'Chase') {
       return this.figures.filter(figure => figure.chase).length;
@@ -260,9 +276,15 @@ export class FiguresShowcaseComponent implements OnInit {
     if (node.name === 'Exclusive') {
       return this.figures.filter(figure => figure.exclusive).length;
     }
+
+    const selectedFandom = this.fandoms.find(fandom => fandom.name === node.name);
+
+    if (selectedFandom) {
+      return this.figures.filter(figure => figure.fandomId === selectedFandom.id).length;
+    }
+
     return 0; 
   }
-
 
   toggleActive(figure: Figure): void {
     figure.isActive = !figure.isActive;
@@ -293,8 +315,18 @@ export class FiguresShowcaseComponent implements OnInit {
     }, 250);
   }
  
-  onCheckboxChange(node: FunkoFlatNode): void {
+  onCheckboxChange(node: any): void {
     node.checked = !node.checked;
+
+    if (node.checked) {
+      this.selectedFilters.push(node.name); 
+    } else {
+      const index = this.selectedFilters.indexOf(node.name);
+      if (index !== -1) {
+        this.selectedFilters.splice(index, 1); 
+      }
+    }
+
     this.filterFigures();
   }
 }

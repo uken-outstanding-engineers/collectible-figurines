@@ -260,6 +260,10 @@
     color: white; /* Default icon color */
 }
 
+.hidden {
+    display: none;
+}
+
 @media (max-width: 1200px) {
     .card-container {
         gap: 15px; 
