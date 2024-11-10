@@ -1,5 +1,6 @@
 .main-container {
     display: flex;
+    //flex-direction: column;
     align-items: flex-start;
     margin: 5% 5% 5% 5%;
 }
@@ -25,6 +26,12 @@
     padding: 10px 0; 
     border-bottom: 2px solid #ddd; 
 }
+
+// .filter-button {
+//     display: none;
+//     align-items: center;
+//     gap: 8px;
+// }
 
 .filters-container mat-tree {
     width: 100%; 
@@ -264,6 +271,24 @@
     display: none;
 }
 
+.filter-button {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: inherit;
+}
+
+.filter-button span {
+    font-family: Lato;
+    font-weight: bold;
+    margin-top: 2.5px;
+}
+
+
 @media (max-width: 1200px) {
     .card-container {
         gap: 15px; 
@@ -271,17 +296,29 @@
 }
 
 @media (max-width: 900px) {
+    .main-container {
+        flex-direction: column;
+    }
+
     .card-container {
         gap: 10px; 
     }
 
+    .filter-button {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
     .filters-container {
-        display: none; //remove
+        width: 95%;
+        margin: 0 5% 20px 0;
+        //display: none;
     }
 
     .paginator {
         margin: 0;
-      }
+    }
     
     .card-container {
         margin: 0;
@@ -304,7 +341,6 @@
         width: 30px;
         margin: 0 5px;
         font-size: 0.875rem;
-
     }
 }
   

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -72,25 +72,8 @@ export class FiguresShowcaseComponent implements OnInit {
     node => node.children,
   );
   
-
   dataFilters = new MatTreeFlatDataSource<FunkoNode, FunkoFlatNode>(this.treeControl, this.treeFlattener);
   hasChild = (_: number, node: FunkoFlatNode) => node.expandable;
-
-  selectedFilters: string[] = [];
-
-  figures: Figure[] = [];
-  filteredFigures: Figure[] = [];
-  paginatedFigures: Figure[] = [];
-  hoverTimeouts: { [key: string]: any } = {};
-
-  fandoms: any[] = []; 
-  selectedFandom: string | null = null; 
-
-  /* Pagination variables */
-  currentPage = 0;
-  pageSize = 5;
-  totalPages = 1;
-  pages: number[] = [];
 
   private TREE_DATA: FunkoNode[] = [
     {
@@ -117,7 +100,26 @@ export class FiguresShowcaseComponent implements OnInit {
     //this.dataFilters.data = TREE_DATA;
   }
 
+  selectedFilters: string[] = [];
+
+  figures: Figure[] = [];
+  filteredFigures: Figure[] = [];
+  paginatedFigures: Figure[] = [];
+  hoverTimeouts: { [key: string]: any } = {};
+
+  fandoms: any[] = []; 
+  selectedFandom: string | null = null; 
+
+  /* Pagination variables */
+  currentPage = 0;
+  pageSize = 8;
+  totalPages = 1;
+  pages: number[] = [];
+
   fandomId: number | undefined; 
+
+  isMobile: boolean = window.innerWidth < 900;
+  showFilters: boolean = false;
 
   ngOnInit(): void {
     this.loadTreeData();
@@ -171,12 +173,23 @@ export class FiguresShowcaseComponent implements OnInit {
     });
   }
   
-
   loadFigures(): void {
     this.figureService.getFigures().subscribe(data => {
       this.figures = data;
       this.filterFigures();
     });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.isMobile = event.target.innerWidth < 900;
+    if (!this.isMobile) {
+      this.showFilters = false;  
+    }
+  }
+
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
   }
   
   paginate(): void {

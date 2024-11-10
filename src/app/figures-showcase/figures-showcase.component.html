@@ -1,6 +1,14 @@
 <div class="main-container">
 
-  <div class="filters-container">
+  <button 
+    class="filter-button" 
+    (click)="toggleFilters()" 
+    *ngIf="isMobile">
+    <mat-icon>filter_list</mat-icon>
+    <span>Filtry</span>
+  </button>
+
+  <div class="filters-container" *ngIf="!isMobile || showFilters">
     <h2 class="title">FILTRY</h2>
   
     <mat-tree [dataSource]="dataFilters" [treeControl]="treeControl">

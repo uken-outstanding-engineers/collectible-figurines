@@ -1,0 +1,26 @@
+
+<div class="card-container">
+    <mat-card *ngFor="let figure of displayedFigures" class="card" appearance="outlined">
+        <div class="image-container">
+            <img 
+                mat-card-image 
+                [src]="figure.imageUrl" 
+                [alt]="figure.name" 
+                (mouseover)="onMouseOver(figure, $event)" 
+                (mouseout)="onMouseOut(figure, $event)" 
+                class="figure-image"
+            >
+        </div>
+        <mat-card-content class="card-content">
+            <p class="figure-series">{{ figure.series }}</p>
+            <br>
+            <p class="figure-name">{{ figure.name }}</p>
+            
+        </mat-card-content>
+        <mat-card-actions class="card-actions">
+            <!-- <button mat-mini-fab [ngClass]="{'active': figure.isActive}" (click)="toggleActive(figure)">
+                <mat-icon>favorite</mat-icon>
+            </button> -->
+        </mat-card-actions>
+    </mat-card>
+</div>

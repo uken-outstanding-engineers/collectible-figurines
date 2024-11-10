@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FandomService } from './fandom.service';
+import { FigureService, Figure } from '../figures-showcase/figure.service';
 import { Fandom } from './fandom.model';
-import { Router } from '@angular/router';  // Dodaj Router
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { forkJoin, map } from 'rxjs';
 
 @Component({
   selector: 'app-fandoms',
@@ -15,12 +17,28 @@ export class FandomsComponent {
   fandoms: Fandom[] = [];
   filteredFandoms: Fandom[] = [];
 
-  constructor(private fandomService: FandomService, private router: Router) {}
+  constructor(
+    private fandomService: FandomService, 
+    private figureService: FigureService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.fandomService.getFandoms().subscribe(data => {
-      this.fandoms = data;
-      this.filteredFandoms = data;
+    this.fandomService.getFandoms().subscribe(fandoms => {
+      const fandomsWithFigures$ = fandoms.map(fandom =>
+        this.figureService.getFiguresByFandomId(fandom.id).pipe(
+          map((figures: Figure[]) => ({
+            fandom,
+            hasFigures: figures.length > 0
+          }))
+        )
+      );
+
+      forkJoin(fandomsWithFigures$).subscribe(results => {
+        this.filteredFandoms = results
+          .filter(result => result.hasFigures)
+          .map(result => result.fandom);
+      });
     });
   }
 

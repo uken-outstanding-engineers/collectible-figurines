@@ -1,48 +1,47 @@
-/* Dodaj czcionki Lato i Courier Prime z Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Courier+Prime&display=swap');
 
-.login-container {
+.register-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     max-width: 400px;
-    margin: 100px auto;
+    margin: 30px auto;
     padding: 40px;
     color: #333333;
     font-family: 'Lato', sans-serif;
 }
 
-.login-title {
+.register-title {
     font-size: 2rem;
     font-weight: bold;
     margin-bottom: 8px;
 }
 
-.login-subtitle {
+.register-subtitle {
     font-size: 1rem;
     color: #666666;
     margin-bottom: 36px;
     font-family: 'Courier Prime', monospace; 
 }
 
-.login-input {
+.register-input {
     width: 100%;
     margin-bottom: 16px;
 }
 
-.login-button {
+.register-button {
     width: 100%;
     background-color: #2e2a2a;
     color: #ffffff;
     font-family: 'Lato', sans-serif;
 }
 
-.login-links {
+.register-links {
     display: flex;
-    flex-direction: column; /* Układa elementy w kolumnie */
-    gap: 10px; /* Odstęp między tekstami */
+    flex-direction: column; 
+    gap: 10px; 
     margin-top: 50px;
-    text-align: center; /* Wyśrodkowanie tekstów */
+    text-align: center;
 }
 
 .link-text {
@@ -67,17 +66,17 @@
 }
 
 @media (max-width: 768px) { 
-    .login-container {
+    .register-container {
         margin: 0 auto;
     }
 }
 
 @media (max-width: 568px) { 
-    .login-title {
+    .register-title {
         font-size: 1.8rem;
     }
 
-    .login-subtitle {
+    .register-subtitle {
         font-size: 0.9rem;
     }
 
@@ -85,4 +84,3 @@
         font-size: 12px;
     }
 }
-
