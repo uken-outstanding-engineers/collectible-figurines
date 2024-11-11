@@ -97,24 +97,54 @@ export class FiguresShowcaseComponent implements OnInit {
   dataFilters = new MatTreeFlatDataSource<FunkoNode, FunkoFlatNode>(this.treeControl, this.treeFlattener);
   hasChild = (_: number, node: FunkoFlatNode) => node.expandable;
 
-  setTreeData(): void {
-    this.TREE_DATA = [
-      {
-        name: this.translate.instant('figures-showcase.variants'),
-        children: [
-          { name: 'Exclusive', checked: false },
-          { name: 'Chase', checked: false },
-          { name: 'Glow in Dark', checked: false },
-          { name: 'Flocked', checked: false },
+  // setTreeData(): void {
+  //   console.log(this.translate.instant('figures-showcase.variants'));
+  //   this.TREE_DATA = [
+  //     {
+  //       name: this.translate.instant('figures-showcase.variants'),
+  //       children: [
+  //         { name: 'Exclusive', checked: false },
+  //         { name: 'Chase', checked: false },
+  //         { name: 'Glow in Dark', checked: false },
+  //         { name: 'Flocked', checked: false },
           
-        ],
-      },
-      {
-        name: 'LICENCJA',
-        children: [],
-      },
-    ];
+  //       ],
+  //     },
+  //     {
+  //       name: 'LICENCJA',
+  //       children: [],
+  //     },
+  //   ];
+  // }
+
+  setTreeData(): void {
+    this.translate.get(['figures-showcase.variants', 'figures-showcase.license']).subscribe(translations => {
+      // Uzyskujemy przetłumaczone wartości dla 'variants' i 'license'
+      const variantTranslation = translations['figures-showcase.variants'];
+      const licenseTranslation = translations['figures-showcase.license'];
+
+      this.TREE_DATA = [
+        {
+          name: variantTranslation,  
+          children: [
+            { name: 'Exclusive', checked: false },
+            { name: 'Chase', checked: false },
+            { name: 'Glow in Dark', checked: false },
+            { name: 'Flocked', checked: false },
+          ],
+        },
+        {
+          name: licenseTranslation, 
+          children: [],  
+        },
+      ];
+        
+      this.loadTreeData(licenseTranslation);  
+      this.dataFilters.data = [...this.TREE_DATA]; 
+    });
   }
+  
+  
 
   selectedFilters: string[] = [];
 
@@ -138,7 +168,7 @@ export class FiguresShowcaseComponent implements OnInit {
   showFilters: boolean = false;
 
   ngOnInit(): void {
-    this.loadTreeData();
+    //this.loadTreeData();
     //this.loadFigures();
     
     //Fandoms
@@ -175,9 +205,9 @@ export class FiguresShowcaseComponent implements OnInit {
     //console.log(this.TREE_DATA);
   }
 
-  loadTreeData(): void {
+  loadTreeData(license: string): void {
     this.fandomService.getFandoms().subscribe(fandoms => {
-      const licenseNode = this.TREE_DATA.find(node => node.name === 'LICENCJA');
+      const licenseNode = this.TREE_DATA.find(node => node.name === license);
       if (licenseNode) {
         licenseNode.children = fandoms.map(fandom => ({
           id: fandom.id,

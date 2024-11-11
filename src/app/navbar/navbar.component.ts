@@ -39,9 +39,10 @@ import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-transla
 })
 export class NavbarComponent {
   
+  currentLanguage: string = 'pl';
+
   searchTerm: string = '';
 
-  
   translatedText: string;
 
   constructor(
@@ -83,9 +84,10 @@ export class NavbarComponent {
     this.isMenuOpen = false;
   }
 
-  changeLanguage(lang: string) {
-    this.languageService.switchLanguage(lang);
-    this.translatedText = this.translate.instant('collectible_figures');
+   changeLanguage(lang: string): void {
+    this.translate.use(lang); 
+    this.currentLanguage = lang;  
+    this.translatedText = this.translate.instant('collectible_figures');  
   }
   
 }

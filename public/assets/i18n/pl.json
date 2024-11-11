@@ -1,4 +1,9 @@
 {
+    "figures-showcase": {
+        "filters": "FILTRY",
+        "variants": "WARIANTY",
+        "license": "LICENCJA"
+    },
     "navbar": {
         "collectible_figures": "Figurki Kolekcjonerskie",
         "search_placeholder": "Szukaj..."

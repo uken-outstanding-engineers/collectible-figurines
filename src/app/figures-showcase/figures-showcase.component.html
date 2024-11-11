@@ -5,11 +5,11 @@
     (click)="toggleFilters()" 
     *ngIf="isMobile">
     <mat-icon>filter_list</mat-icon>
-    <span>Filtry</span>
+    <span>{{ 'figures-showcase.filters' | translate }}</span>
   </button>
 
   <div class="filters-container" *ngIf="!isMobile || showFilters">
-    <h2 class="title">FILTRY</h2>
+    <h2 class="title">{{ 'figures-showcase.filters' | translate }}</h2>
   
     <mat-tree [dataSource]="dataFilters" [treeControl]="treeControl">
       
