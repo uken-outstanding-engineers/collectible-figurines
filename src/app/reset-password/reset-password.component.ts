@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reset-password',
@@ -9,7 +10,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   imports: [    
     MatInputModule,
     MatButtonModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    TranslateModule
   ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss'

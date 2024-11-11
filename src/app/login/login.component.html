@@ -1,25 +1,25 @@
 <div class="login-container">
-    <h1 class="login-title">ZALOGUJ SIĘ</h1>
-    <p class="login-subtitle">Wprowadź swój email i hasło:</p>
+    <h1 class="login-title">{{ 'login.login' | translate }}</h1>
+    <p class="login-subtitle">{{ 'login.enter-data' | translate }}</p>
     
     <mat-form-field class="login-input" appearance="fill">
-      <mat-label>Email</mat-label>
+      <mat-label>{{ 'login.email' | translate }}</mat-label>
       <input matInput type="email" required>
     </mat-form-field>
     
     <mat-form-field class="login-input" appearance="fill">
-      <mat-label>Hasło</mat-label>
+      <mat-label>{{ 'login.password' | translate }}</mat-label>
       <input matInput type="password" required>
     </mat-form-field>
     
-    <button mat-raised-button color="primary" class="login-button">ZALOGUJ</button>
+    <button mat-raised-button color="primary" class="login-button">{{ 'login.logInButton' | translate }}</button>
     
     <div class="login-links">
         <p class="link-text">
-            <span>Nowy użytkownik? </span><a href="/register">Utwórz swoje konto</a>
+            <span>{{ 'login.newUser' | translate }} </span><a href="/register">{{ 'login.createAccount' | translate }}</a>
         </p>
         <p class="link-text">
-            <span>Zapomniałeś hasła? </span><a href="/reset-password">Odzyskaj hasło</a>
+            <span>{{ 'login.lostPassword' | translate }} </span><a href="/reset-password">{{ 'login.recoverPassword' | translate }}</a>
         </p>
     </div>      
   </div>

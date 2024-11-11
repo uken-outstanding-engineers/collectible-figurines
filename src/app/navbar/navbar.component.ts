@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import i18next from 'i18next';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -9,9 +10,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 
+import { LanguageModule } from '../language/language.module';
+
 import { FigureService } from '../figures-showcase/figure.service';
+import { LanguageService } from '../language/language.service'; 
 
 import { MatIconModule } from '@angular/material/icon';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
@@ -25,7 +30,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     MatIconModule,
     FormsModule,
-    MatInputModule
+    MatInputModule,
+    LanguageModule,
+    TranslateModule  
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
@@ -34,7 +41,25 @@ export class NavbarComponent {
   
   searchTerm: string = '';
 
-  constructor(private figureService: FigureService, private router: Router) {} 
+  
+  translatedText: string;
+
+  constructor(
+    private figureService: FigureService, 
+    private router: Router,
+    private languageService: LanguageService,
+    private translate: TranslateService,
+    //private cdr: ChangeDetectorRef
+  ) {
+    this.translatedText = this.translate.instant('collectible_figures');
+    //console.log('Initial translation:', this.translatedText);
+  } 
+
+  // ngOnInit() {
+  //   this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+  //     this.cdr.detectChanges(); 
+  //   });
+  // }
 
   onSearch(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -57,4 +82,10 @@ export class NavbarComponent {
   closeMenu() {
     this.isMenuOpen = false;
   }
+
+  changeLanguage(lang: string) {
+    this.languageService.switchLanguage(lang);
+    this.translatedText = this.translate.instant('collectible_figures');
+  }
+  
 }

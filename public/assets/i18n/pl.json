@@ -1,0 +1,37 @@
+{
+    "navbar": {
+        "collectible_figures": "Figurki Kolekcjonerskie",
+        "search_placeholder": "Szukaj..."
+    },
+    "login": {
+        "login": "ZALOGUJ SIĘ",
+        "enter-data": "Wprowadź swój email i hasło:",
+        "email": "Email",
+        "password": "Hasło",
+        "logInButton": "ZALOGUJ",
+        "newUser": "Nowy użytkownik?",
+        "createAccount": "Utwórz swoje konto",
+        "lostPassword": "Zapomniałeś hasła?",
+        "recoverPassword": "Odzyskaj hasło"
+    },
+    "register": {
+        "register": "ZAREJESTRUJ SIĘ",
+        "enter-data": "Wprowadź swoje dane:",
+        "username": "Nazwa użytkownik",
+        "email": "Email",
+        "password": "Hasło",
+        "confirmPassword": "Potwierdź hasło",
+        "registerButton": "ZAREJESTRUJ ",
+        "alreadyAccount": "Masz już konto?",
+        "loginHere": "Zaloguj się"
+    },
+    "reset-password": {
+        "recover": "ODZYSKIWANIE HASŁA",
+        "enter-data": "Wprowadź swój email:",
+        "email": "Email",
+        "recoverButton": "ODZYSKAJ",
+        "rememberedPassword": "Pamiętasz hasło?",
+        "backToLogin": "Wróc do logownia"
+    }
+}
+  

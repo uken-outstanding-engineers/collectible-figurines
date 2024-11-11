@@ -14,6 +14,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { FigureService, Figure } from './figure.service';
 import { FandomService } from '../fandoms/fandom.service';
 
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 interface FunkoNode {
   name: string;
   id?: number;
@@ -39,12 +41,32 @@ interface FunkoFlatNode {
     MatTreeModule,
     MatCheckboxModule,
     MatPaginatorModule,
-    MatIconModule
+    MatIconModule,
+    TranslateModule 
   ],
   templateUrl: './figures-showcase.component.html',
   styleUrl: './figures-showcase.component.scss'
 })
 export class FiguresShowcaseComponent implements OnInit {
+
+  constructor(
+    private figureService: FigureService, 
+    private fandomService: FandomService,
+    private route: ActivatedRoute,
+    private translate: TranslateService
+  ) {
+    //this.dataFilters.data = TREE_DATA;
+
+    this.setTreeData();  // Początkowe ustawienie danych drzewa
+
+    // Zaktualizuj dane za każdym razem, gdy język się zmienia
+    this.translate.onLangChange.subscribe(() => {
+      this.setTreeData();
+    });
+  }
+
+  private TREE_DATA: FunkoNode[] = [];
+
   
   private _transformer = (node: FunkoNode, level: number): FunkoFlatNode => {
     return {
@@ -75,29 +97,23 @@ export class FiguresShowcaseComponent implements OnInit {
   dataFilters = new MatTreeFlatDataSource<FunkoNode, FunkoFlatNode>(this.treeControl, this.treeFlattener);
   hasChild = (_: number, node: FunkoFlatNode) => node.expandable;
 
-  private TREE_DATA: FunkoNode[] = [
-    {
-      name: 'WARIANTY',
-      children: [
-        { name: 'Exclusive', checked: false },
-        { name: 'Chase', checked: false },
-        { name: 'Glow in Dark', checked: false },
-        { name: 'Flocked', checked: false },
-        
-      ],
-    },
-    {
-      name: 'LICENCJA',
-      children: [],
-    },
-  ];
-
-  constructor(
-    private figureService: FigureService, 
-    private fandomService: FandomService,
-    private route: ActivatedRoute,
-  ) {
-    //this.dataFilters.data = TREE_DATA;
+  setTreeData(): void {
+    this.TREE_DATA = [
+      {
+        name: this.translate.instant('figures-showcase.variants'),
+        children: [
+          { name: 'Exclusive', checked: false },
+          { name: 'Chase', checked: false },
+          { name: 'Glow in Dark', checked: false },
+          { name: 'Flocked', checked: false },
+          
+        ],
+      },
+      {
+        name: 'LICENCJA',
+        children: [],
+      },
+    ];
   }
 
   selectedFilters: string[] = [];

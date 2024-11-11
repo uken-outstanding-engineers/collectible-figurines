@@ -1,0 +1,42 @@
+{
+    "figures-showcase": {
+        "filters": "FILTERS",
+        "variants": "VARIANTS",
+        "license": "LICENSE"
+    },
+    "navbar": {
+        "collectible_figures": "Collectible Figurines",
+        "search_placeholder": "Search..."
+    },
+    "login": {
+        "login": "LOG IN",
+        "enter-data": "Enter your email and password:",
+        "email": "Email",
+        "password": "Password",
+        "logInButton": "LOG IN",
+        "newUser": "New user?",
+        "createAccount": "Create your account",
+        "lostPassword": "Lost password?",
+        "recoverPassword": "Recover password"
+    },
+    "register": {
+        "register": "CREATE ACCOUNT",
+        "enter-data": "Enter your data:",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "registerButton": "CREATE ACCOUNT",
+        "alreadyAccount": "Already have an account?",
+        "loginHere": "Login here"
+    },
+    "reset-password": {
+        "recover": "RECOVER PASSWORD",
+        "enter-data": "Enter your email:",
+        "email": "Email",
+        "recoverButton": "RECOVER",
+        "rememberedPassword": "Remembered your password?",
+        "backToLogin": "Back to login"
+    }
+}
+  

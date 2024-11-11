@@ -1,32 +1,32 @@
 <div class="register-container">
-    <h1 class="register-title">ZAREJESTRUJ SIĘ</h1>
-    <p class="register-subtitle">Wprowadź swoje dane:</p>
+    <h1 class="register-title">{{ 'register.register' | translate }}</h1>
+    <p class="register-subtitle">{{ 'register.enter-data' | translate }}</p>
     
     <mat-form-field class="register-input" appearance="fill">
-      <mat-label>Nazwa użytkownika</mat-label>
+      <mat-label>{{ 'register.username' | translate }}</mat-label>
       <input matInput type="text" required>
     </mat-form-field>
     
     <mat-form-field class="register-input" appearance="fill">
-      <mat-label>Email</mat-label>
+      <mat-label>{{ 'register.email' | translate }}</mat-label>
       <input matInput type="email" required>
     </mat-form-field>
     
     <mat-form-field class="register-input" appearance="fill">
-      <mat-label>Hasło</mat-label>
+      <mat-label>{{ 'register.password' | translate }}</mat-label>
       <input matInput type="password" required>
     </mat-form-field>
 
     <mat-form-field class="register-input" appearance="fill">
-      <mat-label>Potwierdź hasło</mat-label>
+      <mat-label>{{ 'register.confirmPassword' | translate }}</mat-label>
       <input matInput type="password" required>
     </mat-form-field>
     
-    <button mat-raised-button color="primary" class="register-button">ZAREJESTRUJ</button>
+    <button mat-raised-button color="primary" class="register-button">{{ 'register.registerButton' | translate }}</button>
     
     <div class="register-links">
         <p class="link-text">
-            <span>Masz już konto? </span><a href="/login">Zaloguj się</a>
+            <span>{{ 'register.alreadyAccount' | translate }} </span><a href="/login">{{ 'register.loginHere' | translate }}</a>
         </p>
     </div>      
 </div>

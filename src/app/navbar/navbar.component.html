@@ -1,6 +1,7 @@
 <mat-toolbar>
     <a routerLink="figures-showcase" class="figures-showcase">
-        <span>Collectible Figurines</span>
+        <!-- <span>Collectible Figurines</span> -->
+        <span>{{ 'navbar.collectible_figures' | translate }}</span>
     </a>
 
     <div class="spacer"></div>
@@ -16,7 +17,7 @@
     </div> -->
     <div class="search-container">
         <mat-form-field class="search-input">
-            <input matInput placeholder="Szukaj..." [(ngModel)]="searchTerm" (input)="searchFigures()">
+            <input matInput placeholder="{{ 'navbar.search_placeholder' | translate }}" [(ngModel)]="searchTerm" (input)="searchFigures()">
         </mat-form-field>        
         <!-- <div class="search-input">
             <input placeholder="Szukaj..." [(ngModel)]="searchTerm" (input)="searchFigures()">
@@ -28,7 +29,8 @@
             <mat-icon fontIcon="person"></mat-icon>
         </button>
         <div class="vertical-divider"></div>
-        <button mat-button class="language-button">PL</button>
+        <button mat-button class="language-button" (click)="changeLanguage('pl')">PL</button>
+        <button mat-button class="language-button" (click)="changeLanguage('en')">EN</button>
     </div>
 </mat-toolbar>
 

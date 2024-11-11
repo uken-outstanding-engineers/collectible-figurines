@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     CommonModule, 
     MatInputModule,
     MatButtonModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    TranslateModule  
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
