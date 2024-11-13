@@ -178,7 +178,14 @@
 .paginator .paginator-button:disabled {
     cursor: not-allowed;
     color: rgba(0, 0, 0, 0.38);
-}
+    opacity: 0;
+    pointer-events: none; 
+  }
+  
+  .paginator .paginator-button:not(:disabled) {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
 .card-container {
     margin-left: 100px;

@@ -20,7 +20,7 @@
             <mat-checkbox class="node-checkbox" (change)="onCheckboxChange(node)"></mat-checkbox>
             <span [ngClass]="{'bold-text': node.checked}" class="node-name">{{ node.name }}</span>
           </label>
-          <span class="figure-count">&lpar;{{ getFigureCount(node) }}&rpar;</span> <!-- Liczba figurek -->
+          <span class="figure-count">&lpar;{{ getFigureCount(node) }}&rpar;</span>
         </div>
       </mat-tree-node>
       
@@ -45,8 +45,7 @@
       <button 
         (click)="previousPage()" 
         [disabled]="currentPage === 0" 
-        class="paginator-button"
-        [ngClass]="{'hidden': currentPage === 0}"> 
+        class="paginator-button"> 
         <mat-icon>chevron_left</mat-icon>
       </button>
       
@@ -63,8 +62,7 @@
       <button 
         (click)="nextPage()" 
         [disabled]="currentPage >= totalPages - 1" 
-        class="paginator-button"
-        [ngClass]="{'hidden': currentPage >= totalPages - 1}">
+        class="paginator-button">
         <mat-icon>chevron_right</mat-icon>
       </button>
     </div>
@@ -96,5 +94,30 @@
       </mat-card>
     </div>
 
+    <div class="paginator">
+      <button 
+        (click)="previousPage()" 
+        [disabled]="currentPage === 0" 
+        class="paginator-button"> 
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      
+      <div class="page-buttons">
+        <button 
+          *ngFor="let page of pages" 
+          class="page-button" 
+          [class.active]="page === currentPage" 
+          (click)="goToPage(page)">
+          {{ page + 1 }}
+        </button>
+      </div>
+      
+      <button 
+        (click)="nextPage()" 
+        [disabled]="currentPage >= totalPages - 1" 
+        class="paginator-button">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
   </div> 
 </div>
