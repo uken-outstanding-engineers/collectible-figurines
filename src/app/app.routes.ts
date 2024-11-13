@@ -7,10 +7,12 @@ import { FandomsComponent } from './fandoms/fandoms.component';
 import { NewsComponent } from './news/news.component';
 import { RegisterComponent } from './register/register.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { FigureComponent } from './figure/figure.component';
 
 export const routes: Routes = [
     { path: '', component: FiguresShowcaseComponent},
     { path: 'figures-showcase', component: FiguresShowcaseComponent},
+    { path: 'figure/:id', component: FigureComponent},
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'reset-password', component: ResetPasswordComponent },

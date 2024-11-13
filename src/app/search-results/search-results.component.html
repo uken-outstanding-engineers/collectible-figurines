@@ -6,14 +6,16 @@
 <div class="card-container">
   <mat-card *ngFor="let figure of searchResults$ | async" class="card">
     <div class="image-container">
-      <img 
-        mat-card-image 
-        [src]="figure.imageUrl" 
-        [alt]="figure.name" 
-        (mouseover)="onMouseOver(figure, $event)" 
-        (mouseout)="onMouseOut(figure, $event)" 
-        class="figure-image"
-      >
+      <a [routerLink]="['/figure', figure.id]">
+        <img 
+          mat-card-image 
+          [src]="figure.imageUrl" 
+          [alt]="figure.name" 
+          (mouseover)="onMouseOver(figure, $event)" 
+          (mouseout)="onMouseOut(figure, $event)" 
+          class="figure-image"
+        >
+      </a>
     </div>
     <mat-card-content class="card-content">
       <p class="figure-series">{{ figure.series }}</p>

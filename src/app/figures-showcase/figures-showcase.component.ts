@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -42,7 +42,8 @@ interface FunkoFlatNode {
     MatCheckboxModule,
     MatPaginatorModule,
     MatIconModule,
-    TranslateModule 
+    TranslateModule ,
+    RouterModule
   ],
   templateUrl: './figures-showcase.component.html',
   styleUrl: './figures-showcase.component.scss'

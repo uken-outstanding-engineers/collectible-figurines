@@ -1,0 +1,33 @@
+<div class="figure-details" *ngIf="figure">
+    <div class="figure-gallery">
+        <img [src]="currentImageUrl" alt="Figure Image" class="figure-main-image mobile">
+
+        <div class="image-thumbnails">
+            <img 
+            [src]="figure.imageUrl" 
+            (click)="showImage('main')" 
+            [class.selected]="currentImageUrl === figure.imageUrl" 
+            alt="Main Thumbnail" 
+            class="thumbnail-image">
+            
+            <img 
+            [src]="figure.hoverImageUrl" 
+            (click)="showImage('hover')" 
+            [class.selected]="currentImageUrl === figure.hoverImageUrl" 
+            alt="Hover Thumbnail" 
+            class="thumbnail-image">
+        </div>
+
+        <img [src]="currentImageUrl" alt="Figure Image" class="figure-main-image pc">
+    </div>
+    
+    <div class="figure-info">
+        <h2>{{ figure.name }} - {{ figure.series }}</h2>
+        <ul>
+            <li *ngIf="figure.chase">Chase Edition</li>
+            <li *ngIf="figure.glowInDark">Glow in the Dark</li>
+            <li *ngIf="figure.flocked">Flocked</li>
+            <li *ngIf="figure.exclusive">Exclusive Edition</li>
+        </ul>
+    </div>
+</div>
