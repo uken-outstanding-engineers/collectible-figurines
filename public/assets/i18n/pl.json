@@ -37,6 +37,10 @@
         "recoverButton": "ODZYSKAJ",
         "rememberedPassword": "Pamiętasz hasło?",
         "backToLogin": "Wróc do logownia"
+    },
+    "search-result": {
+        "serachResult": "WYNIKI WYSZUKIWANIA",
+        "notFound": "Nie znaleziono figurek."
     }
 }
   

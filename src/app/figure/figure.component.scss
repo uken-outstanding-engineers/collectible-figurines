@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Courier+Prime&display=swap');
+
 .figure-details {
     display: flex;
     gap: 75px;
@@ -7,9 +8,6 @@
     padding: 40px;
     max-width: 80%;
     margin: 25px auto 0 auto;
-    //background-color: #fff;
-    //border-radius: 12px;
-    //box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .figure-gallery {
@@ -55,8 +53,6 @@
 .figure-info {
     flex: 1;
     text-align: center;
-    //background-color: #fff;
-    //padding: 50px;
     border-radius: 30px;
 }
 
@@ -110,6 +106,17 @@ li {
         flex-direction: row; 
         justify-content: center;
         margin-top: 15px;
+    }
+}
+
+@media (max-width: 556px) {
+    h2 {
+        font-size: 2rem;
+    }
+
+    .thumbnail-image {
+        width: 70px;
+        height: 70px;
     }
 }
   

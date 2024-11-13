@@ -36,8 +36,7 @@ export class NewsComponent implements OnInit {
   loadFigures() {
     this.figureService.getFigures().subscribe((allFigures) => {
       this.figures = allFigures;
-      // Wyświetl tylko ostatnie 5 figurek
-      this.displayedFigures = this.figures.slice(-4);  // Pobieramy ostatnie 5 elementów
+      this.displayedFigures = this.figures.slice(-4);  
     });
   }
 

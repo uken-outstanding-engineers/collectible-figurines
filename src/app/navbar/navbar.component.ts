@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import i18next from 'i18next';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -16,7 +15,8 @@ import { FigureService } from '../figures-showcase/figure.service';
 import { LanguageService } from '../language/language.service'; 
 
 import { MatIconModule } from '@angular/material/icon';
-import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -50,17 +50,33 @@ export class NavbarComponent {
     private router: Router,
     private languageService: LanguageService,
     private translate: TranslateService,
-    //private cdr: ChangeDetectorRef
   ) {
     this.translatedText = this.translate.instant('collectible_figures');
-    //console.log('Initial translation:', this.translatedText);
   } 
 
-  // ngOnInit() {
-  //   this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-  //     this.cdr.detectChanges(); 
-  //   });
-  // }
+  ngOnInit(): void {
+    // Restore searchTerm from localStorage if on /search-results page
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if (event.url === '/search-results') {
+          this.searchTerm = localStorage.getItem('searchTerm') || '';
+          if (this.searchTerm) {
+            this.loadSearchResults(this.searchTerm); // Load results if searchTerm exists
+          }
+        } else {
+          // Clear searchTerm if navigating away from /search-results
+          this.searchTerm = '';
+          localStorage.removeItem('searchTerm'); // Optionally clear localStorage
+        }
+      });
+  }
+
+  private loadSearchResults(term: string) {
+    this.figureService.searchFiguresByNameOrSeries(term).subscribe(results => {
+      this.figureService.setSearchResults(results);
+    });
+  }
 
   onSearch(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -68,20 +84,9 @@ export class NavbarComponent {
   }
 
   searchFigures() {
-    this.figureService.searchFiguresByName(this.searchTerm).subscribe(results => {
-      this.figureService.setSearchResults(results); 
-      this.router.navigate(['/search-results']);
-    });
-  }
-
-  isMenuOpen = false;
-
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
-
-  closeMenu() {
-    this.isMenuOpen = false;
+    localStorage.setItem('searchTerm', this.searchTerm); // Save search term in localStorage
+    this.loadSearchResults(this.searchTerm); // Load search results
+    this.router.navigate(['/search-results']);
   }
 
    changeLanguage(lang: string): void {
@@ -89,5 +94,14 @@ export class NavbarComponent {
     this.currentLanguage = lang;  
     this.translatedText = this.translate.instant('collectible_figures');  
   }
-  
+
+  // isMenuOpen = false;
+
+  // toggleMenu() {
+  //   this.isMenuOpen = !this.isMenuOpen;
+  // }
+
+  // closeMenu() {
+  //   this.isMenuOpen = false;
+  // }
 }

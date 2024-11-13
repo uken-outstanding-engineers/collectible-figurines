@@ -120,7 +120,6 @@ export class FiguresShowcaseComponent implements OnInit {
 
   setTreeData(): void {
     this.translate.get(['figures-showcase.variants', 'figures-showcase.license']).subscribe(translations => {
-      // Uzyskujemy przetłumaczone wartości dla 'variants' i 'license'
       const variantTranslation = translations['figures-showcase.variants'];
       const licenseTranslation = translations['figures-showcase.license'];
 

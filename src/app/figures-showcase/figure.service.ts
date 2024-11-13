@@ -125,14 +125,14 @@ export class FigureService {
     this.searchResults.next(results); 
   }
 
-  searchFiguresByName(searchTerm: string): Observable<Figure[]> {
-    return this.getFigures().pipe(
-      map(figures => 
-        figures.filter(figure => 
-          figure.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      )
+  searchFiguresByNameOrSeries(term: string): Observable<Figure[]> {
+    const lowerCaseTerm = term.toLowerCase();
+    const filteredFigures = this.figures.filter(
+      (figure) =>
+        figure.name.toLowerCase().includes(lowerCaseTerm) ||
+        figure.series.toLowerCase().includes(lowerCaseTerm)
     );
+    return of(filteredFigures);
   }
 
   getFiguresByFandomId(fandomId: number): Observable<Figure[]> {

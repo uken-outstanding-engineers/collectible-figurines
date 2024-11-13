@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-search-results',
@@ -15,7 +16,8 @@ import { RouterModule } from '@angular/router';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
-    RouterModule
+    RouterModule,
+    TranslateModule
   ],
   templateUrl: './search-results.component.html',
   styleUrl: './search-results.component.scss'

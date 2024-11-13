@@ -37,6 +37,10 @@
         "recoverButton": "RECOVER",
         "rememberedPassword": "Remembered your password?",
         "backToLogin": "Back to login"
+    },
+    "search-result": {
+        "serachResult": "SEARCH RESULTS",
+        "notFound": "No figurines found."
     }
 }
   

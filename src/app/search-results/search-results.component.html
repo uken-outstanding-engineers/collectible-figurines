@@ -1,6 +1,6 @@
-<h2>WYNIKI WYSZUKIWANIA</h2>
+<h2>{{ 'search-result.serachResult' | translate }}</h2>
 <div *ngIf="(searchResults$ | async)?.length === 0" class="null">
-  Nie znaleziono figurek.
+  {{ 'search-result.notFound' | translate }}
 </div>
 
 <div class="card-container">
