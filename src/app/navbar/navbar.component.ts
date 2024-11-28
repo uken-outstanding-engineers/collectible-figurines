@@ -55,19 +55,23 @@ export class NavbarComponent {
   } 
 
   ngOnInit(): void {
-    // Restore searchTerm from localStorage if on /search-results page
+    const savedLanguage = localStorage.getItem('language') || 'pl';
+    console.log(savedLanguage);
+    this.currentLanguage = savedLanguage;
+    this.languageService.switchLanguage(savedLanguage);
+    this.translate.use(savedLanguage); 
+
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         if (event.url === '/search-results') {
           this.searchTerm = localStorage.getItem('searchTerm') || '';
           if (this.searchTerm) {
-            this.loadSearchResults(this.searchTerm); // Load results if searchTerm exists
+            this.loadSearchResults(this.searchTerm); 
           }
         } else {
-          // Clear searchTerm if navigating away from /search-results
           this.searchTerm = '';
-          localStorage.removeItem('searchTerm'); // Optionally clear localStorage
+          localStorage.removeItem('searchTerm'); 
         }
       });
   }
@@ -84,16 +88,18 @@ export class NavbarComponent {
   }
 
   searchFigures() {
-    localStorage.setItem('searchTerm', this.searchTerm); // Save search term in localStorage
-    this.loadSearchResults(this.searchTerm); // Load search results
+    localStorage.setItem('searchTerm', this.searchTerm); 
+    this.loadSearchResults(this.searchTerm); 
     this.router.navigate(['/search-results']);
   }
 
-   changeLanguage(lang: string): void {
-    this.translate.use(lang); 
-    this.currentLanguage = lang;  
+  changeLanguage(lang: string): void {
+    this.languageService.switchLanguage(lang); 
+    this.currentLanguage = lang;                
     this.translatedText = this.translate.instant('collectible_figures');  
+    console.log(lang);
   }
+  
 
   // isMenuOpen = false;
 

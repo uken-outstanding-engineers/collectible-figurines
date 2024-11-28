@@ -17,7 +17,7 @@
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding [ngClass]="{'hidden': getFigureCount(node) === 0}">
         <div class="tree-node-content" *ngIf="getFigureCount(node) > 0">
           <label class="node-label">
-            <mat-checkbox class="node-checkbox" (change)="onCheckboxChange(node)"></mat-checkbox>
+            <mat-checkbox class="node-checkbox" [checked]="node.checked" (change)="onCheckboxChange(node)"></mat-checkbox>
             <span [ngClass]="{'bold-text': node.checked}" class="node-name">{{ node.name }}</span>
           </label>
           <span class="figure-count">&lpar;{{ getFigureCount(node) }}&rpar;</span>

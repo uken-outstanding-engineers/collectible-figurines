@@ -56,11 +56,8 @@ export class FiguresShowcaseComponent implements OnInit {
     private route: ActivatedRoute,
     private translate: TranslateService
   ) {
-    //this.dataFilters.data = TREE_DATA;
+    this.setTreeData();
 
-    this.setTreeData();  // Początkowe ustawienie danych drzewa
-
-    // Zaktualizuj dane za każdym razem, gdy język się zmienia
     this.translate.onLangChange.subscribe(() => {
       this.setTreeData();
     });
@@ -98,26 +95,6 @@ export class FiguresShowcaseComponent implements OnInit {
   dataFilters = new MatTreeFlatDataSource<FunkoNode, FunkoFlatNode>(this.treeControl, this.treeFlattener);
   hasChild = (_: number, node: FunkoFlatNode) => node.expandable;
 
-  // setTreeData(): void {
-  //   console.log(this.translate.instant('figures-showcase.variants'));
-  //   this.TREE_DATA = [
-  //     {
-  //       name: this.translate.instant('figures-showcase.variants'),
-  //       children: [
-  //         { name: 'Exclusive', checked: false },
-  //         { name: 'Chase', checked: false },
-  //         { name: 'Glow in Dark', checked: false },
-  //         { name: 'Flocked', checked: false },
-          
-  //       ],
-  //     },
-  //     {
-  //       name: 'LICENCJA',
-  //       children: [],
-  //     },
-  //   ];
-  // }
-
   setTreeData(): void {
     this.translate.get(['figures-showcase.variants', 'figures-showcase.license']).subscribe(translations => {
       const variantTranslation = translations['figures-showcase.variants'];
@@ -125,12 +102,12 @@ export class FiguresShowcaseComponent implements OnInit {
 
       this.TREE_DATA = [
         {
-          name: variantTranslation,  
+          name: variantTranslation,
           children: [
-            { name: 'Exclusive', checked: false },
-            { name: 'Chase', checked: false },
-            { name: 'Glow in Dark', checked: false },
-            { name: 'Flocked', checked: false },
+            { name: 'Exclusive', checked: this.selectedFilters.includes('Exclusive') },
+            { name: 'Chase', checked: this.selectedFilters.includes('Chase') },
+            { name: 'Glow in Dark', checked: this.selectedFilters.includes('Glow in Dark') },
+            { name: 'Flocked', checked: this.selectedFilters.includes('Flocked') },
           ],
         },
         {
@@ -144,8 +121,6 @@ export class FiguresShowcaseComponent implements OnInit {
     });
   }
   
-  
-
   selectedFilters: string[] = [];
 
   figures: Figure[] = [];
@@ -168,9 +143,6 @@ export class FiguresShowcaseComponent implements OnInit {
   showFilters: boolean = false;
 
   ngOnInit(): void {
-    //this.loadTreeData();
-    //this.loadFigures();
-    
     //Fandoms
     this.fandomService.getFandoms().subscribe(fandoms => {
       this.fandoms = fandoms; 
@@ -190,19 +162,12 @@ export class FiguresShowcaseComponent implements OnInit {
         this.TREE_DATA.forEach(category => {
           category.children?.forEach(node => {
             if (node.id == fandomId) {
-              //node.checked = true;
               this.onCheckboxChange(node);
             }
           });
         });
       }
     });
-    // this.route.queryParams.subscribe((params) => {
-      
-    //   this.fandomId = +params['fandomId']; 
-    //   //console.log(this.fandomId);
-    // });
-    //console.log(this.TREE_DATA);
   }
 
   loadTreeData(license: string): void {
@@ -280,28 +245,13 @@ export class FiguresShowcaseComponent implements OnInit {
     this.paginate();
   }
 
-  // onFandomChange(selectedFandom: string): void {
-  //   this.selectedFandom = selectedFandom;
-  //   console.log("Selected fandom:", this.selectedFandom); // Debug
-  //   this.filterFigures(); // Uruchamiamy filtrowanie
-  // }
-
   selectedFandoms: any[] = []; 
 
   onFandomChange(fandom: any): void {
     const index = this.selectedFandoms.indexOf(fandom);
-    
-    // if (index === -1) {
-    //   this.selectedFandoms.push(fandom);
-    // } else {
-    //   this.selectedFandoms.splice(index, 1);
-    // }
-  
-    //console.log("Selected fandoms:", this.selectedFandoms);
     this.filterFigures(); 
   }
 
-  
   filterFigures(): void {
     const selectedFilters = this.selectedFilters; 
     
@@ -376,16 +326,18 @@ export class FiguresShowcaseComponent implements OnInit {
  
   onCheckboxChange(node: any): void {
     node.checked = !node.checked;
-
+  
     if (node.checked) {
-      this.selectedFilters.push(node.name); 
+      this.selectedFilters.push(node.name);
     } else {
       const index = this.selectedFilters.indexOf(node.name);
       if (index !== -1) {
-        this.selectedFilters.splice(index, 1); 
+        this.selectedFilters.splice(index, 1);
       }
     }
-
+  
+    this.currentPage = 0;
     this.filterFigures();
   }
+  
 }

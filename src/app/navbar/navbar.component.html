@@ -16,8 +16,9 @@
             <mat-icon fontIcon="person"></mat-icon>
         </button>
         <div class="vertical-divider"></div>
-        <button mat-button class="language-button" *ngIf="currentLanguage === 'pl'" (click)="changeLanguage('en')">EN</button>
-        <button mat-button class="language-button" *ngIf="currentLanguage === 'en'" (click)="changeLanguage('pl')">PL</button>
+        
+        <button mat-button class="language-button" *ngIf="currentLanguage !== 'en'" (click)="changeLanguage('en')">EN</button>
+        <button mat-button class="language-button" *ngIf="currentLanguage !== 'pl'" (click)="changeLanguage('pl')">PL</button>
     </div>
 </mat-toolbar>
 
