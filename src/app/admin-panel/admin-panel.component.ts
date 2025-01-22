@@ -1,0 +1,85 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { AdminPanelFigurinesListComponent } from "../admin-panel-figurines-list/admin-panel-figurines-list.component";
+
+interface InterfaceNode {
+  name: string;
+  children?: InterfaceNode[];
+  icon?: string,
+}
+
+interface ExampleFlatNode {
+  expandable: boolean;
+  name: string;
+  level: number;
+  icon?: string;
+}
+
+const TREE_DATA: InterfaceNode[] = [
+  {
+    name: 'Collectible Figurines',
+    children: [
+      { name: 'Figurines list'}, 
+      { name: 'Categories list'}, 
+    ],
+    icon: 'smart_toy',
+  },
+  {
+    name: 'Users',
+    children: [
+      { name: 'Users list'}, 
+    ],
+    icon: 'groups',
+  },
+];
+
+@Component({
+  selector: 'app-admin-panel',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatTreeModule,
+    MatButtonModule,
+    AdminPanelFigurinesListComponent
+],
+  templateUrl: './admin-panel.component.html',
+  styleUrls: ['./admin-panel.component.scss'],
+})
+export class AdminPanelComponent {
+  private _transformer = (node: InterfaceNode, level: number): ExampleFlatNode => {
+    return {
+      expandable: !!node.children && node.children.length > 0,
+      name: node.name,
+      level: level,
+      icon: node.icon,
+    };
+  };
+  
+  treeControl = new FlatTreeControl<ExampleFlatNode>(
+    node => node.level,
+    node => node.expandable,
+  );
+
+  treeFlattener = new MatTreeFlattener(
+    this._transformer,
+    node => node.level,
+    node => node.expandable,
+    node => node.children,
+  );
+
+  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+
+  constructor() {
+    this.dataSource.data = TREE_DATA;
+  }
+
+  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+}

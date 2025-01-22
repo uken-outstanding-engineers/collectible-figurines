@@ -8,6 +8,8 @@ import { NewsComponent } from './news/news.component';
 import { RegisterComponent } from './register/register.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { FigureComponent } from './figure/figure.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { AdminPanelFigurinesListComponent } from './admin-panel-figurines-list/admin-panel-figurines-list.component';
 
 export const routes: Routes = [
     { path: '', component: FiguresShowcaseComponent},
@@ -19,6 +21,8 @@ export const routes: Routes = [
     { path: 'search-results', component: SearchResultsComponent },
     { path: 'fandoms', component: FandomsComponent },
     { path: 'news', component: NewsComponent },
+    { path: 'admin', component: AdminPanelComponent },
+    { path: 'admin-figurines', component: AdminPanelFigurinesListComponent },
 ];
 
 // @NgModule({

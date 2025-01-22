@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FiguresShowcaseComponent } from './figures-showcase/figures-showcase.component';
 import { LanguageModule } from './language/language.module';
@@ -10,8 +11,8 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   imports: [
     RouterOutlet,
+    CommonModule,
     NavbarComponent,
-    FiguresShowcaseComponent,
     LanguageModule,
     TranslateModule
   ],

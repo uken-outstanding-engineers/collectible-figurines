@@ -1,0 +1,27 @@
+.figurines-list-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 100%; /* Ensure the container takes full width */
+  }
+  
+  .full-width-table {
+    width: 100%; /* Table should take full width */
+    table-layout: auto; /* Let the table adjust its columns based on content */
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 100%; /* Make the table take up the full width */
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  

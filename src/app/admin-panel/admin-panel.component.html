@@ -1,0 +1,37 @@
+<mat-sidenav-container class="example-container">
+  <!-- Left menu -->
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="tree-node-content dashboard">
+      <mat-icon>cottage</mat-icon>
+        <span class="dashboard-name">Dashboard</span>
+    </div>
+    <span class="menu-title">Management</span>
+
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+
+      <!-- Bez dzieci -->
+      <mat-tree-node *matTreeNodeDef="let item" matTreeNodePadding class="child">
+        <div class="tree-node-content tree-child">
+          {{item.name}}
+        </div>
+      </mat-tree-node>
+
+      <!-- Z dziećmi -->
+      <mat-tree-node *matTreeNodeDef="let item; when: hasChild" matTreeNodePadding matTreeNodeToggle>
+        <div class="tree-node-content">
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span>{{ item.name }}</span>
+          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + item.name">
+            <mat-icon>{{treeControl.isExpanded(item) ? 'expand_more' : 'chevron_right'}}</mat-icon>
+          </button>
+        </div>
+      </mat-tree-node>
+    </mat-tree>
+  </mat-sidenav>
+  
+  <!-- Main content -->
+  <mat-sidenav-content class="main">
+    <app-admin-panel-figurines-list></app-admin-panel-figurines-list>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+  
