@@ -1,27 +1,192 @@
 .figurines-list-container {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 30px 50px 30px;
+  margin: 0 0 0 1%;
+}
+
+.description {
+  margin: 20px 0 40px 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.description h2 {
+  margin: 5px 0;
+}
+
+.description p {
+  margin: 0;
+  color: #757575;
+}
+
+.full-width-table {
+  table-layout: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%; 
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+img {
+  width: 50px;
+  height: 50px;
+}
+
+mat-paginator {
+  border-top: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+mat-icon {
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.action-cell {
+  text-align: center;
+  width: 50px; 
+}
+
+.action-icon {
+  vertical-align: initial !important;
+}
+
+.action-more:hover {
+  background-color: #e6e3e3 !important;
+}
+
+.action-more:focus {
+  background-color: #c9c8c8 !important;
+}
+
+::ng-deep.mat-mdc-button-ripple {
+  display: none;
+}
+
+.dialog-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+  font-family: 'Montserrat', sans-serif;
+
+  .dialog-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+  }
+
+  .dialog {
+    position: relative;
+    background: #ffffff;
     padding: 20px;
-    width: 100%; /* Ensure the container takes full width */
+    border-radius: 10px;
+    z-index: 1001;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 32px;
+      background: none;
+      border: none;
+      color: #333;
+      cursor: pointer;
+      font-weight: bold;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #f44336;
+      }
+    }
+
+    h2 {
+      margin: 0 0 15px 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333333;
+      text-align: left;
+    }
+
+    .warning-message {
+      display: flex;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+    
+    .warning-icon {
+      color: #ff9800;
+      font-size: 22px;
+      margin-right: 10px;
+    }
+    .button-group {
+      text-align: right;
+
+      button {
+        flex: 1;
+        padding: 5px 10px;
+        margin: 20px 5px 0 5px;
+        width: 50px;
+        font-size: 1rem;
+        font-weight: bold;
+        text-transform: uppercase; 
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &.yes {
+          background: linear-gradient(90deg, #4caf50, #66bb6a); // Gradient zielony
+          color: white;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+          &:hover {
+            background: linear-gradient(90deg, #43a047, #5cb85c); // Ciemniejszy gradient
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+          }
+        }
+
+        &.no {
+          background: linear-gradient(90deg, #f44336, #e57373); // Gradient czerwony
+          color: white;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+          &:hover {
+            background: linear-gradient(90deg, #e53935, #d32f2f); // Ciemniejszy gradient
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+          }
+        }
+      }
+    }
   }
-  
-  .full-width-table {
-    width: 100%; /* Table should take full width */
-    table-layout: auto; /* Let the table adjust its columns based on content */
-  }
-  
-  table {
-    border-collapse: collapse;
-    width: 100%; /* Make the table take up the full width */
-  }
-  
-  th, td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  th {
-    background-color: #f4f4f4;
-  }
-  
+}
+
+

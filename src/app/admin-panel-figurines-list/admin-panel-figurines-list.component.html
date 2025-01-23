@@ -1,60 +1,98 @@
 <div class="figurines-list-container">
-    <h2>Figurines List</h2>
-  
-    <table mat-table [dataSource]="figurines" class="mat-elevation-z8 full-width-table">
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>ID</th>
-        <td mat-cell *matCellDef="let figure">{{ figure.id }}</td>
-      </ng-container>
-  
-      <!-- Image Column -->
-      <ng-container matColumnDef="imageUrl">
-        <th mat-header-cell *matHeaderCellDef>Image</th>
-        <td mat-cell *matCellDef="let figure">
-          <img [src]="figure.imageUrl" alt="{{ figure.name }}" class="figurine-image"/>
-        </td>
-      </ng-container>
-  
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let figure">{{ figure.name }}</td>
-      </ng-container>
-  
-      <!-- Series Column -->
-      <ng-container matColumnDef="series">
-        <th mat-header-cell *matHeaderCellDef>Series</th>
-        <td mat-cell *matCellDef="let figure">{{ figure.series }}</td>
-      </ng-container>
-  
-      <!-- Chase Column -->
-      <ng-container matColumnDef="chase">
-        <th mat-header-cell *matHeaderCellDef>Chase</th>
-        <td mat-cell *matCellDef="let figure">{{ figure.chase ? 'Yes' : 'No' }}</td>
-      </ng-container>
-  
-      <!-- GlowInDark Column -->
-      <ng-container matColumnDef="glowInDark">
-        <th mat-header-cell *matHeaderCellDef>Glow In Dark</th>
-        <td mat-cell *matCellDef="let figure">{{ figure.glowInDark ? 'Yes' : 'No' }}</td>
-      </ng-container>
-  
-      <!-- Flocked Column -->
-      <ng-container matColumnDef="flocked">
-        <th mat-header-cell *matHeaderCellDef>Flocked</th>
-        <td mat-cell *matCellDef="let figure">{{ figure.flocked ? 'Yes' : 'No' }}</td>
-      </ng-container>
-  
-      <!-- Exclusive Column -->
-      <ng-container matColumnDef="exclusive">
-        <th mat-header-cell *matHeaderCellDef>Exclusive</th>
-        <td mat-cell *matCellDef="let figure">{{ figure.exclusive ? 'Yes' : 'No' }}</td>
-      </ng-container>
-  
-      <!-- Table Header and Row -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+  <div class="description">
+    <h2>List of Collectible Figurines</h2>
+    <p>Browsing and managing the database of collectible figurines</p>
   </div>
+
+  <table mat-table [dataSource]="figurines" class="mat-elevation-z8 full-width-table">
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let figure">{{ figure.id }}</td>
+    </ng-container>
+
+    <!-- Image Column -->
+    <ng-container matColumnDef="imageUrl">
+      <th mat-header-cell *matHeaderCellDef>Image</th>
+      <td mat-cell *matCellDef="let figure">
+        <img [src]="figure.imageUrl" alt="{{ figure.name }}" class="figurine-image"/>
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let figure">{{ figure.name }}</td>
+    </ng-container>
+
+    <!-- Series Column -->
+    <ng-container matColumnDef="series">
+      <th mat-header-cell *matHeaderCellDef>Series</th>
+      <td mat-cell *matCellDef="let figure">{{ figure.series }}</td>
+    </ng-container>
+
+    <!-- Variants Column -->
+    <ng-container matColumnDef="variants">
+      <th mat-header-cell *matHeaderCellDef>Variants</th>
+      <td mat-cell *matCellDef="let figure">
+        <ng-container *ngIf="getVariants(figure).length; else noVariants">
+          <span *ngFor="let variant of getVariants(figure); let isLast = last">
+            {{ variant }}<span *ngIf="!isLast">, </span>
+          </span>
+        </ng-container>
+        <ng-template #noVariants>---</ng-template>
+      </td>
+    </ng-container>
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let figure">
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="onEdit(figure)">
+            <mat-icon>edit</mat-icon>
+            <span>Edit</span>
+          </button>
+          <button mat-menu-item (click)="openDeleteDialog(figure.id, figure.name)">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+    
+    <!-- Table Header and Row -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
   
+  <mat-paginator 
+    [length]="figurines.data.length" 
+    [pageSize]="10" 
+    [pageSizeOptions]="[10, 20]" 
+    aria-label="Select page" 
+    class="mat-elevation-z8"
+  >
+  </mat-paginator>
+</div>
+
+<div class="dialog-container" *ngIf="dialogVisible">
+  <div class="dialog-backdrop" (click)="closeDeleteDialog()"></div>
+  <div class="dialog">
+    <button class="close-btn" (click)="closeDeleteDialog()">×</button>
+    <h2>Confirm</h2>
+    <div class="warning-message">
+      <mat-icon class="warning-icon">warning</mat-icon> <!-- Ikona ostrzeżenia -->
+      <p>Are you sure you want to delete: <strong>{{ selectedName }}</strong>?</p>
+    </div>
+    <div class="button-group">
+      <button class="no" (click)="closeDeleteDialog()">No</button>
+      <button class="yes" (click)="confirmDelete()">Yes</button>
+    </div>
+  </div>
+</div>
+
+

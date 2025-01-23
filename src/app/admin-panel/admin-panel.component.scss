@@ -1,5 +1,5 @@
-.example-container {
-    height: 100vh;
+.container {
+    min-height: 90vh;
     display: flex;
 }
   
@@ -9,9 +9,16 @@
     padding: 20px 10px;
     display: flex;
     flex-direction: column;
-    font-family: Lato, sans-serif; //zmienić czcionkę
+    font-family: 'Montserrat', sans-serif;
     font-size: 18px;
+    box-sizing: border-box;
+    z-index: 1 !important;
+    //display: none;
 }
+
+::ng-deep.mat-drawer-inner-container{
+    overflow: hidden !important;
+} 
 
 .dashboard {
     margin: 30px 0 40px 0;
@@ -48,7 +55,7 @@ mat-tree {
     padding: 10px;
     cursor: pointer;
     border-radius: 4px;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 mat-icon {
@@ -73,6 +80,7 @@ mat-tree-node {
     display: flex;
     align-items: normal;
     word-wrap: break-word;
+    font-family: 'Montserrat', sans-serif !important;
 }
 
 ::ng-deep .tree-node-content {
