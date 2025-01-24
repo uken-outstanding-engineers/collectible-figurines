@@ -13,6 +13,8 @@ import { LanguageModule } from '../language/language.module';
 
 import { FigureService } from '../api/figure.service';
 import { LanguageService } from '../language/language.service'; 
+import { UserService } from '../api/user.service';
+import { User } from '../api/user.model';
 
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -40,23 +42,35 @@ import { filter } from 'rxjs';
 export class NavbarComponent {
   
   currentLanguage: string = 'pl';
-
   searchTerm: string = '';
-
   translatedText: string;
+
+  isLoggedIn: boolean = true;
+  currentUser: User | null = null;
 
   constructor(
     private figureService: FigureService, 
     private router: Router,
     private languageService: LanguageService,
     private translate: TranslateService,
+    private userService: UserService
   ) {
     this.translatedText = this.translate.instant('collectible_figures');
   } 
 
+  logout(): void {
+    this.userService.logout();
+    this.isLoggedIn = false;
+    this.router.navigate(['/figures-showcase']);
+  }
+
   ngOnInit(): void {
+    this.userService.getLoggedInUser().subscribe(user => {
+      this.isLoggedIn = !!user; 
+      this.currentUser = user; 
+    });
+
     const savedLanguage = localStorage.getItem('language') || 'pl';
-    console.log(savedLanguage);
     this.currentLanguage = savedLanguage;
     this.languageService.switchLanguage(savedLanguage);
     this.translate.use(savedLanguage); 
@@ -97,7 +111,6 @@ export class NavbarComponent {
     this.languageService.switchLanguage(lang); 
     this.currentLanguage = lang;                
     this.translatedText = this.translate.instant('collectible_figures');  
-    console.log(lang);
   }
   
 

@@ -4,15 +4,15 @@
     
     <mat-form-field class="login-input" appearance="fill">
       <mat-label>{{ 'login.email' | translate }}</mat-label>
-      <input matInput type="email" required>
+      <input matInput [(ngModel)]="username" type="email" required>
     </mat-form-field>
     
     <mat-form-field class="login-input" appearance="fill">
       <mat-label>{{ 'login.password' | translate }}</mat-label>
-      <input matInput type="password" required>
+      <input matInput [(ngModel)]="password" type="password" required>
     </mat-form-field>
     
-    <button mat-raised-button color="primary" class="login-button">{{ 'login.logInButton' | translate }}</button>
+    <button mat-raised-button color="primary" class="login-button" (click)="login()">{{ 'login.logInButton' | translate }}</button>
     
     <div class="login-links">
         <p class="link-text">

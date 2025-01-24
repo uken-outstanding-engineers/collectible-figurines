@@ -56,8 +56,20 @@ export class AdminPanelFigurinesListComponent {
     return variants;
   }
 
-  onEdit(figure: Figure): void {
-    console.log('Edit action triggered for:', figure);
+  /* Add */
+  openAddDialog(): void {
+    this.editFigure = {
+      id: this.generateId(),
+      name: '',
+      series: '',
+      imageUrl: 'figurines-images/000000001a.jpg',
+      hoverImageUrl: 'figurines-images/000000001b.jpg',
+      chase: false,
+      glowInDark: false,
+      flocked: false,
+      exclusive: false,
+    };
+    this.editDialogVisible = true;
   }
 
   /* Edit */
@@ -88,15 +100,20 @@ export class AdminPanelFigurinesListComponent {
     this.editFigure = null;
   }
 
+  /* Edit & Add */
   saveChanges(): void {
     if (this.editFigure) {
       const index = this.figurines.data.findIndex(
         (figure) => figure.id === this.editFigure?.id
       );
       if (index !== -1) {
+        // Edycja istniejącej figurki
         this.figurines.data[index] = this.editFigure;
-        this.figurines._updateChangeSubscription();
+      } else {
+        // Dodanie nowej figurki
+        this.figurines.data.push(this.editFigure);
       }
+      this.figurines._updateChangeSubscription();
       this.closeEditDialog();
     }
   }
@@ -125,4 +142,12 @@ export class AdminPanelFigurinesListComponent {
       this.closeDeleteDialog();
     }
   }
+
+
+  private generateId(): number {
+    return this.figurines.data.length
+      ? Math.max(...this.figurines.data.map((f) => f.id)) + 1
+      : 1;
+  }
+  
 }

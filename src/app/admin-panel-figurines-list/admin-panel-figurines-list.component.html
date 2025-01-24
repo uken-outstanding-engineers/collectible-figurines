@@ -1,9 +1,15 @@
 <div class="figurines-list-container">
-  <div class="description">
-    <h2>List of Collectible Figurines</h2>
-    <p>Browsing and managing the database of collectible figurines</p>
+  <div class="header-container">
+    <div class="description">
+      <h2>List of Collectible Figurines</h2>
+      <p>Browsing and managing the database of collectible figurines</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openAddDialog()" class="add-figurine-button">
+      <mat-icon>add</mat-icon>
+      Add Figurine
+    </button>
   </div>
-
+  
   <table mat-table [dataSource]="figurines" class="mat-elevation-z8 full-width-table">
     <!-- ID Column -->
     <ng-container matColumnDef="id">

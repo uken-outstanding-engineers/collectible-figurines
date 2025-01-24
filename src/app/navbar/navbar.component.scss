@@ -62,25 +62,6 @@ mat-toolbar a {
     font-size: 24px; 
 }
 
-// :host ::ng-deep .mdc-button {
-//     -webkit-user-select: none;
-//     user-select: none;
-//     position: relative;
-//     display: inline-flex;
-//     align-items: center;
-//     justify-content: center;
-//     box-sizing: border-box;
-//     border: none;
-//     outline: none;
-//     line-height: inherit;
-//     overflow: visible;
-//     vertical-align: middle;
-//     background: rgba(0, 0, 0, 0);
-//     min-width: 52px;
-//     //padding: 0 8px;
-//     padding: 0;
-// }
-
 .profile-language {
     display: flex;
     align-items: center;
@@ -88,6 +69,11 @@ mat-toolbar a {
 
 .profile-icon {
     color: white;
+    margin-right: 16px;
+}
+
+.logged-in {
+    color: grey; 
     margin-right: 16px;
 }
 

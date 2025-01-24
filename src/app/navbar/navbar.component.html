@@ -12,9 +12,41 @@
     </div>
     
     <div class="profile-language">
-        <button mat-icon-button class="profile-icon" routerLink="/login">
+        <button 
+            mat-icon-button 
+            class="logged-in"
+            [matMenuTriggerFor]="menu" 
+            *ngIf="isLoggedIn; else loginRedirect"
+        >
             <mat-icon fontIcon="person"></mat-icon>
         </button>
+
+        <ng-template #loginRedirect>
+            <button mat-icon-button class="profile-icon" routerLink="/login">
+                <mat-icon fontIcon="person"></mat-icon>
+            </button>
+        </ng-template>
+
+        <mat-menu #menu="matMenu">
+            <!-- Admin Panel - only admin -->
+            <button mat-menu-item routerLink="/admin" *ngIf="currentUser?.permission === 'admin'">
+                <mat-icon>admin_panel_settings</mat-icon>
+                <span>Admin Panel</span>
+            </button>
+
+            <!-- Settings -->
+            <button mat-menu-item routerLink="/settings">
+                <mat-icon>settings</mat-icon>
+                <span>Ustawienia</span>
+            </button>
+
+            <!-- Logout -->
+            <button mat-menu-item (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                <span>Wyloguj</span>
+            </button>
+        </mat-menu>
+
         <div class="vertical-divider"></div>
         
         <button mat-button class="language-button" *ngIf="currentLanguage !== 'en'" (click)="changeLanguage('en')">EN</button>
