@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FigureService, Figure } from '../figures-showcase/figure.service';
+
+import { Figure } from '../api/figure.model';
+import { FigureService } from '../api/figure.service';
 
 @Component({
   selector: 'app-figure',
@@ -37,7 +39,8 @@ export class FigureComponent {
 
   showImage(type: 'main' | 'hover'): void {
     if (this.figure) {
-      this.currentImageUrl = type === 'main' ? this.figure.imageUrl : this.figure.hoverImageUrl;
+      //this.currentImageUrl = type === 'main' ? this.figure.imageUrl : this.figure.hoverImageUrl;
+      this.currentImageUrl = type === 'main' ? this.figure.imageUrl : this.figure.imageUrl;
     }
   }
 }

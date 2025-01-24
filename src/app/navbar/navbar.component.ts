@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { LanguageModule } from '../language/language.module';
 
-import { FigureService } from '../figures-showcase/figure.service';
+import { FigureService } from '../api/figure.service';
 import { LanguageService } from '../language/language.service'; 
 
 import { MatIconModule } from '@angular/material/icon';

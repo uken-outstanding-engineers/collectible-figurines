@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
@@ -7,11 +9,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { AdminPanelFigurinesListComponent } from "../admin-panel-figurines-list/admin-panel-figurines-list.component";
+import { AdminPanelUsersComponent } from "../admin-panel-users/admin-panel-users.component";
 
 interface InterfaceNode {
   name: string;
   children?: InterfaceNode[];
-  icon?: string,
+  icon?: string;
+  route?: string;
 }
 
 interface ExampleFlatNode {
@@ -19,21 +23,22 @@ interface ExampleFlatNode {
   name: string;
   level: number;
   icon?: string;
+  route?: string;
 }
 
 const TREE_DATA: InterfaceNode[] = [
   {
     name: 'Collectible Figurines',
     children: [
-      { name: 'Figurines list'}, 
-      { name: 'Categories list'}, 
+      { name: 'Figurines list', route: '/admin/figurines' }, 
+      { name: 'Categories list', route: '/admin/categories' }, 
     ],
     icon: 'smart_toy',
   },
   {
     name: 'Users',
     children: [
-      { name: 'Users list'}, 
+      { name: 'Users list', route: '/admin/users' }, 
     ],
     icon: 'groups',
   },
@@ -44,11 +49,11 @@ const TREE_DATA: InterfaceNode[] = [
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     MatSidenavModule,
     MatIconModule,
     MatTreeModule,
     MatButtonModule,
-    AdminPanelFigurinesListComponent
 ],
   templateUrl: './admin-panel.component.html',
   styleUrls: ['./admin-panel.component.scss'],
@@ -60,6 +65,7 @@ export class AdminPanelComponent {
       name: node.name,
       level: level,
       icon: node.icon,
+      route: node.route,
     };
   };
   
@@ -77,8 +83,14 @@ export class AdminPanelComponent {
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-  constructor() {
+  constructor(private router: Router) {
     this.dataSource.data = TREE_DATA;
+  }
+
+  navigateTo(route: string): void {
+    if (route) {
+      this.router.navigate([route]);
+    }
   }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;

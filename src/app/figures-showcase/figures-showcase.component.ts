@@ -11,8 +11,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { MatIconModule } from '@angular/material/icon';
 
-import { FigureService, Figure } from './figure.service';
-import { FandomService } from '../fandoms/fandom.service';
+import { Figure } from '../api/figure.model';
+import { FigureService } from '../api/figure.service';
+
+import { FandomService } from '../api/fandom.service';
 
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -306,7 +308,7 @@ export class FiguresShowcaseComponent implements OnInit {
       element.style.transition = 'opacity 0.5s ease-in-out';
       element.style.opacity = '0';
       setTimeout(() => {
-        element.src = figure.hoverImageUrl;
+        element.src = figure.hoverImageUrl ?? figure.imageUrl;
         element.style.opacity = '1';
       }, 250);
     }, 250);

@@ -52,7 +52,7 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="onEdit(figure)">
+          <button mat-menu-item (click)="openEditDialog(figure)">
             <mat-icon>edit</mat-icon>
             <span>Edit</span>
           </button>
@@ -79,13 +79,13 @@
   </mat-paginator>
 </div>
 
-<div class="dialog-container" *ngIf="dialogVisible">
+<div class="dialog-delete-container" *ngIf="dialogVisible">
   <div class="dialog-backdrop" (click)="closeDeleteDialog()"></div>
   <div class="dialog">
     <button class="close-btn" (click)="closeDeleteDialog()">×</button>
     <h2>Confirm</h2>
     <div class="warning-message">
-      <mat-icon class="warning-icon">warning</mat-icon> <!-- Ikona ostrzeżenia -->
+      <mat-icon class="warning-icon">warning</mat-icon>
       <p>Are you sure you want to delete: <strong>{{ selectedName }}</strong>?</p>
     </div>
     <div class="button-group">
@@ -94,5 +94,59 @@
     </div>
   </div>
 </div>
+
+<div class="dialog-edit-container" *ngIf="editDialogVisible">
+  <div class="dialog-backdrop" (click)="closeEditDialog()"></div>
+  <div class="dialog">
+    <h2>Edit Figurine</h2>
+    <form (ngSubmit)="saveChanges()" *ngIf="editFigure">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input 
+          id="name"
+          [(ngModel)]="editFigure.name"
+          name="name"
+          type="text"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="series">Series:</label>
+        <input
+          id="series"
+          [(ngModel)]="editFigure.series"
+          name="series"
+          type="text"
+          required
+        />
+      </div>
+
+      <div class="variants-container">
+        <h3>Select Variants</h3>
+        <div
+          class="variant-option"
+          *ngFor="let variant of variants"
+        >
+          <label>
+            <input
+              type="checkbox"
+              [(ngModel)]="editFigure[variant.key]"
+              [name]="variant.key"
+            />
+            {{ variant.label }}
+          </label>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="no" (click)="closeEditDialog()">Cancel</button>
+        <button type="submit" class="yes">Save</button>
+      </div>
+    </form>
+    <button class="close-btn" (click)="closeEditDialog()">×</button>
+  </div>
+</div>
+
 
 

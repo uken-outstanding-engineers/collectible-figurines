@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FigureService, Figure } from '../figures-showcase/figure.service';
 import { map, Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,6 +6,9 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+
+import { Figure } from '../api/figure.model';
+import { FigureService } from '../api/figure.service';
 
 
 @Component({
@@ -49,7 +51,7 @@ export class NewsComponent implements OnInit {
       element.style.transition = 'opacity 0.5s ease-in-out';
       element.style.opacity = '0';
       setTimeout(() => {
-        element.src = figure.hoverImageUrl;
+        element.src = figure.hoverImageUrl ?? figure.imageUrl;
         element.style.opacity = '1';
       }, 250);
     }, 250);

@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { FandomService } from './fandom.service';
-import { FigureService, Figure } from '../figures-showcase/figure.service';
-import { Fandom } from './fandom.model';
+import { FandomService } from '../api/fandom.service';
+import { Fandom } from '../api/fandom.model';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { forkJoin, map } from 'rxjs';
+
+import { Figure } from '../api/figure.model';
+import { FigureService } from '../api/figure.service';
 
 @Component({
   selector: 'app-fandoms',
