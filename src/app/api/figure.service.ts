@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Figure } from './figure.model';
 
@@ -97,11 +98,13 @@ export class FigureService {
 
   private searchResults = new BehaviorSubject<Figure[]>([]);
 
-  constructor() {}
+  private API_URL = 'http://localhost:8080/api/figures';
+
+  constructor(private http: HttpClient) {}
 
   // Pobierz listę figurek
   getFigures(): Observable<Figure[]> {
-    return of(this.figures); 
+    return this.http.get<Figure[]>(`${this.API_URL}/all`);
   }
 
   getSearchResults(): Observable<Figure[]> {

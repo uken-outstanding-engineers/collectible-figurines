@@ -298,7 +298,7 @@ export class FiguresShowcaseComponent implements OnInit {
   }
 
   toggleActive(figure: Figure): void {
-    figure.isActive = !figure.isActive;
+    //figure.isActive = !figure.isActive;
   }
 
   /* Mouse over on figure picture */

@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
+import { MatSort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 
 import { Figure } from '../api/figure.model';
@@ -21,13 +22,15 @@ import { FigureService } from '../api/figure.service';
     MatButtonModule,
     MatPaginator,
     MatMenuModule,
-    FormsModule
+    FormsModule,
+    //MatSort
 ],
   templateUrl: './admin-panel-figurines-list.component.html',
   styleUrl: './admin-panel-figurines-list.component.scss'
 })
 export class AdminPanelFigurinesListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort; 
 
   figurines = new MatTableDataSource<Figure>([]);
 
