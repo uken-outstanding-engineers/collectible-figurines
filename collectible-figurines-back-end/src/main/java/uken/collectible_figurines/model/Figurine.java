@@ -31,7 +31,7 @@ public class Figurine {
   private String hoverImageUrl;
 
   @Column(name = "fandom_id")
-  private Integer fandomId;
+  private Long fandomId;
 
   @Column(name = "chase")
   private Boolean chase;
@@ -85,11 +85,11 @@ public class Figurine {
     this.hoverImageUrl = hoverImageUrl;
   }
 
-  public Integer getFandomId() {
+  public Long getFandomId() {
     return fandomId;
   }
 
-  public void setFandomId(Integer fandomId) {
+  public void setFandomId(Long fandomId) {
     this.fandomId = fandomId;
   }
 

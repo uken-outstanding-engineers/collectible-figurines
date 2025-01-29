@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface FigurineService {
   List<Figurine> getAllFigurines();
+  Figurine saveFigurine(Figurine figurine);
+  void deleteFigurineById(Long id);
 }

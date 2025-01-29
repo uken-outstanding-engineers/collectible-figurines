@@ -35,7 +35,7 @@ export class AdminPanelFigurinesListComponent {
   figurines = new MatTableDataSource<Figure>([]);
 
   displayedColumns: string[] = [
-    'id', 'imageUrl', 'name', 'series', 'variants', 'action',
+    'imageUrl', 'name', 'series', 'variants', 'action',
   ];
 
   private subscription: Subscription;
@@ -110,11 +110,19 @@ export class AdminPanelFigurinesListComponent {
         (figure) => figure.id === this.editFigure?.id
       );
       if (index !== -1) {
-        // Edycja istniejącej figurki
+        // Edit figurine
         this.figurines.data[index] = this.editFigure;
       } else {
-        // Dodanie nowej figurki
-        this.figurines.data.push(this.editFigure);
+        // Add new figurine
+        this.editFigure['fandomId'] = 1;
+
+        console.log(JSON.stringify(this.editFigure));
+        
+        this.figureService.addFigure(this.editFigure).subscribe((newFigure) => {
+          this.figurines.data.push(newFigure);
+          this.figurines._updateChangeSubscription();
+          this.closeEditDialog();
+        });
       }
       this.figurines._updateChangeSubscription();
       this.closeEditDialog();
@@ -140,9 +148,17 @@ export class AdminPanelFigurinesListComponent {
 
   confirmDelete(): void {
     if (this.selectedId !== null) {
-      this.figurines.data = this.figurines.data.filter(figure => figure.id !== this.selectedId);
-      this.figurines._updateChangeSubscription();
-      this.closeDeleteDialog();
+      this.figureService.deleteFigure(this.selectedId).subscribe(
+        () => {
+          this.figurines.data = this.figurines.data.filter(figure => figure.id !== this.selectedId);
+          this.figurines._updateChangeSubscription();
+          this.closeDeleteDialog();  
+          //console.log('The figurine has been removed');
+        },
+        (error) => {
+          //console.error('Error while deleting figure', error);
+        }
+      );
     }
   }
 

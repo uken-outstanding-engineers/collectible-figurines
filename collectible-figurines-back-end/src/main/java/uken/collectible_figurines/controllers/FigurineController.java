@@ -1,9 +1,6 @@
 package uken.collectible_figurines.controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import uken.collectible_figurines.model.Figurine;
@@ -13,7 +10,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/figures")
+@RequestMapping("/api/figurines")
 public class FigurineController {
   private final FigurineService figurineService;
 
@@ -24,5 +21,18 @@ public class FigurineController {
   @GetMapping("/all")
   public List<Figurine> getAllFigures() {
     return figurineService.getAllFigurines();
+  }
+
+  @PostMapping("/add")
+  public Figurine addFigurine(@RequestBody Figurine figurine) {
+    if (figurine.getId() != null) {
+      figurine.setId(null);
+    }
+    return figurineService.saveFigurine(figurine);
+  }
+
+  @DeleteMapping("/delete/{id}")
+  public void deleteFigurine(@PathVariable Long id) {
+    figurineService.deleteFigurineById(id);
   }
 }

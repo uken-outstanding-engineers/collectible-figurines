@@ -98,13 +98,23 @@ export class FigureService {
 
   private searchResults = new BehaviorSubject<Figure[]>([]);
 
-  private API_URL = 'http://localhost:8080/api/figures';
+  private API_URL = 'http://localhost:8080/api/figurines';
 
   constructor(private http: HttpClient) {}
 
-  // Pobierz listę figurek
+  // Download the figurines list
   getFigures(): Observable<Figure[]> {
     return this.http.get<Figure[]>(`${this.API_URL}/all`);
+  }
+
+  // Add a figurine to the database
+  addFigure(figure: Figure): Observable<Figure> {
+    return this.http.post<Figure>(`${this.API_URL}/add`, figure);
+  }
+
+  // Delete figurine
+  deleteFigure(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/delete/${id}`);
   }
 
   getSearchResults(): Observable<Figure[]> {

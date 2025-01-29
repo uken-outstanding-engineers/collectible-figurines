@@ -17,4 +17,12 @@ public class FigurineServiceImpl implements FigurineService {
   public List<Figurine> getAllFigurines() {
     return figurineRepository.findAll();
   }
+
+  public Figurine saveFigurine(Figurine figurine) {
+    return figurineRepository.save(figurine);
+  }
+
+  public void deleteFigurineById(Long id) {
+    figurineRepository.deleteById(id);
+  }
 }
