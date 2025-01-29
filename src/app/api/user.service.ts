@@ -7,9 +7,9 @@ import { User } from './user.model';
 })
 export class UserService {
   private users: User[] = [
-    { id: 1, username: 'admin', password: 'admin123', permission: 'admin' },
-    { id: 2, username: 'user1', password: 'user123', permission: 'user' },
-    { id: 3, username: 'user2', password: 'user456', permission: 'user' },
+    { id: 1, email: "admin@figurines.pl", username: 'admin', password: 'admin123', permission: 'ADMIN' },
+    { id: 2, email: "user1@figurines.pl", username: 'user1', password: 'user123', permission: 'USER' },
+    { id: 3, email: "user2@figurines.pl", username: 'user2', password: 'user456', permission: 'USER' },
   ];
 
   constructor() {

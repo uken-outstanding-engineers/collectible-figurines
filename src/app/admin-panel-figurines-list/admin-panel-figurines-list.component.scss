@@ -35,6 +35,31 @@
   white-space: nowrap; 
 }
 
+/* SEARCH */
+.search-container {
+  display: flex;
+  justify-content: flex-end; 
+  width: 100%;
+}
+
+.search-field {
+  width: 250px;
+  height: 36px;
+  margin-bottom: 20px;
+  background-color: #fff;
+}
+
+::ng-deep .search-field .mat-mdc-form-field-flex {
+  align-items: center;
+  height: 36px;
+}
+
+::ng-deep .search-field .mat-mdc-form-field-icon-prefix {
+  margin-right: 8px;
+  color: #757575;
+}
+
+/* TABLE */
 .full-width-table {
   table-layout: auto;
 }

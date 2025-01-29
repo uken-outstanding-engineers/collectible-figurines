@@ -4,11 +4,20 @@
       <h2>List of Collectible Figurines</h2>
       <p>Browsing and managing the database of collectible figurines</p>
     </div>
+  
     <button mat-raised-button color="primary" (click)="openAddDialog()" class="add-figurine-button">
       <mat-icon>add</mat-icon>
       Add Figurine
     </button>
   </div>
+  
+  <div class="search-container">
+    <mat-form-field class="search-field" appearance="outline">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search..." />
+    </mat-form-field>
+  </div>
+  
   
   <table mat-table [dataSource]="figurines" class="mat-elevation-z8 full-width-table">
     <!-- ID Column -->

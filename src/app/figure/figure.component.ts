@@ -39,8 +39,7 @@ export class FigureComponent {
 
   showImage(type: 'main' | 'hover'): void {
     if (this.figure) {
-      //this.currentImageUrl = type === 'main' ? this.figure.imageUrl : this.figure.hoverImageUrl;
-      this.currentImageUrl = type === 'main' ? this.figure.imageUrl : this.figure.imageUrl;
+      this.currentImageUrl = type === 'main' ? this.figure.imageUrl : this.figure.hoverImageUrl;
     }
   }
 }

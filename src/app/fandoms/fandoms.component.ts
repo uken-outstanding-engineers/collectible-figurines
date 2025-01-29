@@ -26,22 +26,22 @@ export class FandomsComponent {
   ) {}
 
   ngOnInit(): void {
-    this.fandomService.getFandoms().subscribe(fandoms => {
-      const fandomsWithFigures$ = fandoms.map(fandom =>
-        this.figureService.getFiguresByFandomId(fandom.id).pipe(
-          map((figures: Figure[]) => ({
-            fandom,
-            hasFigures: figures.length > 0
-          }))
-        )
-      );
+    // this.fandomService.getFandoms().subscribe(fandoms => {
+    //   const fandomsWithFigures$ = fandoms.map(fandom =>
+    //     this.figureService.getFiguresByFandomId(fandom.id).pipe(
+    //       map((figures: Figure[]) => ({
+    //         fandom,
+    //         hasFigures: figures.length > 0
+    //       }))
+    //     )
+    //   );
 
-      forkJoin(fandomsWithFigures$).subscribe(results => {
-        this.filteredFandoms = results
-          .filter(result => result.hasFigures)
-          .map(result => result.fandom);
-      });
-    });
+    //   forkJoin(fandomsWithFigures$).subscribe(results => {
+    //     this.filteredFandoms = results
+    //       .filter(result => result.hasFigures)
+    //       .map(result => result.fandom);
+    //   });
+    // });
   }
 
   onFandomClick(fandomId: number): void {

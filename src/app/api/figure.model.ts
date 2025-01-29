@@ -3,7 +3,7 @@ export interface Figure {
   name: string; 
   series: string; 
   imageUrl: string; 
-  hoverImageUrl?: string;
+  hoverImageUrl: string;
   fandomId?: number;
   chase?: boolean; 
   glowInDark?: boolean; 

@@ -1,6 +1,7 @@
 package uken.collectible_figurines.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uken.collectible_figurines.model.Figurine;
 import uken.collectible_figurines.repository.FigurineRepository;
@@ -15,7 +16,7 @@ public class FigurineServiceImpl implements FigurineService {
 
   @Override
   public List<Figurine> getAllFigurines() {
-    return figurineRepository.findAll();
+    return figurineRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
   }
 
   public Figurine saveFigurine(Figurine figurine) {
@@ -24,5 +25,9 @@ public class FigurineServiceImpl implements FigurineService {
 
   public void deleteFigurineById(Long id) {
     figurineRepository.deleteById(id);
+  }
+
+  public Figurine getFigurineById(Long id) {
+    return figurineRepository.findById(id).orElse(null);
   }
 }

@@ -48,80 +48,31 @@ public class Figurine {
   public Long getId() {
     return id;
   }
-
   public void setId(Long id) {
     this.id = id;
   }
-
   public String getName() {
     return name;
   }
-
   public void setName(String name) {
     this.name = name;
   }
-
   public String getSeries() {
     return series;
   }
-
-  public void setSeries(String series) {
-    this.series = series;
-  }
-
-  public String getImageUrl() {
-    return imageUrl;
-  }
-
-  public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
-  }
-
-  public String getHoverImageUrl() {
-    return hoverImageUrl;
-  }
-
-  public void setHoverImageUrl(String hoverImageUrl) {
-    this.hoverImageUrl = hoverImageUrl;
-  }
-
-  public Long getFandomId() {
-    return fandomId;
-  }
-
-  public void setFandomId(Long fandomId) {
-    this.fandomId = fandomId;
-  }
-
-  public Boolean getChase() {
-    return chase;
-  }
-
-  public void setChase(Boolean chase) {
-    this.chase = chase;
-  }
-
-  public Boolean getGlowInDark() {
-    return glowInDark;
-  }
-
-  public void setGlowInDark(Boolean glowInDark) {
-    this.glowInDark = glowInDark;
-  }
-
-  public Boolean getFlocked() {
-    return flocked;
-  }
-
-  public void setFlocked(Boolean flocked) {
-    this.flocked = flocked;
-  }
-
-  public Boolean getExclusive() {
-    return exclusive;
-  }
-
-  public void setExclusive(Boolean exclusive) {
-    this.exclusive = exclusive;
-  }
+  public void setSeries(String series) { this.series = series; }
+  public String getImageUrl() { return imageUrl; }
+  public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+  public String getHoverImageUrl() { return hoverImageUrl; }
+  public void setHoverImageUrl(String hoverImageUrl) { this.hoverImageUrl = hoverImageUrl; }
+  public Long getFandomId() { return fandomId; }
+  public void setFandomId(Long fandomId) { this.fandomId = fandomId; }
+  public Boolean getChase() { return chase; }
+  public void setChase(Boolean chase) { this.chase = chase; }
+  public Boolean getGlowInDark() { return glowInDark; }
+  public void setGlowInDark(Boolean glowInDark) { this.glowInDark = glowInDark; }
+  public Boolean getFlocked() { return flocked; }
+  public void setFlocked(Boolean flocked) { this.flocked = flocked; }
+  public Boolean getExclusive() { return exclusive; }
+  public void setExclusive(Boolean exclusive) { this.exclusive = exclusive; }
 }

@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,8 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
-import { MatSort } from '@angular/material/sort';
-import { Subscription } from 'rxjs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
@@ -23,14 +24,14 @@ import { FigureService } from '../api/figure.service';
     MatPaginator,
     MatMenuModule,
     FormsModule,
-    //MatSort
+    MatFormFieldModule,
+    MatInputModule,
 ],
   templateUrl: './admin-panel-figurines-list.component.html',
   styleUrl: './admin-panel-figurines-list.component.scss'
 })
 export class AdminPanelFigurinesListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort; 
 
   figurines = new MatTableDataSource<Figure>([]);
 
@@ -50,6 +51,11 @@ export class AdminPanelFigurinesListComponent {
     this.figurines.paginator = this.paginator;
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.figurines.filter = filterValue;
+  }
+
   getVariants(figure: Figure): string[] {
     const variants = [];
     if (figure.chase) variants.push('Chase');
@@ -62,7 +68,7 @@ export class AdminPanelFigurinesListComponent {
   /* Add */
   openAddDialog(): void {
     this.editFigure = {
-      id: this.generateId(),
+      id: 0,
       name: '',
       series: '',
       imageUrl: 'figurines-images/000000001a.jpg',
@@ -71,13 +77,14 @@ export class AdminPanelFigurinesListComponent {
       glowInDark: false,
       flocked: false,
       exclusive: false,
+      fandomId: null,
     };
     this.editDialogVisible = true;
   }
 
   /* Edit */
   editDialogVisible = false;
-  editFigure: { id: number; name: string; series: string; imageUrl: string; [key: string]: any } | null = null;
+  editFigure: { id: number; name: string; series: string; imageUrl: string; hoverImageUrl: string; [key: string]: any } | null = null;
 
   variants = [
     { key: 'chase', label: 'Chase' },
@@ -86,7 +93,7 @@ export class AdminPanelFigurinesListComponent {
     { key: 'exclusive', label: 'Exclusive' },
   ];
 
-  openEditDialog(figure: { id: number; name: string; series: string; imageUrl: string; [key: string]: any }): void {
+  openEditDialog(figure: { id: number; name: string; series: string; imageUrl: string; hoverImageUrl: string; [key: string]: any }): void {
     this.editFigure = { ...figure };
 
     this.variants.forEach((variant) => {
@@ -106,29 +113,28 @@ export class AdminPanelFigurinesListComponent {
   /* Edit & Add */
   saveChanges(): void {
     if (this.editFigure) {
-      const index = this.figurines.data.findIndex(
-        (figure) => figure.id === this.editFigure?.id
-      );
-      if (index !== -1) {
+      console.log("Before saving:", this.editFigure);
+  
+      const index = this.figurines.data.findIndex(f => f.id === this.editFigure?.id);
+  
+      if (index !== -1 && this.editFigure.id > 0) {
         // Edit figurine
-        this.figurines.data[index] = this.editFigure;
+        this.figureService.editFigure(this.editFigure.id, this.editFigure).subscribe((updatedFigure) => {
+          this.figurines.data[index] = { ...updatedFigure };
+          this.figurines._updateChangeSubscription(); 
+          this.closeEditDialog();
+        });
       } else {
-        // Add new figurine
-        this.editFigure['fandomId'] = 1;
-
-        console.log(JSON.stringify(this.editFigure));
-        
+        // Add new figurine 
         this.figureService.addFigure(this.editFigure).subscribe((newFigure) => {
           this.figurines.data.push(newFigure);
           this.figurines._updateChangeSubscription();
           this.closeEditDialog();
         });
       }
-      this.figurines._updateChangeSubscription();
-      this.closeEditDialog();
     }
   }
-
+  
   /* Delete */
   dialogVisible = false;
   selectedId: number | null = null;
@@ -161,7 +167,6 @@ export class AdminPanelFigurinesListComponent {
       );
     }
   }
-
 
   private generateId(): number {
     return this.figurines.data.length
