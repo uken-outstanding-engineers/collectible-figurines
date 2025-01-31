@@ -26,18 +26,39 @@ import { UserService } from '../api/user.service';
 export class LoginComponent {
   username: string = '';
   password: string = '';
+  errorMessage: string = '';
 
   constructor(
     private userService: UserService,
     private router: Router
   ) {}
 
+  // login(): void {
+  //   if (this.userService.login(this.username, this.password)) {
+  //     console.log('Zalogowany:', this.username);
+  //     this.router.navigate(['/figures-showcase']);
+  //   } else {
+  //     console.log('Złe dane');
+  //   }
+  // }
+
   login(): void {
-    if (this.userService.login(this.username, this.password)) {
-      console.log('Zalogowany:', this.username);
-      this.router.navigate(['/figures-showcase']);
-    } else {
-      console.log('Złe dane');
-    }
+    this.userService.login(this.username, this.password).subscribe({
+      next: (response) => {
+        console.log('Odpowiedź z backendu:', response);
+  
+        if (response.includes('User not found') || response.includes('Invalid password')) {
+          this.errorMessage = 'Nieprawidłowe dane logowania';
+          console.error('Błąd logowania:', response);
+        } else {
+          console.log('Zalogowany');
+          // this.router.navigate(['/figures-showcase']);
+        }
+      },
+      error: (err) => {
+        console.error('Błąd logowania:', err);
+        this.errorMessage = 'Wystąpił błąd serwera';
+      }
+    });
   }
 }

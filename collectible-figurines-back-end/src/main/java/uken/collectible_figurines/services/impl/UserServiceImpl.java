@@ -20,11 +20,18 @@ public class UserServiceImpl implements UserService {
     return userRepository.findByUsername(username);
   }
 
-  public BCryptPasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+  //public BCryptPasswordEncoder passwordEncoder() {
+    //return new BCryptPasswordEncoder();
+  //}
 
   public boolean checkPassword(String rawPassword, String encodedPassword) {
+
+    //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    //String pass = "user456";
+    //String hashedPassword = encoder.encode(pass);
+
+    //System.out.println("Hashed password: " + hashedPassword);
+
     return passwordEncoder.matches(rawPassword, encodedPassword);
   }
 }

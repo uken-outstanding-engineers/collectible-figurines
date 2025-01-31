@@ -66,6 +66,7 @@ export class NavbarComponent {
 
   ngOnInit(): void {
     this.userService.getLoggedInUser().subscribe(user => {
+      console.log(user);
       this.isLoggedIn = !!user; 
       this.currentUser = user; 
     });
