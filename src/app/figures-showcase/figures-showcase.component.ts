@@ -8,15 +8,12 @@ import { MatTreeFlatDataSource, MatTreeFlattener, MatTreeModule } from '@angular
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
 import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
-
 import { FandomService } from '../api/fandom.service';
-
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface FunkoNode {
   name: string;

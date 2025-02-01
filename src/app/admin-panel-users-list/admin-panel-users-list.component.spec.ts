@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminPanelUsersComponent } from './admin-panel-users.component';
+import { AdminPanelUsersComponent } from './admin-panel-users-list.component';
 
 describe('AdminPanelUsersComponent', () => {
   let component: AdminPanelUsersComponent;

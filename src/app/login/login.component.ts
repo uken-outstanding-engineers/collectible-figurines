@@ -44,21 +44,14 @@ export class LoginComponent {
 
   login(): void {
     this.userService.login(this.username, this.password).subscribe({
-      next: (response) => {
-        console.log('Odpowiedź z backendu:', response);
-  
-        if (response.includes('User not found') || response.includes('Invalid password')) {
-          this.errorMessage = 'Nieprawidłowe dane logowania';
-          console.error('Błąd logowania:', response);
-        } else {
-          console.log('Zalogowany');
-          // this.router.navigate(['/figures-showcase']);
-        }
+      next: (user) => {
+        //console.log('Zalogowany użytkownik:', user);
+        this.router.navigate(['/figures-showcase']);
       },
       error: (err) => {
+        this.errorMessage = err.error;
         console.error('Błąd logowania:', err);
-        this.errorMessage = 'Wystąpił błąd serwera';
       }
     });
-  }
+  }  
 }

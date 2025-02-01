@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   padding: 10px 30px 50px 30px;
-  margin: 0 0 0 1%;
 }
 
 .header-container {
@@ -115,6 +114,69 @@ mat-icon {
 
 ::ng-deep.mat-mdc-button-ripple {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column; 
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .description {
+    max-width: 100%;
+    margin: 10px 0;
+  }
+
+  .add-figurine-button {
+    align-self: flex-end;
+    margin: 15px 0px;
+  }
+}
+
+@media (max-width: 556px) {
+
+  .figurines-list-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px 50px 10px;
+  }
+
+  .description {
+    text-align: center;
+  }
+
+  .description h2 {
+    font-size: 1.4rem;
+  }
+  
+  .description p {
+    font-size: 1rem;
+  }
+
+  .add-figurine-button {
+    align-self: center;
+  }
+
+  .search-container {
+    justify-content: center; 
+  }
+
+  .search-field {
+    width: 300px;
+  }
+
+  th, td {
+    padding: 5px;
+  }
+
+  th {
+    font-size: 12px;
+  }
+
+  td {
+    font-size: 10px;
+  }
 }
 
 .dialog-delete-container {

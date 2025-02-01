@@ -10,7 +10,10 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { FigureComponent } from './figure/figure.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { AdminPanelFigurinesListComponent } from './admin-panel-figurines-list/admin-panel-figurines-list.component';
-import { AdminPanelUsersComponent } from './admin-panel-users/admin-panel-users.component';
+import { AdminPanelUsersComponent } from './admin-panel-users-list/admin-panel-users-list.component';
+
+import { AuthGuard } from './authorization/auth.guard';
+import { AdminPanelVariantsListComponent } from './admin-panel-variants-list/admin-panel-variants-list.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/figures-showcase', pathMatch: 'full' }, 
@@ -25,8 +28,10 @@ export const routes: Routes = [
     {
       path: 'admin',
       component: AdminPanelComponent,
+      canActivate: [AuthGuard],
       children: [
         { path: 'figurines', component: AdminPanelFigurinesListComponent },
+        { path: 'variants', component: AdminPanelVariantsListComponent },
         { path: 'users', component: AdminPanelUsersComponent },
         { path: '', redirectTo: 'figurines', pathMatch: 'full' },
       ],

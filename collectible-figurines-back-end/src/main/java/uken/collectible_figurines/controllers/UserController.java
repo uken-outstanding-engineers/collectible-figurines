@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.*;
 import uken.collectible_figurines.model.User;
 import uken.collectible_figurines.services.FigurineService;
 import uken.collectible_figurines.services.UserService;
+import uken.collectible_figurines.dto.UserDTO;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -16,21 +18,19 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public String loginUser(@RequestParam String username, @RequestParam String passwd) {
+  public UserDTO loginUser(@RequestParam String username, @RequestParam String passwd) {
     User user = userService.findByUsername(username);
 
     if (user == null) {
-      return "User not found";
+      throw new RuntimeException("User not found");
     }
 
     boolean isPasswordValid = userService.checkPassword(passwd, user.getPasswd());
     if (!isPasswordValid) {
-      return "Invalid password";
+      throw new RuntimeException("Invalid password");
     }
 
-    // Możemy dodać generowanie tokena JWT, jeśli potrzebujemy
-    // String token = authenticationService.generateToken(user);
-
-    return "Login successful";
+    // Zwracamy użytkownika jako DTO (bez hasła)
+    return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPermission());
   }
 }

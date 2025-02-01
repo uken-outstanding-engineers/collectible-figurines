@@ -33,8 +33,15 @@ export class UserService {
       params: new HttpParams()
         .set('username', username)
         .set('passwd', passwd),
-      responseType: 'text'
-    });
+      responseType: 'json' 
+    }).pipe(
+      tap((user: any) => {
+        if (user && user !== 'User not found' && user !== 'Invalid password') {
+          this.loggedInUser.next(user); 
+          localStorage.setItem('loggedInUser', JSON.stringify(user));
+        }
+      })
+    );
   }
   
   logout(): void {
@@ -43,7 +50,6 @@ export class UserService {
   }
 
   getLoggedInUser() {
-    //console.log("User: ", this.loggedInUser.asObservable());
     return this.loggedInUser.asObservable(); 
   }
 
@@ -65,5 +71,19 @@ export class UserService {
       this.loggedInUser.next(JSON.parse(storedUser)); 
     }
   }
+
+  hasAccess(): boolean {
+    const userString = localStorage.getItem('loggedInUser'); 
+    if (!userString) {
+      return false;
+    }
+
+    const user = JSON.parse(userString);
+    if (user && user.permission === 'ADMIN') { 
+      return true;
+    } 
+    return false;
+  }
+
 }
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -8,8 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
+import { MatSidenav } from '@angular/material/sidenav';
 import { AdminPanelFigurinesListComponent } from "../admin-panel-figurines-list/admin-panel-figurines-list.component";
-import { AdminPanelUsersComponent } from "../admin-panel-users/admin-panel-users.component";
+import { AdminPanelUsersComponent } from "../admin-panel-users-list/admin-panel-users-list.component";
 
 interface InterfaceNode {
   name: string;
@@ -59,6 +60,10 @@ const TREE_DATA: InterfaceNode[] = [
   styleUrls: ['./admin-panel.component.scss'],
 })
 export class AdminPanelComponent {
+  //@ViewChild('sidenav') sidenav!: MatSidenav;
+  isSidenavOpened: boolean = true;
+  screenWidth!: number;
+  
   private _transformer = (node: InterfaceNode, level: number): ExampleFlatNode => {
     return {
       expandable: !!node.children && node.children.length > 0,
@@ -87,6 +92,11 @@ export class AdminPanelComponent {
     this.dataSource.data = TREE_DATA;
   }
 
+  ngOnInit() {
+    this.screenWidth = window.innerWidth;
+    this.checkScreenSize();
+  }
+
   navigateTo(route: string): void {
     if (route) {
       this.router.navigate([route]);
@@ -94,4 +104,23 @@ export class AdminPanelComponent {
   }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+
+  /* Hide and open menu */
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {  
+    this.screenWidth = (event.target as Window).innerWidth;  
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    if (this.screenWidth <= 1056) {
+      this.isSidenavOpened = false; 
+    } else {
+      this.isSidenavOpened = true; 
+    }
+  }
+
+  toggleSidenav(): void {
+    this.isSidenavOpened = !this.isSidenavOpened;
+  }
 }

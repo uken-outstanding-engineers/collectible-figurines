@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
 
+import { MatCardModule } from '@angular/material/card';
+
 @Component({
   selector: 'app-admin-panel-figurines-list',
   standalone: true,
@@ -26,6 +28,8 @@ import { FigureService } from '../api/figure.service';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+
+    MatCardModule,
 ],
   templateUrl: './admin-panel-figurines-list.component.html',
   styleUrl: './admin-panel-figurines-list.component.scss'
