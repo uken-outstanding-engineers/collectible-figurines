@@ -1,0 +1,128 @@
+$button-color: #2a2a2a;
+$button-hover-color: #9c9ea3;
+$font-poppins: 'Poppins', sans-serif;
+
+.account-settings {
+    margin: 0px auto;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: $font-poppins;
+}
+  
+/* Profile */
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    margin: 0 0 40px 0;
+    background-color: #fff;
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+}
+  
+.profile-picture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-button {
+    margin-top: 10px;
+    background-color: transparent;
+    border: 2px solid $button-color;
+    color: $button-color;
+    font-weight: bold;
+    padding: 5px 20px;
+    border-radius: 6px;
+    font-family: $font-poppins;
+}
+
+.upload-button:hover {
+    color: $button-hover-color;
+    border-color: $button-hover-color;
+    cursor: pointer;
+}
+  
+/* Form */
+.settings-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #100d0f;
+    padding: 35px 5%;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.edit-button {
+    background-color: transparent;
+    border: 2px solid $button-color;
+    color: $button-color;
+    font-weight: bold;
+    font-family: $font-poppins;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
+
+.edit-button:hover {
+    color: $button-hover-color;
+    border-color: $button-hover-color;
+    cursor: pointer;
+}
+
+
+/* Delete Account */
+.delete-section {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    width: 100%;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.delete-button {
+    display: flex;
+    align-items: center;
+    background-color: #ff4d4d;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 10px 25px;
+    text-transform: none;
+    gap: 8px;
+    font-family: $font-poppins;
+    border: 2px solid #d50000;
+}
+
+.delete-button:hover {
+    background-color: #d50000;
+    border-color: #ff4d4d;
+    cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+
+}

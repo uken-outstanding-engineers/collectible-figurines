@@ -1,0 +1,45 @@
+<div class="account-settings">
+    <!-- Sekcja Profilowa -->
+    <div class="profile-header">
+      <div class="profile-picture">
+        <img src="figurines-images/000000001a.jpg" alt="Profilowe">
+      </div>
+      <button mat-button class="upload-button">Wybierz zdjęcie</button>
+    </div>
+  
+    <!-- Formularz z danymi użytkownika -->
+    <div class="settings-form">
+
+        <span class="separator-line"></span>
+        <div class="input-group">
+
+          <span>{{ user.email }}</span>
+          <button mat-button class="edit-button">Zmień</button>
+        </div>
+
+        <span class="separator-line"></span>
+
+        <div class="input-group">
+          <span>{{ user.username }}</span>
+          <button mat-button class="edit-button">Zmień</button>
+        </div>
+
+        <span class="separator-line"></span>
+      
+        <div class="input-group">
+          <span>Hasło</span>
+          <button mat-button class="edit-button">Zmień</button>
+        </div>
+
+        <span class="separator-line"></span>
+      </div>
+      
+  
+    <!-- Przycisk Usuń Konto -->
+    <div class="delete-section">
+      <button mat-button class="delete-button">
+        <mat-icon>delete</mat-icon> Usuń Konto
+      </button>
+    </div>
+  </div>
+  

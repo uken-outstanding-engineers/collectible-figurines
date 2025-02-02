@@ -8,9 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatSidenav } from '@angular/material/sidenav';
-import { AdminPanelFigurinesListComponent } from "../admin-panel-figurines-list/admin-panel-figurines-list.component";
-import { AdminPanelUsersComponent } from "../admin-panel-users-list/admin-panel-users-list.component";
 
 interface InterfaceNode {
   name: string;

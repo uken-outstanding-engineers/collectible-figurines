@@ -1,0 +1,92 @@
+.settings-container {
+    display: flex;
+    min-height: 80vh; 
+    padding: 30px 40px; 
+    gap: 40px; 
+}
+  
+.settings-menu {
+    width: 250px; 
+    padding: 0 50px;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 8px;
+}
+  
+.settings-menu h2 {
+    font-size: 2.2rem; 
+    margin: 10px 0 10px 0; 
+    color: #333;
+}
+
+::ng-deep.mdc-list-item__primary-text {
+    font-family: 'Poppins', sans-serif !important;
+}
+  
+.settings-menu mat-list {
+    padding: 0;
+}
+  
+.settings-menu mat-list-item {
+    cursor: pointer; 
+    padding: 12px 16px;
+    margin: 5px auto; 
+    border-radius: 5px; 
+    transition: background-color 0.3s ease; 
+}
+  
+.settings-menu mat-list-item:hover {
+    background-color: #e0e0e0; 
+}
+  
+.settings-menu mat-list-item.active {
+    background-color: #2a2a2a;    
+}
+
+.settings-menu mat-list-item.active ::ng-deep.mdc-list-item__primary-text {
+    color: white !important;   
+}
+  
+.settings-panel {
+    flex-grow: 1; 
+    margin: 70px 5% 20px 5%;
+}
+  
+@media (max-width: 1024px) {
+    .settings-container {
+        flex-direction: column; 
+    }
+
+    .settings-menu {
+        width: 100%;
+        padding: 0 0;
+        margin: 0; 
+        background-color: #fff;
+    }
+
+    .settings-menu mat-list-item {
+        width: 35%;
+    }
+
+    .settings-panel {
+        margin-top: 10px;
+    }
+}
+  
+@media (max-width: 768px) {
+    .settings-menu {
+        padding: 10px; 
+    }
+
+    .settings-panel {
+        padding: 10px 0; 
+        margin: 20px 0 20px 0;
+    }
+
+    .settings-menu mat-list-item {
+        width: 90%;
+        font-size: 14px; // don't work
+    }
+}
+  

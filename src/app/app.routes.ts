@@ -14,6 +14,9 @@ import { AdminPanelUsersComponent } from './admin-panel-users-list/admin-panel-u
 
 import { AuthGuard } from './authorization/auth.guard';
 import { AdminPanelVariantsListComponent } from './admin-panel-variants-list/admin-panel-variants-list.component';
+import { SettingsComponent } from './settings/settings.component';
+import { SettingsAccountComponent } from './settings-account/settings-account.component';
+import { SettingsNotificationsComponent } from './settings-notifications/settings-notifications.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/figures-showcase', pathMatch: 'full' }, 
@@ -34,6 +37,15 @@ export const routes: Routes = [
         { path: 'variants', component: AdminPanelVariantsListComponent },
         { path: 'users', component: AdminPanelUsersComponent },
         { path: '', redirectTo: 'figurines', pathMatch: 'full' },
+      ],
+    },
+    {
+      path: 'settings',
+      component: SettingsComponent,
+      children: [
+        { path: 'account', component: SettingsAccountComponent },
+        { path: 'notifications', component: SettingsNotificationsComponent },
+        { path: '', redirectTo: 'account', pathMatch: 'full' },
       ],
     },
     { path: '**', redirectTo: '/figures-showcase' },
