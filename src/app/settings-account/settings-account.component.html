@@ -1,45 +1,58 @@
 <div class="account-settings">
-    <!-- Sekcja Profilowa -->
-    <div class="profile-header">
-      <div class="profile-picture">
-        <img src="figurines-images/000000001a.jpg" alt="Profilowe">
-      </div>
-      <button mat-button class="upload-button">Wybierz zdjęcie</button>
+  <!-- Profil Section -->
+  <div class="profile-header">
+    <div class="profile-picture">
+      <img src="figurines-images/000000001a.jpg" alt="Profilowe">
     </div>
+    <button mat-button class="upload-button">Wybierz zdjęcie</button>
+  </div>
   
-    <!-- Formularz z danymi użytkownika -->
-    <div class="settings-form">
-
-        <span class="separator-line"></span>
-        <div class="input-group">
-
-          <span>{{ user.email }}</span>
-          <button mat-button class="edit-button">Zmień</button>
-        </div>
-
-        <span class="separator-line"></span>
-
-        <div class="input-group">
-          <span>{{ user.username }}</span>
-          <button mat-button class="edit-button">Zmień</button>
-        </div>
-
-        <span class="separator-line"></span>
-      
-        <div class="input-group">
-          <span>Hasło</span>
-          <button mat-button class="edit-button">Zmień</button>
-        </div>
-
-        <span class="separator-line"></span>
-      </div>
-      
-  
-    <!-- Przycisk Usuń Konto -->
-    <div class="delete-section">
-      <button mat-button class="delete-button">
-        <mat-icon>delete</mat-icon> Usuń Konto
-      </button>
+  <!-- Form -->
+  <div class="settings-form">
+    <div class="input-group">
+      <span>{{ user.email }}</span>
+      <button mat-button class="edit-button" (click)="openEditDialog('Email', user.email)">Zmień</button>
+    </div>
+    <div class="input-group">
+      <span>{{ user.username }}</span>
+      <button mat-button class="edit-button" (click)="openEditDialog('Username', user.username)">Zmień</button>
+    </div>
+    <div class="input-group">
+      <span>Hasło</span>
+      <button mat-button class="edit-button" (click)="openEditDialog('Password', '')">Zmień</button>
     </div>
   </div>
+      
+  <!-- Delete Account -->
+  <div class="delete-section">
+    <button mat-button class="delete-button">
+      <mat-icon>delete</mat-icon> Usuń Konto
+    </button>
+  </div>
+</div>
+
+<div class="dialog-edit-container" *ngIf="editDialogVisible">
+  <div class="dialog-backdrop" (click)="closeEditDialog()"></div>
+  <div class="dialog">
+    <h2>Edit {{ editField }}</h2>
+    <form (ngSubmit)="saveChanges()">
+      <div class="form-group">
+        <label for="editInput">{{ editField }}</label>
+        <input 
+          id="editInput"
+          [(ngModel)]="editValue"
+          name="editInput"
+          type="text"
+          required
+        />
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="no" (click)="closeEditDialog()">Cancel</button>
+        <button type="submit" class="yes">Save</button>
+      </div>
+    </form>
+    <button class="close-btn" (click)="closeEditDialog()">×</button>
+  </div>
+</div>
   

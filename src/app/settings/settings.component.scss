@@ -60,7 +60,7 @@
 
     .settings-menu {
         width: 100%;
-        padding: 0 0;
+        padding: 10px; 
         margin: 0; 
         background-color: #fff;
     }
@@ -75,8 +75,8 @@
 }
   
 @media (max-width: 768px) {
-    .settings-menu {
-        padding: 10px; 
+    .settings-menu h2 {
+        font-size: 1.8rem;
     }
 
     .settings-panel {
@@ -86,7 +86,10 @@
 
     .settings-menu mat-list-item {
         width: 90%;
-        font-size: 14px; // don't work
+    }
+
+    ::ng-deep.mdc-list-item__primary-text {
+        font-size: 14px !important;
     }
 }
   

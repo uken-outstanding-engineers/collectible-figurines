@@ -1,6 +1,8 @@
 package uken.collectible_figurines.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import uken.collectible_figurines.model.User;
 import uken.collectible_figurines.services.FigurineService;
 import uken.collectible_figurines.services.UserService;
@@ -22,15 +24,14 @@ public class UserController {
     User user = userService.findByUsername(username);
 
     if (user == null) {
-      throw new RuntimeException("User not found");
+      return null;
     }
 
     boolean isPasswordValid = userService.checkPassword(passwd, user.getPasswd());
     if (!isPasswordValid) {
-      throw new RuntimeException("Invalid password");
+      return null;
     }
 
-    // Zwracamy użytkownika jako DTO (bez hasła)
     return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPermission());
   }
 }

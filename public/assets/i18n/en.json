@@ -10,8 +10,8 @@
     },
     "login": {
         "login": "LOG IN",
-        "enter-data": "Enter your email and password:",
-        "email": "Email",
+        "enter-data": "Enter your username and password:",
+        "username": "Username",
         "password": "Password",
         "logInButton": "LOG IN",
         "newUser": "New user?",

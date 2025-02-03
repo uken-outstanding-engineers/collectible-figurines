@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component, ElementRef, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
@@ -27,31 +27,24 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
   errorMessage: string = '';
+  @ViewChild('errorBox') errorBox!: ElementRef;
 
   constructor(
     private userService: UserService,
     private router: Router
   ) {}
 
-  // login(): void {
-  //   if (this.userService.login(this.username, this.password)) {
-  //     console.log('Zalogowany:', this.username);
-  //     this.router.navigate(['/figures-showcase']);
-  //   } else {
-  //     console.log('Złe dane');
-  //   }
-  // }
-
   login(): void {
-    this.userService.login(this.username, this.password).subscribe({
-      next: (user) => {
-        //console.log('Zalogowany użytkownik:', user);
+    this.userService.login(this.username, this.password).subscribe(user => {
+      if (user) {
         this.router.navigate(['/figures-showcase']);
-      },
-      error: (err) => {
-        this.errorMessage = err.error;
-        console.error('Błąd logowania:', err);
+      } else {
+        this.errorMessage = "Nieprawidłowy nazwa użytkonika lub hasło.";
+
+        this.errorBox.nativeElement.classList.remove('show');
+        void this.errorBox.nativeElement.offsetWidth; // Reset animacji
+        this.errorBox.nativeElement.classList.add('show');
       }
     });
-  }  
+  }
 }

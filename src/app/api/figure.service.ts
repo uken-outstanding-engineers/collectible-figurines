@@ -143,7 +143,6 @@ export class FigureService {
     );
   }
 
-
   //getFiguresByFandomId(fandomId: number): Observable<Figure[]> {
     //return of(this.figures.filter(figure => figure.fandomId === fandomId));
   //}

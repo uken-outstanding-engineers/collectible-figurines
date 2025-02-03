@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rxjs';
 import { User } from './user.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
@@ -20,26 +20,20 @@ export class UserService {
     this.loadUserFromStorage();
   }
 
-  //getUsers(): Observable<User[]> {
-    //return of(this.users);
-  //}
-
-  //getUserById(id: number): Observable<User | undefined> {
-    //return of(this.users.find(user => user.id === id));
-  //}
-
   login(username: string, passwd: string): Observable<any> {
     return this.http.post(`${this.API_URL}/login`, null, {
-      params: new HttpParams()
-        .set('username', username)
-        .set('passwd', passwd),
-      responseType: 'json' 
+      params: new HttpParams().set('username', username).set('passwd', passwd),
+      responseType: 'json',
     }).pipe(
       tap((user: any) => {
-        if (user && user !== 'User not found' && user !== 'Invalid password') {
-          this.loggedInUser.next(user); 
+        if (user) {
+          this.loggedInUser.next(user);
           localStorage.setItem('loggedInUser', JSON.stringify(user));
         }
+      }),
+      catchError((error) => {
+        console.error('Login error:', error); // Wypisz pełny błąd w konsoli
+        return throwError(() => new Error(error.message || 'Login failed'));
       })
     );
   }
@@ -52,10 +46,6 @@ export class UserService {
   getLoggedInUser() {
     return this.loggedInUser.asObservable(); 
   }
-
-  // isLoggedIn(): boolean {
-  //   return this.loggedInUser.value !== null; 
-  // }
 
   isAuthenticated(): boolean {
     return this.loggedInUser !== null;
@@ -84,6 +74,5 @@ export class UserService {
     } 
     return false;
   }
-
 }
 

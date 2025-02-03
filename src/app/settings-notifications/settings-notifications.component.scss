@@ -1,0 +1,47 @@
+$font-poppins: 'Poppins', sans-serif;
+
+.account-settings {
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: $font-poppins;
+}
+
+.settings-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.notification-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #100d0f;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1024px) {
+
+}
+
+@media (max-width: 768px) {
+    .notification-group {
+        font-size: 14px;
+    }
+}

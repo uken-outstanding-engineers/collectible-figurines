@@ -76,6 +76,14 @@ $font-poppins: 'Poppins', sans-serif;
     border-radius: 8px;
 }
 
+.input-group span {
+    display: block; 
+    word-break: break-word; 
+    white-space: normal; 
+    max-width: 100%; 
+}
+  
+
 .edit-button {
     background-color: transparent;
     border: 2px solid $button-color;
@@ -91,7 +99,6 @@ $font-poppins: 'Poppins', sans-serif;
     border-color: $button-hover-color;
     cursor: pointer;
 }
-
 
 /* Delete Account */
 .delete-section {
@@ -126,3 +133,141 @@ $font-poppins: 'Poppins', sans-serif;
 @media (max-width: 1024px) {
 
 }
+
+@media (max-width: 768px) {
+    .edit-button {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .input-group span { 
+        font-size: 14px;
+    }
+}
+
+.dialog-edit-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-family: 'Montserrat', sans-serif;
+
+    .dialog-backdrop {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        z-index: 999;
+    }
+
+    .dialog {
+        position: relative;
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        z-index: 1001;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        width: 80%;
+        max-width: 400px;
+
+        h2 {
+            margin: 0 0 15px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+                color: #555;
+            }
+
+            input {
+                width: 96%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+        }
+
+        .button-group {
+            text-align: right;
+
+            button {
+                flex: 1;
+                padding: 5px 10px;
+                margin: 20px 0px 0 5px;
+                width: 120px;
+                font-size: 1rem;
+                font-weight: bold;
+                text-transform: uppercase;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-align: center;
+
+                &.yes {
+                    background-color: #4caf50;
+                    color: white;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: #45a049;
+                    }
+                }
+
+                &.no {
+                    background-color: #f44336;
+                    color: white;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: #d32f2f;
+                    }
+                }
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            font-size: 32px;
+            background: none;
+            border: none;
+            color: #333;
+            cursor: pointer;
+            font-weight: bold;
+            transition: color 0.3s;
+
+            &:hover {
+                color: #000;
+            }
+        }
+    }
+}
+  

@@ -1,26 +1,28 @@
 <div class="login-container">
-    <h1 class="login-title">{{ 'login.login' | translate }}</h1>
-    <p class="login-subtitle">{{ 'login.enter-data' | translate }}</p>
-    
-    <mat-form-field class="login-input" appearance="fill">
-      <mat-label>{{ 'login.email' | translate }}</mat-label>
-      <input matInput [(ngModel)]="username" type="email" required>
-    </mat-form-field>
-    
-    <mat-form-field class="login-input" appearance="fill">
-      <mat-label>{{ 'login.password' | translate }}</mat-label>
-      <input matInput [(ngModel)]="password" type="password" required>
-    </mat-form-field>
-    
-    <button mat-raised-button color="primary" class="login-button" (click)="login()">{{ 'login.logInButton' | translate }}</button>
-    
-    <div class="login-links">
-        <p class="link-text">
-            <span>{{ 'login.newUser' | translate }} </span><a href="register">{{ 'login.createAccount' | translate }}</a>
-        </p>
-        <p class="link-text">
-            <span>{{ 'login.lostPassword' | translate }} </span><a href="reset-password">{{ 'login.recoverPassword' | translate }}</a>
-        </p>
-    </div>      
-  </div>
+  <h1 class="login-title">{{ 'login.login' | translate }}</h1>
+  <p class="login-subtitle">{{ 'login.enter-data' | translate }}</p>
+
+  <span class="error-message" [class.show]="errorMessage" #errorBox>{{ errorMessage }}</span>
+
+  <mat-form-field class="login-input" appearance="fill">
+    <mat-label>{{ 'login.username' | translate }}</mat-label>
+    <input matInput [(ngModel)]="username" type="text" required>
+  </mat-form-field>
+  
+  <mat-form-field class="login-input" appearance="fill">
+    <mat-label>{{ 'login.password' | translate }}</mat-label>
+    <input matInput [(ngModel)]="password" type="password" required>
+  </mat-form-field>
+  
+  <button mat-raised-button color="primary" class="login-button" (click)="login()">{{ 'login.logInButton' | translate }}</button>
+  
+  <div class="login-links">
+      <p class="link-text">
+          <span>{{ 'login.newUser' | translate }} </span><a href="register">{{ 'login.createAccount' | translate }}</a>
+      </p>
+      <p class="link-text">
+          <span>{{ 'login.lostPassword' | translate }} </span><a href="reset-password">{{ 'login.recoverPassword' | translate }}</a>
+      </p>
+  </div>      
+</div>
   

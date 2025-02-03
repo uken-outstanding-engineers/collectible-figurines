@@ -10,8 +10,8 @@
     },
     "login": {
         "login": "ZALOGUJ SIĘ",
-        "enter-data": "Wprowadź swój email i hasło:",
-        "email": "Email",
+        "enter-data": "Wprowadź nazwę użytkownika i hasło:",
+        "username": "Nazwa użytkownik",
         "password": "Hasło",
         "logInButton": "ZALOGUJ",
         "newUser": "Nowy użytkownik?",
