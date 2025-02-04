@@ -34,17 +34,26 @@ export class LoginComponent {
     private router: Router
   ) {}
 
-  login(): void {
+  login(): void { 
+    if (this.username.trim() === "" || this.password.trim() === "") {
+      this.errorMessage = "Wszystkie pola muszą być wypełnione.";
+      this.showErrorMessage();
+      return;
+    }
+
     this.userService.login(this.username, this.password).subscribe(user => {
       if (user) {
         this.router.navigate(['/figures-showcase']);
       } else {
         this.errorMessage = "Nieprawidłowy nazwa użytkonika lub hasło.";
-
-        this.errorBox.nativeElement.classList.remove('show');
-        void this.errorBox.nativeElement.offsetWidth; // Reset animacji
-        this.errorBox.nativeElement.classList.add('show');
+        this.showErrorMessage();
       }
     });
+  }
+
+  showErrorMessage() {
+    this.errorBox.nativeElement.classList.remove('show');
+    void this.errorBox.nativeElement.offsetWidth; 
+    this.errorBox.nativeElement.classList.add('show');
   }
 }

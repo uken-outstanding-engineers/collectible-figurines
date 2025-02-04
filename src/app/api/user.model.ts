@@ -4,5 +4,6 @@ export interface User {
     username: string;
     password: string;
     permission: string;
+    lastLogin: string | number | Date;
   }
   

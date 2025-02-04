@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -33,7 +34,7 @@ public class User {
   private String permission;
 
   @Column(name = "last_login")
-  private Instant lastLogin;
+  private LocalDateTime lastLogin;
 
   public Long getId() { return id; }
   public void setId(Long id) { this.id = id; }
@@ -45,6 +46,6 @@ public class User {
   public void setPasswd(String passwd) { this.passwd = passwd; }
   public String getPermission() { return permission; }
   public void setPermission(String permission) { this.permission = permission; }
-  //public Instant getLastLogin() { return lastLogin; }
-  //public void setLastLogin(Instant lastLogin) { this.lastLogin = lastLogin;}
+  public LocalDateTime getLastLogin() { return lastLogin; }
+  public void setLastLogin(LocalDateTime lastLogin) { this.lastLogin = lastLogin; }
 }

@@ -9,11 +9,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
 
-import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-admin-panel-figurines-list',
@@ -28,11 +28,10 @@ import { MatCardModule } from '@angular/material/card';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-
     MatCardModule,
 ],
   templateUrl: './admin-panel-figurines-list.component.html',
-  styleUrl: './admin-panel-figurines-list.component.scss'
+  styleUrl: '../admin-panel/admin-panel-main.component.scss'
 })
 export class AdminPanelFigurinesListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;

@@ -24,6 +24,20 @@
     font-family: 'Courier Prime', monospace; 
 }
 
+.error-message {
+    display: none;
+    color: red;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 0 50px 0;
+    text-align: center;
+}
+
+.error-message.show {
+    display: block;
+    animation: shake 0.4s ease-in-out;
+}
+
 .register-input {
     width: 100%;
     margin-bottom: 16px;
@@ -83,4 +97,11 @@
     .link-text {
         font-size: 12px;
     }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateY(0); }
+    25% { transform: translateY(-5px); }
+    50% { transform: translateY(5px); }
+    75% { transform: translateY(-3px); }
 }

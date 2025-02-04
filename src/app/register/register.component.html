@@ -1,32 +1,54 @@
 <div class="register-container">
-    <h1 class="register-title">{{ 'register.register' | translate }}</h1>
-    <p class="register-subtitle">{{ 'register.enter-data' | translate }}</p>
-    
+  <h1 class="register-title">{{ 'register.register' | translate }}</h1>
+  <p class="register-subtitle">{{ 'register.enter-data' | translate }}</p>
+
+  <span class="error-message" [class.show]="errorMessage" #errorBox>{{ errorMessage }}</span>
+
+  <form [formGroup]="registerForm" (ngSubmit)="register()">
+    <!-- Username -->
     <mat-form-field class="register-input" appearance="fill">
       <mat-label>{{ 'register.username' | translate }}</mat-label>
-      <input matInput type="text" required>
-    </mat-form-field>
-    
-    <mat-form-field class="register-input" appearance="fill">
-      <mat-label>{{ 'register.email' | translate }}</mat-label>
-      <input matInput type="email" required>
-    </mat-form-field>
-    
-    <mat-form-field class="register-input" appearance="fill">
-      <mat-label>{{ 'register.password' | translate }}</mat-label>
-      <input matInput type="password" required>
+      <input matInput formControlName="username" type="text" required>
+      <mat-error *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+        Nazwa użytkownika musi mieć min. 3 znaki
+      </mat-error>
     </mat-form-field>
 
+    <!-- Email -->
+    <mat-form-field class="register-input" appearance="fill">
+      <mat-label>{{ 'register.email' | translate }}</mat-label>
+      <input matInput formControlName="email" type="email" required>
+      <mat-error *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+        Wprowadź poprawny adres email
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Password -->
+    <mat-form-field class="register-input" appearance="fill">
+      <mat-label>{{ 'register.password' | translate }}</mat-label>
+      <input matInput formControlName="password" type="password" required>
+      <mat-error *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+        Hasło musi mieć min. 8 znaków
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Confirm Password -->
     <mat-form-field class="register-input" appearance="fill">
       <mat-label>{{ 'register.confirmPassword' | translate }}</mat-label>
-      <input matInput type="password" required>
+      <input matInput formControlName="confirmPassword" type="password" required>
+      <mat-error *ngIf="registerForm.hasError('mismatch') && (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)">
+        Hasła nie są zgodne
+      </mat-error>      
     </mat-form-field>
-    
-    <button mat-raised-button color="primary" class="register-button">{{ 'register.registerButton' | translate }}</button>
-    
-    <div class="register-links">
-        <p class="link-text">
-            <span>{{ 'register.alreadyAccount' | translate }} </span><a href="login">{{ 'register.loginHere' | translate }}</a>
-        </p>
-    </div>      
+
+    <button mat-raised-button color="primary" class="register-button" type="submit">
+      {{ 'register.registerButton' | translate }}
+    </button>
+  </form>
+
+  <div class="register-links">
+    <p class="link-text">
+      <span>{{ 'register.alreadyAccount' | translate }} </span><a href="login">{{ 'register.loginHere' | translate }}</a>
+    </p>
+  </div>
 </div>

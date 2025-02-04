@@ -20,7 +20,13 @@ export class UserService {
     this.loadUserFromStorage();
   }
 
-  login(username: string, passwd: string): Observable<any> {
+  // Download the users list
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.API_URL}/all`);
+  }
+
+  //Login user
+  login(username: string, passwd: string) {
     return this.http.post(`${this.API_URL}/login`, null, {
       params: new HttpParams().set('username', username).set('passwd', passwd),
       responseType: 'json',
@@ -32,8 +38,26 @@ export class UserService {
         }
       }),
       catchError((error) => {
-        console.error('Login error:', error); // Wypisz pełny błąd w konsoli
+        console.error('Login error:', error);
         return throwError(() => new Error(error.message || 'Login failed'));
+      })
+    );
+  }
+  
+  //Register user
+  register(username: string, email: string, passwd: string) {
+    const registerData = { username, email, passwd };
+  
+    return this.http.post(`${this.API_URL}/register`, registerData).pipe(
+      tap((user: any) => {
+        if (user) {
+          this.loggedInUser.next(user); 
+          localStorage.setItem('loggedInUser', JSON.stringify(user));
+        }
+      }),
+      catchError((error) => {
+        console.error('Register error:', error);
+        return throwError(() => new Error(error.message || 'Registration failed'));
       })
     );
   }
