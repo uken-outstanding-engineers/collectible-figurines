@@ -1,7 +1,7 @@
 <mat-sidenav-container class="container">
   <!-- Menu -->
   <mat-sidenav #sidenav mode="side" [opened]="isSidenavOpened" class="sidenav">
-    <div class="tree-node-content dashboard">
+    <div class="tree-node-content dashboard" (click)="navigateTo('/admin/dashboard')">
       <mat-icon>cottage</mat-icon>
       <span class="dashboard-name">Dashboard</span>
     </div>
@@ -38,7 +38,7 @@
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>{{ sidenav.opened ? 'menu_open' : 'menu' }}</mat-icon>
       </button>
-      <span class="path">Admin > Figurines > List</span>
+      <span class="path">Admin Panel</span>
     </div>
   
     <router-outlet></router-outlet>

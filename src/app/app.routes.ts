@@ -11,12 +11,12 @@ import { FigureComponent } from './figure/figure.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { AdminPanelFigurinesListComponent } from './admin-panel-figurines-list/admin-panel-figurines-list.component';
 import { AdminPanelUsersComponent } from './admin-panel-users-list/admin-panel-users-list.component';
-
 import { AuthGuard } from './authorization/auth.guard';
 import { AdminPanelVariantsListComponent } from './admin-panel-variants-list/admin-panel-variants-list.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsAccountComponent } from './settings-account/settings-account.component';
 import { SettingsNotificationsComponent } from './settings-notifications/settings-notifications.component';
+import { AdminPanelDashboardComponent } from './admin-panel-dashboard/admin-panel-dashboard.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/figures-showcase', pathMatch: 'full' }, 
@@ -33,10 +33,11 @@ export const routes: Routes = [
       component: AdminPanelComponent,
       canActivate: [AuthGuard],
       children: [
+        { path: 'dashboard', component: AdminPanelDashboardComponent },
         { path: 'figurines', component: AdminPanelFigurinesListComponent },
         { path: 'variants', component: AdminPanelVariantsListComponent },
         { path: 'users', component: AdminPanelUsersComponent },
-        { path: '', redirectTo: 'figurines', pathMatch: 'full' },
+        { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       ],
     },
     {
