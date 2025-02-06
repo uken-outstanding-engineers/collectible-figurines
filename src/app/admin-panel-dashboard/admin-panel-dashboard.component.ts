@@ -2,6 +2,11 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
+import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+
+import { FigureService } from '../api/figure.service';
+import { UserService } from '../api/user.service';
 
 @Component({
   selector: 'app-admin-panel-dashboard',
@@ -9,23 +14,50 @@ import { MatCardModule } from '@angular/material/card';
   imports: [
     CommonModule,
     MatGridListModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule
   ],
   templateUrl: './admin-panel-dashboard.component.html',
   styleUrl: './admin-panel-dashboard.component.scss'
 })
 export class AdminPanelDashboardComponent {
-  totalFigurines = 120;  
-  totalUsers = 45;       
-  activeUsers = 12;  
+  totalFigurines = 0;  
+  totalUsers = 0;       
+  activeUsers = 0;  
 
-  cols = window.innerWidth < 768 ? 1 : 3;
-  gutterSize = window.innerWidth < 768 ? '40px' : '0px 20px';
+  constructor(private router: Router, private figureService: FigureService, private userService: UserService) {}
 
-  constructor() {
-    window.addEventListener('resize', () => {
-      this.cols = window.innerWidth < 768 ? 1 : 3;
-      this.gutterSize = window.innerWidth < 768 ? '30px' : '0';
-    });
+  ngOnInit(): void {
+    this.loadTotalFigurines();
+    this.loadTotalUsers();
+    this.loadActiveUsers();
+  }
+
+  loadTotalFigurines(): void {
+    this.figureService.getTotalFigurines().subscribe(
+      (data) => {
+        this.totalFigurines = data;
+      }
+    );
+  }
+
+  loadTotalUsers(): void {
+    this.userService.getTotalUsers().subscribe(
+      (data) => {
+        this.totalUsers = data;
+      }
+    );
+  }
+
+  loadActiveUsers(): void {
+    this.userService.getActiveUsers().subscribe(
+      (data) => {
+        this.activeUsers = data;
+      }
+    );
+  }
+
+  navigateToFigurines( route: string): void {
+    this.router.navigate([route]);
   }
 }

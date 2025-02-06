@@ -116,8 +116,6 @@ export class AdminPanelFigurinesListComponent {
   /* Edit & Add */
   saveChanges(): void {
     if (this.editFigure) {
-      console.log("Before saving:", this.editFigure);
-  
       const index = this.figurines.data.findIndex(f => f.id === this.editFigure?.id);
   
       if (index !== -1 && this.editFigure.id > 0) {

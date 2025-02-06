@@ -25,6 +25,16 @@ export class UserService {
     return this.http.get<User[]>(`${this.API_URL}/all`);
   }
 
+  // Download the number of users
+  getTotalUsers(): Observable<number> {
+    return this.http.get<number>(`${this.API_URL}/total`);
+  }
+
+  // Download the number of active users (last month)
+  getActiveUsers(): Observable<number> {
+    return this.http.get<number>(`${this.API_URL}/active`);
+  }
+
   //Login user
   login(username: string, passwd: string) {
     return this.http.post(`${this.API_URL}/login`, null, {

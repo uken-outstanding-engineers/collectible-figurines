@@ -2,15 +2,19 @@ package uken.collectible_figurines.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import uken.collectible_figurines.dto.ErrorUserDTO;
 import uken.collectible_figurines.dto.UserDTO;
+import uken.collectible_figurines.model.Figurine;
 import uken.collectible_figurines.model.User;
 import uken.collectible_figurines.repository.UserRepository;
 import uken.collectible_figurines.services.UserService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +32,7 @@ public class UserServiceImpl implements UserService {
   public User findByEmail(String email) { return userRepository.findByEmail(email);}
 
   public List<UserDTO> getAllUsers() {
-    List<User> users = userRepository.findAll();
+    List<User> users = userRepository.findAll(Sort.by(Sort.Direction.DESC, "lastLogin"));
     return users.stream()
       .map(user -> new UserDTO(
         user.getId(),
@@ -66,5 +70,14 @@ public class UserServiceImpl implements UserService {
   public void updateLastLogin(User user) {
     user.setLastLogin(LocalDateTime.now());
     userRepository.save(user);
+  }
+
+  public int getTotalUsers() {
+    return (int) userRepository.count();
+  }
+
+  public int getActiveUsers() {
+    LocalDateTime oneMonthAgo = LocalDateTime.now().minus(1, ChronoUnit.MONTHS);
+    return userRepository.countUsersLoggedAfter(oneMonthAgo);
   }
 }

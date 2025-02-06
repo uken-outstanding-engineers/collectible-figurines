@@ -21,24 +21,30 @@
         <div class="card-value">{{ activeUsers }}</div>
     </div>
 
-    <div class="dashboard-card clickable-card" routerLink="/figures">
+    <div class="dashboard-card clickable-card" (click)='navigateToFigurines("/admin/figurines")'>
         <div class="card-header">
             <div class="card-title">Go to Figurines</div>
         </div>
-        <div class="card-value">📦</div>
+        <div class="card-value">
+            <mat-icon>arrow_circle_right</mat-icon>
+        </div>
     </div>
 
-    <div class="dashboard-card clickable-card" routerLink="/variants">
+    <div class="dashboard-card clickable-card" (click)='navigateToFigurines("/admin/variants")'>
         <div class="card-header">
             <div class="card-title">Go to Variants</div>
         </div>
-        <div class="card-value">🎨</div>
+        <div class="card-value">
+            <mat-icon>arrow_circle_right</mat-icon>
+        </div>
     </div>
 
-    <div class="dashboard-card clickable-card" routerLink="/users">
+    <div class="dashboard-card clickable-card" (click)='navigateToFigurines("/admin/users")'>
         <div class="card-header">
             <div class="card-title">Go to Users</div>
         </div>
-        <div class="card-value">👥</div>
+        <div class="card-value">
+            <mat-icon>arrow_circle_right</mat-icon>
+        </div>
     </div>
 </div>

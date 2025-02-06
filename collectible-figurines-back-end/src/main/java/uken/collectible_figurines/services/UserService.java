@@ -14,4 +14,6 @@ public interface UserService {
   boolean checkPassword(String rawPassword, String encodedPassword);
   User register(User user);
   void updateLastLogin(User user);
+  int getTotalUsers();
+  int getActiveUsers();
 }

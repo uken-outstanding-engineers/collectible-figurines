@@ -122,6 +122,11 @@ export class FigureService {
     return this.http.put<Figure>(`${this.API_URL}/edit/${id}`, figure);
   }
 
+  // Download the number of figurines
+  getTotalFigurines(): Observable<number> {
+    return this.http.get<number>(`${this.API_URL}/total`);
+  }
+
   getSearchResults(): Observable<Figure[]> {
     return this.searchResults.asObservable();
   }

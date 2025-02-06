@@ -56,4 +56,14 @@ public class UserController {
 
     return new ErrorUserDTO("ERROR");
   }
+
+  @GetMapping("/total")
+  public int getTotalUsers() {
+    return userService.getTotalUsers();
+  }
+
+  @GetMapping("/active")
+  public int getActiveUsers() {
+    return userService.getActiveUsers();
+  }
 }

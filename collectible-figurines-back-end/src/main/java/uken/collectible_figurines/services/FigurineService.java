@@ -10,4 +10,5 @@ public interface FigurineService {
   Figurine saveFigurine(Figurine figurine);
   void deleteFigurineById(Long id);
   Figurine getFigurineById(Long id);
+  int getTotalFigurines();
 }

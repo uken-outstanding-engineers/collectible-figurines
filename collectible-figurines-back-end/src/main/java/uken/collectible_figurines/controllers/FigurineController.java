@@ -52,4 +52,9 @@ public class FigurineController {
   public void deleteFigurine(@PathVariable Long id) {
     figurineService.deleteFigurineById(id);
   }
+
+  @GetMapping("/total")
+  public int getTotalFigurines() {
+    return figurineService.getTotalFigurines();
+  }
 }

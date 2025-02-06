@@ -30,4 +30,6 @@ public class FigurineServiceImpl implements FigurineService {
   public Figurine getFigurineById(Long id) {
     return figurineRepository.findById(id).orElse(null);
   }
+
+  public int getTotalFigurines() { return (int) figurineRepository.count(); }
 }

@@ -2,8 +2,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px; /* Odstępy między kafelkami */
-    max-width: 900px;
+    gap: 20px;
+    max-width: 1200px;
     margin: 40px auto;
 }
 
@@ -18,12 +18,12 @@
     background: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    padding: 15px;
+    padding: 30px 20px;
     font-family: 'Montserrat', sans-serif;
     transition: transform 0.2s ease-in-out;
 }
 
-.dashboard-card:hover {
+.clickable-card:hover {
     transform: scale(1.05);
 }
 
@@ -32,10 +32,7 @@
 }
 
 .card-header {
-    //display: flex;
-    //flex-direction: column;
-    //align-items: center;
-    height: 60px; /* Ustawi wysokość nagłówka, aby tytuł był zawsze na tej samej wysokości */
+    height: 60px;
     justify-content: space-between;
 }
 
@@ -47,7 +44,6 @@
 .card-subtitle {
     font-size: 0.9rem;
     color: #757575;
-    //margin-top: 5px;
 }
 
 .card-value {
@@ -57,8 +53,14 @@
     margin-top: 10px;
 }
 
+.card-value mat-icon {
+    color: #2a2a2a;
+    font-size: 50px;
+    width: 100%;
+    margin-top: 30px;
+    height: 10vh;
+}
 
-/* 📱 RESPONSYWNOŚĆ */
 @media (max-width: 768px) {
     .dashboard-container {
         flex-direction: column;
@@ -66,12 +68,9 @@
     }
 
     .dashboard-card {
-        width: 60%;
+        width: 50%;
     }
 }
-
-
-
 
 @media (max-width: 556px) {
     .dashboard-card {
@@ -79,13 +78,4 @@
     }
 }
 
-// ::ng-deep.mat-grid-tile {
-//     overflow: visible !important;
-// }
-
-// @media (max-width: 1024px) {
-//     .card-title {
-//         font-size: 1.4rem;
-//     }
-// }
   
