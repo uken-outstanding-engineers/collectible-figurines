@@ -3,9 +3,9 @@
   <mat-sidenav #sidenav mode="side" [opened]="isSidenavOpened" class="sidenav">
     <div class="tree-node-content dashboard" (click)="navigateTo('/admin/dashboard')">
       <mat-icon>cottage</mat-icon>
-      <span class="dashboard-name">Dashboard</span>
+      <span class="dashboard-name">{{ 'admin_panel.dashboard' | translate }}</span>
     </div>
-    <span class="menu-title">Management</span>
+    <span class="menu-title">{{ 'admin_panel.management' | translate }}</span>
 
     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
 

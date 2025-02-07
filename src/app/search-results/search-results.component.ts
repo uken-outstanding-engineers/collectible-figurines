@@ -35,7 +35,7 @@ export class SearchResultsComponent {
   }
 
   toggleActive(figure: Figure): void {
-    figure.isActive = !figure.isActive;
+    //figure.isActive = !figure.isActive;
   }
 
     /* Mouse over on figure picture */

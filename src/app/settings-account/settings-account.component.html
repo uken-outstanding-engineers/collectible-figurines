@@ -4,29 +4,29 @@
     <div class="profile-picture">
       <img src="figurines-images/000000001a.jpg" alt="Profilowe">
     </div>
-    <button mat-button class="upload-button">Wybierz zdjęcie</button>
+    <button mat-button class="upload-button">{{ 'settings.account_settings_page.select_photo' | translate }}</button>
   </div>
   
   <!-- Form -->
   <div class="settings-form">
     <div class="input-group">
       <span>{{ user.email }}</span>
-      <button mat-button class="edit-button" (click)="openEditDialog('Email', user.email)">Zmień</button>
+      <button mat-button class="edit-button" (click)="openEditDialog('Email', user.email)">{{ 'settings.account_settings_page.change' | translate }}</button>
     </div>
     <div class="input-group">
       <span>{{ user.username }}</span>
-      <button mat-button class="edit-button" (click)="openEditDialog('Username', user.username)">Zmień</button>
+      <button mat-button class="edit-button" (click)="openEditDialog('Username', user.username)">{{ 'settings.account_settings_page.change' | translate }}</button>
     </div>
     <div class="input-group">
       <span>Hasło</span>
-      <button mat-button class="edit-button" (click)="openEditDialog('Password', '')">Zmień</button>
+      <button mat-button class="edit-button" (click)="openEditDialog('Password', '')">{{ 'settings.account_settings_page.change' | translate }}</button>
     </div>
   </div>
       
   <!-- Delete Account -->
   <div class="delete-section">
     <button mat-button class="delete-button">
-      <mat-icon>delete</mat-icon> Usuń Konto
+      <mat-icon>delete</mat-icon> {{ 'settings.account_settings_page.delete_account' | translate }}
     </button>
   </div>
 </div>
@@ -48,8 +48,8 @@
       </div>
 
       <div class="button-group">
-        <button type="button" class="no" (click)="closeEditDialog()">Cancel</button>
-        <button type="submit" class="yes">Save</button>
+        <button type="button" class="no" (click)="closeEditDialog()">{{ 'settings.account_settings_page.cancel' | translate }}</button>
+        <button type="submit" class="yes">{{ 'settings.account_settings_page.save' | translate }}</button>
       </div>
     </form>
     <button class="close-btn" (click)="closeEditDialog()">×</button>

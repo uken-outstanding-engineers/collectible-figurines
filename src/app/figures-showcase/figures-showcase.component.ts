@@ -14,6 +14,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
 import { FandomService } from '../api/fandom.service';
+import { FigureListService } from '../api/figure-list.service';
+import { UserService } from '../api/user.service';
 
 interface FunkoNode {
   name: string;
@@ -52,6 +54,8 @@ export class FiguresShowcaseComponent implements OnInit {
   constructor(
     private figureService: FigureService, 
     private fandomService: FandomService,
+    private figureListService: FigureListService,
+    private userService: UserService,
     private route: ActivatedRoute,
     private translate: TranslateService
   ) {
@@ -130,6 +134,11 @@ export class FiguresShowcaseComponent implements OnInit {
   fandoms: any[] = []; 
   selectedFandom: string | null = null; 
 
+  listName: string = "";
+  userId: number | null = null;
+
+  likedFigures: number[] = []; 
+
   /* Pagination variables */
   currentPage = 0;
   pageSize = 8;
@@ -142,6 +151,13 @@ export class FiguresShowcaseComponent implements OnInit {
   showFilters: boolean = false;
 
   ngOnInit(): void {
+    // User
+    this.userService.getLoggedInUser().subscribe(user => {
+      if (user) {
+        this.userId = user.id;
+      }
+    });
+
     //Fandoms
     this.fandomService.getFandoms().subscribe(fandoms => {
       this.fandoms = fandoms; 
@@ -167,6 +183,8 @@ export class FiguresShowcaseComponent implements OnInit {
         });
       }
     });
+
+    this.loadLikedFigures();
   }
 
   loadTreeData(license: string): void {
@@ -294,8 +312,33 @@ export class FiguresShowcaseComponent implements OnInit {
     return 0; 
   }
 
-  toggleActive(figure: Figure): void {
-    //figure.isActive = !figure.isActive;
+  toggleListActive(figure: Figure, listName: string): void {
+    if (!this.userId) {
+      console.error('User is not logged in!');
+      return;
+    }
+
+    this.figureListService.toggleFigurine(this.userId, figure.id, listName).subscribe(response => {
+      figure.isLiked = !figure.isLiked;
+    });
+  }
+
+  loadLikedFigures(): void {
+    if (!this.userId) {
+      console.error('User is not logged in!');
+      return;
+    }
+
+    this.figureListService.getUserFigurineLists(this.userId).subscribe(lists => {
+      if (lists.liked) {
+        this.likedFigures = lists.liked.map(figurine => figurine.id); 
+        console.log(this.likedFigures);
+
+        this.figures.forEach(figure => {
+          figure.isLiked = this.likedFigures.includes(figure.id);
+        });
+      }
+    });
   }
 
   /* Mouse over on figure picture */
@@ -338,5 +381,4 @@ export class FiguresShowcaseComponent implements OnInit {
     this.currentPage = 0;
     this.filterFigures();
   }
-  
 }

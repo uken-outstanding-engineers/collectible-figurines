@@ -38,6 +38,12 @@ public class UserFigurineListItem {
   public void setFigurine(Figurine figurine) {
     this.figurine = figurine;
   }
+  public LocalDateTime getDate() {
+    return date;
+  }
+  public void setDate(LocalDateTime date) {
+    this.date = date;
+  }
 }
 
 

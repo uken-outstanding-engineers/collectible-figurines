@@ -6,7 +6,11 @@
     },
     "navbar": {
         "collectible_figures": "Figurki Kolekcjonerskie",
-        "search_placeholder": "Szukaj..."
+        "search_placeholder": "Szukaj...",
+        "admin_panel": "Panel Administratora",
+        "figurine_lists": "Lista Figurek",
+        "settings": "Ustawienia",
+        "logout": "Wyloguj"
     },
     "login": {
         "login": "ZALOGUJ SIĘ",
@@ -41,6 +45,26 @@
     "search-result": {
         "serachResult": "WYNIKI WYSZUKIWANIA",
         "notFound": "Nie znaleziono figurek."
+    },
+    "admin_panel": {
+        "dashboard": "Panel Główny",
+        "management": "Zarządzanie"
+    },
+    "settings": {
+        "settings": "Ustawienia",
+        "account_settings": "Ustawienia konta",
+        "notifications": "Powiadomienia",
+
+        "account_settings_page": {
+            "select_photo": "Wybierz zdjęcie",
+            "change": "Zmień",
+            "delete_account": "Usuń Konto",
+            "cancel": "Anuluj",
+            "save": "Zapisz"
+        },
+        "notifications_page": {
+            "notifications": "Powiadomienia"
+        }
     }
 }
   

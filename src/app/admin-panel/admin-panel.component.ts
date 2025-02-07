@@ -9,6 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
 
+import { TranslateModule} from '@ngx-translate/core';
+
 interface InterfaceNode {
   name: string;
   children?: InterfaceNode[];
@@ -52,6 +54,7 @@ const TREE_DATA: InterfaceNode[] = [
     MatIconModule,
     MatTreeModule,
     MatButtonModule,
+    TranslateModule
 ],
   templateUrl: './admin-panel.component.html',
   styleUrls: ['./admin-panel.component.scss'],
@@ -87,6 +90,7 @@ export class AdminPanelComponent {
 
   constructor(private router: Router) {
     this.dataSource.data = TREE_DATA;
+    //this.translatedText = this.translate.instant('collectible_figures');
   }
 
   ngOnInit() {

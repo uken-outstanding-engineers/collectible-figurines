@@ -6,7 +6,11 @@
     },
     "navbar": {
         "collectible_figures": "Collectible Figurines",
-        "search_placeholder": "Search..."
+        "search_placeholder": "Search...",
+        "admin_panel": "Admin Panel",
+        "figurine_lists": "Figurine Lists",
+        "settings": "Settings",
+        "logout": "Logout"
     },
     "login": {
         "login": "LOG IN",
@@ -41,6 +45,26 @@
     "search-result": {
         "serachResult": "SEARCH RESULTS",
         "notFound": "No figurines found."
+    },
+    "admin_panel": {
+        "dashboard": "Dashboard",
+        "management": "Management"
+    },
+    "settings": {
+        "settings": "Settings",
+        "account_settings": "Account settings",
+        "notifications": "Notifications",
+
+        "account_settings_page": {
+            "select_photo": "Select photo",
+            "change": "Change",
+            "delete_account": "Delete account",
+            "cancel": "Cancel",
+            "save": "Save"
+        },
+        "notifications_page": {
+            "notifications": "Notifications"
+        }
     }
 }
   

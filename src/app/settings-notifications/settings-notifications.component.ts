@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings-notifications',
@@ -9,7 +10,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   imports: [
     CommonModule,
     FormsModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    TranslateModule
   ],
   templateUrl: './settings-notifications.component.html',
   styleUrl: './settings-notifications.component.scss'

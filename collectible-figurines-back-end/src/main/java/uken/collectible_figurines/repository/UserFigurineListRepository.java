@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface UserFigurineListRepository extends JpaRepository<UserFigurineList, Long> {
   List<UserFigurineList> findByUserId(Long userId);
   Optional<UserFigurineList> findByUserIdAndType(Long userId, String type);
+  Optional<UserFigurineList> findByUserIdAndName(Long userId, String name);
 }

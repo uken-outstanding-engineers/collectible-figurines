@@ -23,7 +23,7 @@
       <p class="figure-name">{{ figure.name }}</p>
     </mat-card-content>
     <mat-card-actions class="card-actions">
-      <button mat-mini-fab [ngClass]="{'active': figure.isActive}" (click)="toggleActive(figure)">
+      <button mat-mini-fab (click)="toggleActive(figure)">
         <mat-icon fontIcon="favorite"></mat-icon> 
       </button>
     </mat-card-actions>

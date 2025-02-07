@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { User } from '../api/user.model';
 import { UserService } from '../api/user.service';
@@ -16,7 +17,8 @@ import { UserService } from '../api/user.service';
     MatIconModule,
     MatFormFieldModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    TranslateModule
   ],
   templateUrl: './settings-account.component.html',
   styleUrl: './settings-account.component.scss'

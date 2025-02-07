@@ -1,0 +1,30 @@
+<div class="figurine-container">
+  <div class="figurine-menu">
+    <h2>Figurine Lists</h2> 
+    <mat-list>
+      <mat-list-item 
+        *ngFor="let listName of getListNames()" 
+        (click)="setActive(listName)" 
+        [class.active]="activeItem === listName">
+        {{ formatListName(listName) }} 
+      </mat-list-item>
+    </mat-list>
+  </div>
+  
+  <div class="figurine-panel">
+    <ng-container *ngIf="getActiveFigurines().length > 0; else noFigurines">
+      <mat-list>
+        <mat-list-item *ngFor="let figurine of getActiveFigurines()">
+          <img [src]="figurine.imageUrl" alt="{{ figurine.name }}" />
+          <span>{{ figurine.name }} ({{ figurine.series }})</span>
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+  
+    <ng-template #noFigurines>
+      <p>Brak figurek na tej liście.</p>
+    </ng-template>
+  </div>
+  
+</div>
+  

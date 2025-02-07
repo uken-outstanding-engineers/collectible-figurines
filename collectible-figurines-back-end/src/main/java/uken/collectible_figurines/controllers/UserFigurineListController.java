@@ -42,4 +42,13 @@ public class UserFigurineListController {
       return ResponseEntity.ok(response);
     }
 
+  @PostMapping("/{userId}/{listName}/{figurineId}/toggle")
+  public ResponseEntity<String> toggleFigurineLiked(@PathVariable Long userId, @PathVariable String listName, @PathVariable Long figurineId) {
+
+    boolean isLiked = listService.toggleFigurineInList(userId, figurineId, listName);
+
+    String message = isLiked ? "The figurine has been added to list." : "The figure has been removed from list.";
+    return ResponseEntity.ok(message);
+  }
+
 }

@@ -31,19 +31,25 @@
             <!-- Admin Panel - only admin -->
             <button mat-menu-item routerLink="/admin" *ngIf="currentUser?.permission === 'ADMIN'">
                 <mat-icon>admin_panel_settings</mat-icon>
-                <span>Admin Panel</span>
+                <span>{{ 'navbar.admin_panel' | translate }}</span>
+            </button>
+
+            <!-- Figurine Lists -->
+            <button mat-menu-item routerLink="/figurine-lists">
+                <mat-icon>smart_toy</mat-icon>
+                <span>{{ 'navbar.figurine_lists' | translate }}</span>
             </button>
 
             <!-- Settings -->
             <button mat-menu-item routerLink="/settings">
-                <mat-icon>settings</mat-icon>
-                <span>Ustawienia</span>
+                <mat-icon>format_list_bulleted</mat-icon>
+                <span>{{ 'navbar.settings' | translate }}</span>
             </button>
 
             <!-- Logout -->
             <button mat-menu-item (click)="logout()">
                 <mat-icon>logout</mat-icon>
-                <span>Wyloguj</span>
+                <span>{{ 'navbar.logout' | translate }}</span>
             </button>
         </mat-menu>
 

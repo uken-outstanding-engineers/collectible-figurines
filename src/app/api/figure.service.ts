@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, switchMap } from 'rxjs';
 import { Figure } from './figure.model';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -100,7 +101,7 @@ export class FigureService {
 
   private API_URL = 'http://localhost:8080/api/figurines';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   // Download the figurines list
   getFigures(): Observable<Figure[]> {

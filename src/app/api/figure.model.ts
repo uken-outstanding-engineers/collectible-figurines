@@ -9,6 +9,5 @@ export interface Figure {
   glowInDark?: boolean; 
   flocked?: boolean; 
   exclusive?: boolean;
-  isActive?: boolean;
+  isLiked?: boolean;
 }
-  
