@@ -14,10 +14,10 @@
   <div class="figurine-panel">
     <ng-container *ngIf="getActiveFigurines().length > 0; else noFigurines">
       <mat-list>
-        <mat-list-item *ngFor="let figurine of getActiveFigurines()">
+        <div class="figurine-item" *ngFor="let figurine of getActiveFigurines()">
           <img [src]="figurine.imageUrl" alt="{{ figurine.name }}" />
           <span>{{ figurine.name }} ({{ figurine.series }})</span>
-        </mat-list-item>
+        </div>
       </mat-list>
     </ng-container>
   

@@ -31,7 +31,7 @@ const TREE_DATA: InterfaceNode[] = [
     name: 'Collectible Figurines',
     children: [
       { name: 'Figurines list', route: '/admin/figurines' }, 
-      { name: 'Variants list', route: '/admin/variants' }, 
+      { name: 'Fandoms list', route: '/admin/fandoms' }, 
     ],
     icon: 'smart_toy',
   },

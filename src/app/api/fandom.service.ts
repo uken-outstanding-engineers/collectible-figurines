@@ -1,7 +1,7 @@
-// fandom.service.ts
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Fandom } from './fandom.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,18 @@ export class FandomService {
     },
   ];
 
+  // getFandoms(): Observable<Fandom[]> {
+  //   return of(this.fandoms);
+  // }
+
+  private searchResults = new BehaviorSubject<Fandom[]>([]);
+
+  private API_URL = 'http://localhost:8080/api/fandoms';
+
+  constructor(private http: HttpClient) {}
+
+  // Download the fandoms list
   getFandoms(): Observable<Fandom[]> {
-    return of(this.fandoms);
+    return this.http.get<Fandom[]>(`${this.API_URL}/all`);
   }
 }

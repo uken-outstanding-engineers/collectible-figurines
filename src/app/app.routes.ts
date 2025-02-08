@@ -17,6 +17,7 @@ import { SettingsAccountComponent } from './settings-account/settings-account.co
 import { SettingsNotificationsComponent } from './settings-notifications/settings-notifications.component';
 import { AdminPanelDashboardComponent } from './admin-panel-dashboard/admin-panel-dashboard.component';
 import { UserFigurineListsComponent } from './user-figurine-lists/user-figurine-lists.component';
+import { AdminPanelFandomsListComponent } from './admin-panel-fandoms-list/admin-panel-fandoms-list.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/figures-showcase', pathMatch: 'full' }, 
@@ -35,6 +36,7 @@ export const routes: Routes = [
         { path: 'dashboard', component: AdminPanelDashboardComponent },
         { path: 'figurines', component: AdminPanelFigurinesListComponent },
         { path: 'variants', component: AdminPanelVariantsListComponent },
+        { path: 'fandoms', component: AdminPanelFandomsListComponent},
         { path: 'users', component: AdminPanelUsersComponent },
         { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       ],

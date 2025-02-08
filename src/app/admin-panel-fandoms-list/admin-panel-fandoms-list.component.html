@@ -1,0 +1,67 @@
+<div class="figurines-list-container">
+    <div class="header-container">
+      <div class="description">
+        <h2>List of Fandoms of Collectible Figurines</h2>
+        <p>Browsing and managing the database of collectible figurines fandoms</p>
+      </div>  
+    </div>
+    
+    <div class="search-container">
+      <mat-form-field class="search-field" appearance="outline">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search..." />
+      </mat-form-field>
+    </div>
+    
+    <table mat-table [dataSource]="fandoms" class="mat-elevation-z8 full-width-table">
+      <!-- Image Column -->
+      <ng-container matColumnDef="imageUrl">
+        <th mat-header-cell *matHeaderCellDef>Image</th>
+        <td mat-cell *matCellDef="let fandom">
+          <!-- <img [src]="'fandoms-images/' + fandom.imageUrl" alt="{{ fandom.name}}" class="figurine-image" /> -->
+          <img src="figurines-images/000000001a.jpg" alt="{{ fandom.name}}" class="figurine-image" />
+        </td>
+      </ng-container>
+  
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let fandom">{{ fandom.name }}</td>
+      </ng-container>
+  
+  
+      <!-- Action Column -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let fandom">
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openEditDialog(fandom)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item (click)="openDeleteDialog(fandom.id, fandom.name)">
+              <mat-icon>delete</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+      
+      <!-- Table Header and Row -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    
+    <mat-paginator 
+      [length]="fandoms.data.length" 
+      [pageSize]="10" 
+      [pageSizeOptions]="[10, 20]" 
+      aria-label="Select page" 
+      class="mat-elevation-z8"
+    >
+    </mat-paginator>
+  
+  </div>

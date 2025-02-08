@@ -48,10 +48,9 @@
     color: white !important;   
 }
 
-
 .figurine-panel {
     flex-grow: 1;
-    margin: 20px 5%;
+    margin: 50px 5% 25px 5%;
     padding: 0;
 }
 
@@ -59,31 +58,26 @@
     padding: 0;
 }
 
-.figurine-panel mat-list-item {
-    display: flex;
+.figurine-panel .figurine-item {
+    display: flex ; 
+    flex-direction: row ; 
     align-items: center;
     background-color: #fff;
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    overflow: hidden; /* Zapobiega wychodzeniu zdjęcia lub tekstu poza box */
-}
-
-.figurine-panel mat-list-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
 }
 
 .figurine-panel img {
-    width: 100px;
-    height: 100px;
+    width: 75px;
+    height: 75px;
     border-radius: 8px;
     object-fit: cover;
     flex-shrink: 0;
     margin-right: 20px;
-    border: 2px solid #ddd; /* Delikatna ramka dla lepszej widoczności */
+    border: 2px solid #ff4081; // or #ddd
 }
 
 .figurine-panel span {
@@ -92,15 +86,13 @@
     color: #333;
     font-weight: 600;
     display: flex;
-    align-items: center; /* Wyśrodkowanie pionowe */
-    height: 100%; /* Dopasowanie wysokości do kontenera */
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; /* Zapobiega rozciąganiu tekstu na zbyt długie nazwy */
+    align-items: center;
+    height: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
 }
-
-
-
 
 .no-figures {
     text-align: center;
