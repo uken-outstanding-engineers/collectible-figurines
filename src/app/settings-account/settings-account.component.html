@@ -31,20 +31,66 @@
   </div>
 </div>
 
+<!-- Dialog for Editing -->
 <div class="dialog-edit-container" *ngIf="editDialogVisible">
   <div class="dialog-backdrop" (click)="closeEditDialog()"></div>
   <div class="dialog">
     <h2>Edit {{ editField }}</h2>
     <form (ngSubmit)="saveChanges()">
+      
       <div class="form-group">
-        <label for="editInput">{{ editField }}</label>
-        <input 
-          id="editInput"
-          [(ngModel)]="editValue"
-          name="editInput"
-          type="text"
-          required
-        />
+        <label for="editInput">{{ editField }}<span *ngIf="editField != 'Password'">: {{ currentValue }}</span></label>
+
+        <div *ngIf="editField != 'Password'">
+          <input 
+            id="editInput"
+            [(ngModel)]="editValue"
+            name="editInput"
+            type="text"
+            required
+            minlength="3"
+            placeholder="Enter new {{ editField | lowercase }}"
+          />
+
+          <input 
+            id="editInput"
+            [(ngModel)]="editConfirmValue"
+            name="editInput"
+            type="text"
+            required
+            minlength="3"
+            placeholder="Confirm new {{ editField | lowercase }}"
+          />
+        </div>
+
+        <div *ngIf="editField === 'Password'">
+          <input 
+            id="currentPassword"
+            [(ngModel)]="currentPassword"
+            name="currentPassword"
+            type="password"
+            placeholder="Current Password"
+            required 
+          />
+          <input 
+            id="newPassword"
+            [(ngModel)]="newPassword"
+            name="newPassword"
+            type="password"
+            placeholder="New Password"
+            required 
+          />
+          <input 
+            id="confirmNewPassword"
+            [(ngModel)]="confirmNewPassword"
+            name="confirmNewPassword"
+            type="password"
+            placeholder="Confirm New Password"
+            required 
+          />
+        </div>
+        <span class="error-message" [class.show]="errorMessage" #errorBox>{{ errorMessage }}</span>
+        <!-- <span class="error-message" #errorBox>{{ errorMessage }}</span> -->
       </div>
 
       <div class="button-group">
@@ -52,7 +98,9 @@
         <button type="submit" class="yes">{{ 'settings.account_settings_page.save' | translate }}</button>
       </div>
     </form>
+
     <button class="close-btn" (click)="closeEditDialog()">×</button>
   </div>
 </div>
+
   

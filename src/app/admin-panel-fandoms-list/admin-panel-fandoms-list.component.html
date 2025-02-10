@@ -4,6 +4,11 @@
         <h2>List of Fandoms of Collectible Figurines</h2>
         <p>Browsing and managing the database of collectible figurines fandoms</p>
       </div>  
+
+      <button mat-raised-button color="primary" (click)="openAddDialog()" class="add-figurine-button">
+        <mat-icon>add</mat-icon>
+        Add Fandom
+      </button>
     </div>
     
     <div class="search-container">
@@ -63,5 +68,44 @@
       class="mat-elevation-z8"
     >
     </mat-paginator>
+  </div>
+
+  <div class="dialog-delete-container" *ngIf="dialogVisible">
+    <div class="dialog-backdrop" (click)="closeDeleteDialog()"></div>
+    <div class="dialog">
+      <button class="close-btn" (click)="closeDeleteDialog()">×</button>
+      <h2>Confirm</h2>
+      <div class="warning-message">
+        <mat-icon class="warning-icon">warning</mat-icon>
+        <p>Are you sure you want to delete: <strong>{{ selectedName }}</strong>?</p>
+      </div>
+      <div class="button-group">
+        <button class="no" (click)="closeDeleteDialog()">No</button>
+        <button class="yes" (click)="confirmDelete()">Yes</button>
+      </div>
+    </div>
+  </div>
   
+  <div class="dialog-edit-container" *ngIf="editDialogVisible">
+    <div class="dialog-backdrop" (click)="closeEditDialog()"></div>
+    <div class="dialog">
+      <h2>Edit Fandom</h2>
+      <form (ngSubmit)="saveChanges()" *ngIf="editFandom">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input 
+            id="name"
+            [(ngModel)]="editFandom.name"
+            name="name"
+            type="text"
+            required
+          />
+        </div>  
+        <div class="button-group">
+          <button type="button" class="no" (click)="closeEditDialog()">Cancel</button>
+          <button type="submit" class="yes">Save</button>
+        </div>
+      </form>
+      <button class="close-btn" (click)="closeEditDialog()">×</button>
+    </div>
   </div>

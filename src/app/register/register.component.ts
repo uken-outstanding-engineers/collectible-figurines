@@ -26,9 +26,10 @@ import { Router } from '@angular/router';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
+  @ViewChild('errorBox') errorBox!: ElementRef;
+  
   registerForm: FormGroup;
   errorMessage: string = '';
-  @ViewChild('errorBox') errorBox!: ElementRef;
 
   constructor(
     private fb: FormBuilder,

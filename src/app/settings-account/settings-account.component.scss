@@ -187,13 +187,14 @@ $font-poppins: 'Poppins', sans-serif;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
 
             label {
                 display: block;
                 margin-bottom: 5px;
                 font-weight: bold;
                 color: #555;
+                margin-bottom: 10px;
             }
 
             input {
@@ -202,6 +203,22 @@ $font-poppins: 'Poppins', sans-serif;
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 font-size: 14px;
+                margin: 7.5px 0;
+                font-family: 'Montserrat', sans-serif;
+            }
+
+            .error-message {
+                display: none;
+                color: red;
+                font-size: 0.9rem;
+                font-weight: bold;
+                margin: 20px 0;
+                text-align: center;
+            }
+            
+            .error-message.show {
+                display: block;
+                animation: shake 0.4s ease-in-out;
             }
         }
 
@@ -211,7 +228,7 @@ $font-poppins: 'Poppins', sans-serif;
             button {
                 flex: 1;
                 padding: 5px 10px;
-                margin: 20px 0px 0 5px;
+                margin: 10px 0px 0 5px; //20px 0px 0 5px
                 width: 120px;
                 font-size: 1rem;
                 font-weight: bold;
@@ -271,3 +288,10 @@ $font-poppins: 'Poppins', sans-serif;
     }
 }
   
+
+@keyframes shake {
+    0%, 100% { transform: translateY(0); }
+    25% { transform: translateY(-5px); }
+    50% { transform: translateY(5px); }
+    75% { transform: translateY(-3px); }
+}

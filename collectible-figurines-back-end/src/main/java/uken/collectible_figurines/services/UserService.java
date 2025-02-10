@@ -16,4 +16,5 @@ public interface UserService {
   void updateLastLogin(User user);
   int getTotalUsers();
   int getActiveUsers();
+  User updateEmail(Long userId, String newEmail);
 }

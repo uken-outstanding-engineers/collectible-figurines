@@ -1,19 +1,19 @@
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms'; 
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator } from '@angular/material/paginator';
-import { Fandom } from '../api/fandom.model';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatTableModule } from '@angular/material/table';
-import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button'; 
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
 
-
+import { Fandom } from '../api/fandom.model';
 import { FandomService } from '../api/fandom.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-panel-fandoms-list',
@@ -26,7 +26,9 @@ import { Subscription } from 'rxjs';
     MatInputModule,
     MatSelectModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule,
+    FormsModule
   ],
   templateUrl: './admin-panel-fandoms-list.component.html',
   styleUrl: '../admin-panel/admin-panel-main.component.scss'
@@ -57,11 +59,84 @@ export class AdminPanelFandomsListComponent {
     this.fandoms.filter = filterValue;
   }
 
-  openEditDialog(fandom: { id: number; name: string; series: string; imageUrl: string; hoverImageUrl: string; [key: string]: any }): void {
-
+  /* Add */
+  openAddDialog(): void {
+    this.editFandom = {
+      id: 0,
+      name: '',
+      imageUrl: 'figurines-images/000000001a.jpg',
+    };
+    this.editDialogVisible = true;
   }
+
+  /* Edit */
+  editDialogVisible = false;
+  editFandom: { id: number; name: string; imageUrl: string;} | null = null;
+
+  openEditDialog(fandom: { id: number; name: string; imageUrl: string; }): void {
+    this.editFandom = { ...fandom };
+
+    this.editDialogVisible = true;
+  }
+
+  closeEditDialog(): void {
+    this.editDialogVisible = false;
+    this.editFandom = null;
+  }
+
+  /* Edit & Add */
+  saveChanges(): void {
+    if (this.editFandom) {
+      const index = this.fandoms.data.findIndex(f => f.id === this.editFandom?.id);
+  
+      if (index !== -1 && this.editFandom.id > 0) {
+        // Edit fandom
+        this.fandomService.editFandom(this.editFandom.id, this.editFandom).subscribe((updatedFandom) => {
+          this.fandoms.data[index] = { ...updatedFandom };
+          this.fandoms._updateChangeSubscription(); 
+          this.closeEditDialog();
+        });
+      } else {
+        // Add new fadnom
+        this.fandomService.addFandom(this.editFandom).subscribe((newFandom) => {
+          this.fandoms.data.push(newFandom);
+          this.fandoms._updateChangeSubscription();
+          this.closeEditDialog();
+        });
+      }
+    }
+  }
+
+  /* Delete */
+  dialogVisible = false;
+  selectedId: number | null = null;
+  selectedName: string | null = null; 
 
   openDeleteDialog(id: number, name: string): void {
-
+    this.selectedId = id;
+    this.selectedName = name;
+    this.dialogVisible = true;
   }
+
+  closeDeleteDialog(): void {
+    this.dialogVisible = false;
+    this.selectedId = null;
+    this.selectedName = null;
+  }
+
+  confirmDelete(): void {
+    if (this.selectedId !== null) {
+      this.fandomService.deleteFandom(this.selectedId).subscribe(
+        () => {
+          this.fandoms.data = this.fandoms.data.filter(fandoms => fandoms.id !== this.selectedId);
+          this.fandoms._updateChangeSubscription();
+          this.closeDeleteDialog();  
+          //console.log('The fandoms has been removed');
+        },
+        (error) => {
+          //console.error('Error while deleting fandoms', error);
+        }
+      );
+    }
+  }   
 }

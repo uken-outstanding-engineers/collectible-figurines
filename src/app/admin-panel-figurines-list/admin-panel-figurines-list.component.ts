@@ -1,18 +1,21 @@
 import { Component, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button'; 
 import { MatPaginator } from '@angular/material/paginator';
-import { MatMenuModule } from '@angular/material/menu';
-import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button'; 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
+import { FandomService } from '../api/fandom.service';
+import { Fandom } from '../api/fandom.model';
 
 
 @Component({
@@ -29,6 +32,7 @@ import { FigureService } from '../api/figure.service';
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,
+    MatSelectModule,
 ],
   templateUrl: './admin-panel-figurines-list.component.html',
   styleUrl: '../admin-panel/admin-panel-main.component.scss'
@@ -37,6 +41,7 @@ export class AdminPanelFigurinesListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   figurines = new MatTableDataSource<Figure>([]);
+  fandoms: Fandom[] = []; 
 
   displayedColumns: string[] = [
     'imageUrl', 'name', 'series', 'variants', 'action',
@@ -44,9 +49,15 @@ export class AdminPanelFigurinesListComponent {
 
   private subscription: Subscription;
 
-  constructor(private figureService: FigureService) {
+  constructor(private figureService: FigureService, private fandomService: FandomService) {
+    //Figurines
     this.subscription = this.figureService.getFigures().subscribe((data: Figure[]) => {
       this.figurines.data = data;
+    });
+
+    //Fandoms
+    this.fandomService.getFandoms().subscribe(fandoms => {
+      this.fandoms = fandoms; 
     });
   }
 
@@ -167,12 +178,5 @@ export class AdminPanelFigurinesListComponent {
         }
       );
     }
-  }
-
-  private generateId(): number {
-    return this.figurines.data.length
-      ? Math.max(...this.figurines.data.map((f) => f.id)) + 1
-      : 1;
-  }
-  
+  }  
 }

@@ -16,6 +16,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,4 +82,17 @@ public class UserServiceImpl implements UserService {
     LocalDateTime oneMonthAgo = LocalDateTime.now().minus(1, ChronoUnit.MONTHS);
     return userRepository.countUsersLoggedAfter(oneMonthAgo);
   }
+
+  public User updateEmail(Long userId, String newEmail) {
+    User user = userRepository.findById(userId)
+      .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + userId));
+
+    if(user.getEmail().equals(newEmail)) {
+      throw new IllegalArgumentException("The new email must be different from the current one!");
+    }
+
+    user.setEmail(newEmail);
+    return userRepository.save(user);
+  }
+
 }

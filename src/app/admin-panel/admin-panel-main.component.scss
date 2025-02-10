@@ -16,6 +16,10 @@
   font-family: 'Lato', sans-serif;
 }
 
+::ng-deep.header-container .add-figurine-button ::ng-deep.mdc-button__label {
+margin-top: 2px;
+}
+
 .description {
   margin: 20px 0 40px 0;
   max-width: 70%;
@@ -70,7 +74,7 @@ table {
 
 th, td {
   padding: 10px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #ddd;
   text-align: center;
 }
@@ -90,7 +94,14 @@ mat-paginator {
   padding: 10px 0;
 }
 
+button[mat-icon-button] {
+  background: transparent;
+  border: none;
+}
+
 mat-icon {
+  display: flex;
+  text-align: center;
   vertical-align: middle;
   cursor: pointer;
 }
@@ -335,6 +346,10 @@ mat-icon {
 
     .form-group {
       margin-bottom: 15px;
+
+      mat-form-field {
+        width: 100%;
+      }
 
       label {
         display: block;

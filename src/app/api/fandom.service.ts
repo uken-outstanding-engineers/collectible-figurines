@@ -44,4 +44,19 @@ export class FandomService {
   getFandoms(): Observable<Fandom[]> {
     return this.http.get<Fandom[]>(`${this.API_URL}/all`);
   }
+
+  // Add a fandom to the database
+  addFandom(fandom: Fandom): Observable<Fandom> {
+    return this.http.post<Fandom>(`${this.API_URL}/add`, fandom);
+  }
+
+  // Delete figurine
+  deleteFandom(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/delete/${id}`);
+  }
+
+  // Edit figurine
+  editFandom(id: number, fandom: Fandom): Observable<Fandom> {
+    return this.http.put<Fandom>(`${this.API_URL}/edit/${id}`, fandom);
+  }
 }

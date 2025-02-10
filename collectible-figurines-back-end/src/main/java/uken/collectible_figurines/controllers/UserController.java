@@ -66,4 +66,11 @@ public class UserController {
   public int getActiveUsers() {
     return userService.getActiveUsers();
   }
+
+  @PutMapping("/{userId}/newEmail")
+  public String updateEmail(@PathVariable Long userId, @RequestBody String newEmail) {
+    User updatedUser = userService.updateEmail(userId, newEmail);
+    return updatedUser.getEmail();
+  }
+
 }

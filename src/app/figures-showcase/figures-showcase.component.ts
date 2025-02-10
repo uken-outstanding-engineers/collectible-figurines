@@ -16,6 +16,7 @@ import { FigureService } from '../api/figure.service';
 import { FandomService } from '../api/fandom.service';
 import { FigureListService } from '../api/figure-list.service';
 import { UserService } from '../api/user.service';
+import { Fandom } from '../api/fandom.model';
 
 interface FunkoNode {
   name: string;
@@ -131,7 +132,7 @@ export class FiguresShowcaseComponent implements OnInit {
   paginatedFigures: Figure[] = [];
   hoverTimeouts: { [key: string]: any } = {};
 
-  fandoms: any[] = []; 
+  fandoms: Fandom[] = []; 
   selectedFandom: string | null = null; 
 
   listName: string = "";
@@ -332,7 +333,6 @@ export class FiguresShowcaseComponent implements OnInit {
     this.figureListService.getUserFigurineLists(this.userId).subscribe(lists => {
       if (lists.liked) {
         this.likedFigures = lists.liked.map(figurine => figurine.id); 
-        console.log(this.likedFigures);
 
         this.figures.forEach(figure => {
           figure.isLiked = this.likedFigures.includes(figure.id);

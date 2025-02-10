@@ -102,15 +102,13 @@
     margin-top: 40px;
 }
 
-
-
-@media (max-width: 1024px) {
+@media (max-width: 1124px) {
     .figurine-container {
         flex-direction: column; 
     }
 
     .figurine-menu {
-        width: 100%;
+        width: 95%;
         padding: 10px; 
         margin: 0; 
         background-color: #fff;

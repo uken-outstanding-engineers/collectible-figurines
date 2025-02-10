@@ -71,6 +71,20 @@ export class UserService {
       })
     );
   }
+
+    // Update E-mail
+    // updateEmail(userId: number, newEmail: string) {
+    //   return this.http.put<string>(`${this.API_URL}${userId}/newEmail`, newEmail).pipe(
+    //     tap(updatedEmail => {
+    //       const currentUser = this.loggedInUser.getValue();
+    //       if (currentUser) {
+    //         currentUser.email = updatedEmail;  
+    //         this.loggedInUser.next(currentUser);
+    //       }
+    //     })
+    //   );
+    // }
+    
   
   logout(): void {
     this.loggedInUser.next(null); 

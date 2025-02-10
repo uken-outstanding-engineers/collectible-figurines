@@ -1,10 +1,13 @@
 package uken.collectible_figurines.services.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uken.collectible_figurines.model.Figurine;
 import uken.collectible_figurines.repository.FigurineRepository;
+import uken.collectible_figurines.repository.UserFigurineListItemRepository;
 import uken.collectible_figurines.services.FigurineService;
 
 import java.util.List;
@@ -13,6 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FigurineServiceImpl implements FigurineService {
   private final FigurineRepository figurineRepository;
+  @Autowired
+  private UserFigurineListItemRepository userFigurineListItemRepository;
 
   @Override
   public List<Figurine> getAllFigurines() {
@@ -23,7 +28,9 @@ public class FigurineServiceImpl implements FigurineService {
     return figurineRepository.save(figurine);
   }
 
+  @Transactional
   public void deleteFigurineById(Long id) {
+    userFigurineListItemRepository.deleteByFigurineId(id);
     figurineRepository.deleteById(id);
   }
 
