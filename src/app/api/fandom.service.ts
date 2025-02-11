@@ -36,7 +36,8 @@ export class FandomService {
 
   private searchResults = new BehaviorSubject<Fandom[]>([]);
 
-  private API_URL = 'http://localhost:8080/api/fandoms';
+  //private API_URL = 'http://localhost:8080/api/fandoms'; 
+  private API_URL = 'https://api.wojtasm.pl:8443/api/fandoms';
 
   constructor(private http: HttpClient) {}
 

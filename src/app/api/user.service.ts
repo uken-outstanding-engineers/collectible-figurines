@@ -13,7 +13,9 @@ export class UserService {
     //{ id: 3, email: "user2@figurines.pl", username: 'user2', password: 'user456', permission: 'USER' },
   //];
 
-  private API_URL = 'http://localhost:8080/api/users';
+  //private API_URL = 'http://localhost:8080/api/users';
+  private API_URL = 'https://api.wojtasm.pl:8443/api/users/all';
+
   private loggedInUser = new BehaviorSubject<User | null>(null);
 
   constructor(private http: HttpClient) {

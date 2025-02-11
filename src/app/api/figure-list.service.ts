@@ -8,7 +8,8 @@ import { UserFigurineLists } from './figure-list.model';
   providedIn: 'root',
 })
 export class FigureListService {
-  private API_URL = 'http://localhost:8080/api/figurine-lists';
+  //private API_URL = 'http://localhost:8080/api/figurine-lists';
+  private API_URL = 'https://api.wojtasm.pl:8443/api/figurine-lists';
 
   constructor(private http: HttpClient, private userService: UserService) {}
 

@@ -99,7 +99,8 @@ export class FigureService {
 
   private searchResults = new BehaviorSubject<Figure[]>([]);
 
-  private API_URL = 'http://localhost:8080/api/figurines';
+  //private API_URL = 'http://localhost:8080/api/figurines';
+  private API_URL = 'https://api.wojtasm.pl:8443/api/figurines';
 
   constructor(private http: HttpClient, private userService: UserService) {}
 
