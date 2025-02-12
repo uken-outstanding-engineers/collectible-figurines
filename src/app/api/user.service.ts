@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rxjs';
 import { User } from './user.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { API_URL } from './api-url';
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +14,7 @@ export class UserService {
     //{ id: 3, email: "user2@figurines.pl", username: 'user2', password: 'user456', permission: 'USER' },
   //];
 
-  //private API_URL = 'http://localhost:8080/api/users';
-  private API_URL = 'https://api.wojtasm.pl:8443/api/users/all';
+  private API_URL = `${API_URL.BASE_URL}/users`;
 
   private loggedInUser = new BehaviorSubject<User | null>(null);
 

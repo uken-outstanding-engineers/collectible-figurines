@@ -24,7 +24,8 @@
         <th mat-header-cell *matHeaderCellDef>Image</th>
         <td mat-cell *matCellDef="let fandom">
           <!-- <img [src]="'fandoms-images/' + fandom.imageUrl" alt="{{ fandom.name}}" class="figurine-image" /> -->
-          <img src="figurines-images/000000001a.jpg" alt="{{ fandom.name}}" class="figurine-image" />
+          <!-- <img src="figurines-images/000000001a.jpg" alt="{{ fandom.name}}" class="figurine-image" /> -->
+          <img [src]="fandom.imageUrl" alt="{{ fandom.name}}" class="figurine-image" />
         </td>
       </ng-container>
   
@@ -91,6 +92,34 @@
     <div class="dialog">
       <h2>Edit Fandom</h2>
       <form (ngSubmit)="saveChanges()" *ngIf="editFandom">
+
+        <div class="form-group">
+          <label 
+            for="imageUpload" 
+            class="image-upload-box" 
+            (dragover)="onDragOver($event)" 
+            (dragleave)="onDragLeave($event)" 
+            (drop)="onDrop($event)"
+            [class.dragging]="isDragging"
+          >
+            <div *ngIf="!editFandom.imageUrl; else imagePreview">
+              <p>Kliknij lub przeciągnij i upuść</p>
+            </div>
+        
+            <ng-template #imagePreview>
+              <img [src]="editFandom.imageUrl" alt="Preview" class="image-preview" />
+            </ng-template>
+        
+            <input 
+              type="file" 
+              id="imageUpload" 
+              (change)="onImageSelected($event)" 
+              accept="image/*"
+              hidden
+            />
+          </label>
+        </div>
+
         <div class="form-group">
           <label for="name">Name:</label>
           <input 
@@ -101,6 +130,7 @@
             required
           />
         </div>  
+
         <div class="button-group">
           <button type="button" class="no" (click)="closeEditDialog()">Cancel</button>
           <button type="submit" class="yes">Save</button>

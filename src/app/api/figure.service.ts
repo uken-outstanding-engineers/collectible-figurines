@@ -3,104 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, map, Observable, of, switchMap } from 'rxjs';
 import { Figure } from './figure.model';
 import { UserService } from './user.service';
+import { API_URL } from './api-url';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FigureService {
-  // private figures: Figure[] = [
-  //   {
-  //       id: 1,
-  //       imageUrl: 'figurines-images/000000001a.jpg',
-  //       hoverImageUrl: 'figurines-images/000000001b.jpg',
-  //       series: 'STAR WARS',
-  //       fandomId: 1,
-  //       name: 'THRAWN\'S NIGHT TROOPER',
-  //   },
-  //   {
-  //       id: 2,
-  //       imageUrl: 'figurines-images/000000002a.jpg',
-  //       hoverImageUrl: 'figurines-images/000000002b.jpg',
-  //       series: 'STAR WARS',
-  //       fandomId: 1,
-  //       name: 'PURGE TROOPER',
-  //       exclusive: true,
-  //   },
-  //   {
-  //       id: 3,
-  //       imageUrl: 'figurines-images/000000003a.jpg',
-  //       hoverImageUrl: 'figurines-images/000000003b.jpg',
-  //       series: 'THE WITCHER',
-  //       name: 'GERALT (WITH SHIELD)',
-  //   },
-  //   {
-  //       id: 4,
-  //       imageUrl: 'figurines-images/000000004a.jpg',
-  //       hoverImageUrl: 'figurines-images/000000004b.jpg',
-  //       series: 'FC BARCELONA',
-  //       name: 'ROBERT LEWANDOWSKI',
-  //   },
-  //   {
-  //       id: 5,
-  //       imageUrl: 'figurines-images/000000005a.jpg',
-  //       hoverImageUrl: 'figurines-images/000000005b.jpg',
-  //       series: 'HOUSE OF THE DRAGON',
-  //       name: 'AEMOND TARGARYEN',
-  //       fandomId: 4,
-  //       chase: true,
-  //   },
-  //   {
-  //       id: 6,
-  //       imageUrl: 'figurines-images/000000006a.jpg',
-  //       hoverImageUrl: 'figurines-images/000000006b.jpg',
-  //       series: 'WEDNESDAY',
-  //       name: 'WEDNESDAY ADDAMS',
-  //   },
-  //   {
-  //       id: 7,
-  //       imageUrl: 'figurines-images/000000007a.jpg',
-  //       hoverImageUrl: 'figurines-images/000000007b.jpg',
-  //       series: 'EREN YEAGER',
-  //       name: 'ATTACK ON TITAN',
-  //   },
-  //   {
-  //       id: 8,
-  //       imageUrl: 'figurines-images/000000008a.jpg',
-  //       hoverImageUrl: 'figurines-images/000000008b.jpg',
-  //       series: 'SHREK',
-  //       name: 'SHREK',
-  //   },
-  //   {
-  //       id: 9,
-  //       imageUrl: 'figurines-images/000000009a.jpg',
-  //       hoverImageUrl: 'figurines-images/000000009b.jpg',
-  //       series: 'NARUTO SHIPPUDEN',
-  //       name: 'NARUTO (SIX PATH SAGE)',
-  //       glowInDark: true
-  //   },
-  //   {
-  //       id: 10,
-  //       imageUrl: 'figurines-images/000000010a.jpg',
-  //       hoverImageUrl: 'figurines-images/000000010b.jpg',
-  //       series: 'STAR WARS',
-  //       fandomId: 1,
-  //       name: 'PROXY',
-  //       glowInDark: true,
-  //       exclusive: true
-  //   },
-  //   {
-  //       id: 11,
-  //       imageUrl: 'figurines-images/000000011a.jpg',
-  //       hoverImageUrl: 'figurines-images/000000011b.jpg',
-  //       series: 'I AM GROOT',
-  //       name: 'GROOT IN ONESIE',
-  //   },
-  // ];
-
   private searchResults = new BehaviorSubject<Figure[]>([]);
 
-  //private API_URL = 'http://localhost:8080/api/figurines';
-  private API_URL = 'https://api.wojtasm.pl:8443/api/figurines';
+  private API_URL = `${API_URL.BASE_URL}/figurines`;
 
   constructor(private http: HttpClient, private userService: UserService) {}
 
@@ -110,19 +21,20 @@ export class FigureService {
   }
 
   // Add a figurine to the database
-  addFigure(figure: Figure): Observable<Figure> {
-    return this.http.post<Figure>(`${this.API_URL}/add`, figure);
+  addFigure(formData: FormData): Observable<Figure> {
+    return this.http.post<Figure>(`${this.API_URL}/add`, formData);
   }
-
+  
   // Delete figurine
   deleteFigure(id: number): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/delete/${id}`);
   }
 
   // Edit figurine
-  editFigure(id: number, figure: Figure): Observable<Figure> {
-    return this.http.put<Figure>(`${this.API_URL}/edit/${id}`, figure);
+  editFigure(id: number, formData: FormData): Observable<Figure> {
+    return this.http.put<Figure>(`${this.API_URL}/edit/${id}`, formData);
   }
+  
 
   // Download the number of figurines
   getTotalFigurines(): Observable<number> {

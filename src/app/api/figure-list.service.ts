@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, map, Observable, of, switchMap } from 'rxjs';
 import { UserService } from './user.service';
 import { UserFigurineLists } from './figure-list.model';
+import { API_URL } from './api-url';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FigureListService {
-  //private API_URL = 'http://localhost:8080/api/figurine-lists';
-  private API_URL = 'https://api.wojtasm.pl:8443/api/figurine-lists';
+  private API_URL = `${API_URL.BASE_URL}/figurine-lists`;
 
   constructor(private http: HttpClient, private userService: UserService) {}
 

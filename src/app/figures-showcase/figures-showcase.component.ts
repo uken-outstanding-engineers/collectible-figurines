@@ -318,10 +318,12 @@ export class FiguresShowcaseComponent implements OnInit {
       console.error('User is not logged in!');
       return;
     }
-
-    this.figureListService.toggleFigurine(this.userId, figure.id, listName).subscribe(response => {
-      figure.isLiked = !figure.isLiked;
-    });
+    
+    if (figure.id !== null) {
+      this.figureListService.toggleFigurine(this.userId, figure.id, listName).subscribe(response => {
+        figure.isLiked = !figure.isLiked;
+      });
+    }
   }
 
   loadLikedFigures(): void {
@@ -332,10 +334,11 @@ export class FiguresShowcaseComponent implements OnInit {
 
     this.figureListService.getUserFigurineLists(this.userId).subscribe(lists => {
       if (lists.liked) {
-        this.likedFigures = lists.liked.map(figurine => figurine.id); 
+        this.likedFigures = lists.liked.map(figurine => figurine.id).filter(id => id !== null) as number[];
 
         this.figures.forEach(figure => {
-          figure.isLiked = this.likedFigures.includes(figure.id);
+          if (figure.id !== null)
+            figure.isLiked = this.likedFigures.includes(figure.id);
         });
       }
     });

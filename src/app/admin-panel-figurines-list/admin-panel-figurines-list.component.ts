@@ -82,10 +82,10 @@ export class AdminPanelFigurinesListComponent {
   /* Add */
   openAddDialog(): void {
     this.editFigure = {
-      id: 0,
+      id: null,
       name: '',
       series: '',
-      imageUrl: 'figurines-images/000000001a.jpg',
+      imageUrl: '',
       hoverImageUrl: 'figurines-images/000000001b.jpg',
       chase: false,
       glowInDark: false,
@@ -98,7 +98,7 @@ export class AdminPanelFigurinesListComponent {
 
   /* Edit */
   editDialogVisible = false;
-  editFigure: { id: number; name: string; series: string; imageUrl: string; hoverImageUrl: string; [key: string]: any } | null = null;
+  editFigure: { id: number | null; name: string; series: string; imageUrl: string; hoverImageUrl: string; [key: string]: any } | null = null;
 
   variants = [
     { key: 'chase', label: 'Chase' },
@@ -109,6 +109,8 @@ export class AdminPanelFigurinesListComponent {
 
   openEditDialog(figure: { id: number; name: string; series: string; imageUrl: string; hoverImageUrl: string; [key: string]: any }): void {
     this.editFigure = { ...figure };
+    console.log(this.previewUrl);
+    console.log(this.selectedFile);
 
     this.variants.forEach((variant) => {
       if (this.editFigure![variant.key] === undefined) {
@@ -120,30 +122,93 @@ export class AdminPanelFigurinesListComponent {
   }
 
   closeEditDialog(): void {
+    this.previewUrl = null;
+    this.selectedFile = null;
     this.editDialogVisible = false;
     this.editFigure = null;
   }
 
-  /* Edit & Add */
   saveChanges(): void {
     if (this.editFigure) {
-      const index = this.figurines.data.findIndex(f => f.id === this.editFigure?.id);
+      const formData = new FormData();
   
-      if (index !== -1 && this.editFigure.id > 0) {
+      formData.append('figurine', new Blob([JSON.stringify(this.editFigure)], { type: 'application/json' }));
+  
+      if (this.selectedFile) {
+        formData.append('imageFile', this.selectedFile);
+      }
+  
+      if (this.editFigure.id !== null) {
         // Edit figurine
-        this.figureService.editFigure(this.editFigure.id, this.editFigure).subscribe((updatedFigure) => {
-          this.figurines.data[index] = { ...updatedFigure };
-          this.figurines._updateChangeSubscription(); 
+        this.figureService.editFigure(this.editFigure.id, formData).subscribe(updatedFigure => {
+          const index = this.figurines.data.findIndex(f => f.id === updatedFigure.id);
+          this.figurines.data[index] = updatedFigure;
+          this.figurines._updateChangeSubscription();
           this.closeEditDialog();
         });
       } else {
-        // Add new figurine 
-        this.figureService.addFigure(this.editFigure).subscribe((newFigure) => {
+        // Add figurine
+        this.figureService.addFigure(formData).subscribe(newFigure => {
           this.figurines.data.push(newFigure);
           this.figurines._updateChangeSubscription();
           this.closeEditDialog();
         });
       }
+    }
+  }
+  
+  /* Drag and Drop */
+  isDragging: boolean = false;
+  previewUrl: string | ArrayBuffer | null = null;
+  selectedFile: File | null = null;
+
+  onImageSelected(event: any): void {
+    const file = event.target.files[0];
+    this.readImage(file);
+  }
+  
+  // private previewImage(file: File): void {
+  //   const reader = new FileReader();
+  //   reader.onload = (e: any) => {
+  //     if (this.editFigure) {
+  //       this.editFigure.imageUrl = e.target.result; 
+  //     }
+  //   };
+  //   reader.readAsDataURL(file);
+  // }
+  
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = true;
+  }
+  
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+  }
+  
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+    
+    const file = event.dataTransfer?.files[0];
+    if (file) {
+      this.readImage(file);
+    }
+  }
+  
+  private readImage(file: File): void {
+    if (file instanceof File) {
+      this.selectedFile = file; 
+  
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        if (this.editFigure) {
+          this.previewUrl = e.target?.result;
+          this.editFigure.imageUrl = e.target.result;  
+        }
+      };
+      reader.readAsDataURL(file);  
     }
   }
   

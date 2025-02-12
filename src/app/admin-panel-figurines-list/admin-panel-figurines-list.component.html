@@ -24,7 +24,8 @@
     <ng-container matColumnDef="imageUrl">
       <th mat-header-cell *matHeaderCellDef>Image</th>
       <td mat-cell *matCellDef="let figure">
-        <img [src]="figure.imageUrl" alt="{{ figure.name }}" class="figurine-image"/>
+        <!-- <img [src]="figure.imageUrl" alt="{{ figure.name }}" class="figurine-image"/> -->
+        <img [src]="'http://localhost:8080' + figure.imageUrl" alt="figurine image">
       </td>
     </ng-container>
 
@@ -109,6 +110,39 @@
   <div class="dialog">
     <h2>Edit Figurine</h2>
     <form (ngSubmit)="saveChanges()" *ngIf="editFigure">
+
+      <div class="form-group">
+        <label 
+          for="imageUpload" 
+          class="image-upload-box" 
+          (dragover)="onDragOver($event)" 
+          (dragleave)="onDragLeave($event)" 
+          (drop)="onDrop($event)"
+          [class.dragging]="isDragging"
+        >
+          <div *ngIf="!editFigure.imageUrl; else imagePreview">
+            <p>Kliknij lub przeciągnij i upuść</p>
+          </div>
+      
+          <ng-template #imagePreview>
+            <img *ngIf="previewUrl; else existingImage" [src]="previewUrl" alt="Preview" class="image-preview">
+            <ng-template #existingImage>
+              <img [src]="'http://localhost:8080' + editFigure.imageUrl" alt="Preview" class="image-preview">
+            </ng-template>
+          </ng-template>
+          
+      
+          <input 
+            type="file" 
+            id="imageUpload" 
+            (change)="onImageSelected($event)" 
+            accept="image/*"
+            hidden
+          />
+        </label>
+      </div>
+      
+
       <div class="form-group">
         <label for="name">Name:</label>
         <input 

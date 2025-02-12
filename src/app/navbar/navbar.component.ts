@@ -61,7 +61,7 @@ export class NavbarComponent {
   logout(): void {
     this.userService.logout();
     this.isLoggedIn = false;
-    this.router.navigate(['/figures-showcase']);
+    this.router.navigate(['/login']);
   }
 
   ngOnInit(): void {

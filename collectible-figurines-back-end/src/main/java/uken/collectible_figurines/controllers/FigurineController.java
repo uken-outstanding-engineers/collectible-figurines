@@ -3,9 +3,11 @@ package uken.collectible_figurines.controllers;
 import org.springframework.web.bind.annotation.*;
 
 
+import org.springframework.web.multipart.MultipartFile;
 import uken.collectible_figurines.model.Figurine;
 import uken.collectible_figurines.services.FigurineService;
 
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -23,29 +25,37 @@ public class FigurineController {
     return figurineService.getAllFigurines();
   }
 
+//  @PostMapping("/add")
+//  public Figurine addFigurine(@RequestBody Figurine figurine) {
+//    if (figurine.getId() != null) {
+//      figurine.setId(null);
+//    }
+//    return figurineService.saveFigurine(figurine);
+//  }
+
   @PostMapping("/add")
-  public Figurine addFigurine(@RequestBody Figurine figurine) {
-    if (figurine.getId() != null) {
-      figurine.setId(null);
-    }
-    return figurineService.saveFigurine(figurine);
+  public Figurine addFigurine(@RequestPart("figurine") Figurine figurine,
+                              @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+    return figurineService.saveFigurine(figurine, imageFile);
   }
 
+
   @PutMapping("/edit/{id}")
-  public Figurine updateFigurine(@PathVariable Long id, @RequestBody Figurine updatedFigurine) {
-    Figurine figurine = figurineService.getFigurineById(id);
+  public Figurine updateFigurine(@PathVariable Long id,
+                                 @RequestPart("figurine") Figurine updatedFigurine,
+                                 @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+    Figurine existingFigurine = figurineService.getFigurineById(id);
 
-    figurine.setName(updatedFigurine.getName());
-    figurine.setSeries(updatedFigurine.getSeries());
-    figurine.setImageUrl(updatedFigurine.getImageUrl());
-    figurine.setHoverImageUrl(updatedFigurine.getHoverImageUrl());
-    figurine.setChase(updatedFigurine.getChase());
-    figurine.setGlowInDark(updatedFigurine.getGlowInDark());
-    figurine.setFlocked(updatedFigurine.getFlocked());
-    figurine.setExclusive(updatedFigurine.getExclusive());
-    figurine.setFandomId(updatedFigurine.getFandomId());
+    existingFigurine.setName(updatedFigurine.getName());
+    existingFigurine.setSeries(updatedFigurine.getSeries());
+    existingFigurine.setHoverImageUrl(updatedFigurine.getHoverImageUrl());
+    existingFigurine.setChase(updatedFigurine.getChase());
+    existingFigurine.setGlowInDark(updatedFigurine.getGlowInDark());
+    existingFigurine.setFlocked(updatedFigurine.getFlocked());
+    existingFigurine.setExclusive(updatedFigurine.getExclusive());
+    existingFigurine.setFandomId(updatedFigurine.getFandomId());
 
-    return figurineService.saveFigurine(figurine);
+    return figurineService.saveFigurine(existingFigurine, imageFile);
   }
 
   @DeleteMapping("/delete/{id}")

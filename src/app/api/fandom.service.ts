@@ -2,42 +2,15 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Fandom } from './fandom.model';
 import { HttpClient } from '@angular/common/http';
+import { API_URL } from './api-url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FandomService {
-  private fandoms: Fandom[] = [
-    {
-      id: 1,
-      name: 'Star Wars',
-      imageUrl: 'fandoms/star-wars.jpg',
-    },
-    {
-      id: 2,
-      name: 'Harry Potter',
-      imageUrl: 'fandoms/harry-potter.jpg',
-    },
-    {
-      id: 3,
-      name: 'Marvel Universe',
-      imageUrl: 'fandoms/marvel.jpg',
-    },
-    {
-      id: 4,
-      name: 'House Of The Dragon',
-      imageUrl: 'fandoms/house-of-the-dragon.jpg',
-    },
-  ];
-
-  // getFandoms(): Observable<Fandom[]> {
-  //   return of(this.fandoms);
-  // }
-
   private searchResults = new BehaviorSubject<Fandom[]>([]);
 
-  //private API_URL = 'http://localhost:8080/api/fandoms'; 
-  private API_URL = 'https://api.wojtasm.pl:8443/api/fandoms';
+  private API_URL = `${API_URL.BASE_URL}/fandoms`;
 
   constructor(private http: HttpClient) {}
 

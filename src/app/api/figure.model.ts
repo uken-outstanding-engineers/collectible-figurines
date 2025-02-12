@@ -1,5 +1,5 @@
 export interface Figure {
-  id: number; 
+  id: number | null; 
   name: string; 
   series: string; 
   imageUrl: string; 

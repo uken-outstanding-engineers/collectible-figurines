@@ -24,13 +24,21 @@ public class UserFigurineListServiceImpl implements UserFigurineListService {
   private final UserRepository userRepository;
   private final FigurineRepository figurineRepository;
   @Override
-  public UserFigurineList getOrCreatePredefinedList(Long userId, String type) {
+  public UserFigurineList getOrCreatePredefinedList(Long userId, String name) {
+    String type;
+
+    if ("Liked".equalsIgnoreCase(name) || "Wanted".equalsIgnoreCase(name)) {
+      type = name.toUpperCase();
+    } else {
+      type = "CUSTOM";
+    }
+
     return listRepository.findByUserIdAndType(userId, type)
       .orElseGet(() -> {
         User user = userRepository.findById(userId).orElseThrow();
         UserFigurineList list = new UserFigurineList();
         list.setUser(user);
-        list.setName(type);
+        list.setName(name);
         list.setType(type);
         return listRepository.save(list);
       });

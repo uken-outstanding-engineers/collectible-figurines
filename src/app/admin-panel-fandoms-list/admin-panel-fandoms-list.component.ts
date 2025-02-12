@@ -64,7 +64,7 @@ export class AdminPanelFandomsListComponent {
     this.editFandom = {
       id: 0,
       name: '',
-      imageUrl: 'figurines-images/000000001a.jpg',
+      imageUrl: '',
     };
     this.editDialogVisible = true;
   }
@@ -75,7 +75,7 @@ export class AdminPanelFandomsListComponent {
 
   openEditDialog(fandom: { id: number; name: string; imageUrl: string; }): void {
     this.editFandom = { ...fandom };
-
+    console.log(this.editFandom.imageUrl);
     this.editDialogVisible = true;
   }
 
@@ -107,6 +107,44 @@ export class AdminPanelFandomsListComponent {
     }
   }
 
+  /* Drag and Drop */
+  isDragging: boolean = false;
+
+  onImageSelected(event: any): void {
+    const file = event.target.files[0];
+    this.readImage(file);
+  }
+  
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = true;
+  }
+  
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+  }
+  
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+    
+    const file = event.dataTransfer?.files[0];
+    if (file) {
+      this.readImage(file);
+    }
+  }
+  
+  private readImage(file: File): void {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      if (this.editFandom) {
+        this.editFandom.imageUrl = e.target.result;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
   /* Delete */
   dialogVisible = false;
   selectedId: number | null = null;
@@ -131,7 +169,6 @@ export class AdminPanelFandomsListComponent {
           this.fandoms.data = this.fandoms.data.filter(fandoms => fandoms.id !== this.selectedId);
           this.fandoms._updateChangeSubscription();
           this.closeDeleteDialog();  
-          //console.log('The fandoms has been removed');
         },
         (error) => {
           //console.error('Error while deleting fandoms', error);

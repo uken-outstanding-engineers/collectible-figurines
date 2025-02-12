@@ -23,13 +23,13 @@ public class UserFigurineListController {
 
     @GetMapping("/figurines/{userId}")
     public ResponseEntity<Map<String, List<Figurine>>> getLikedAndWantedFigurines(@PathVariable Long userId) {
-      UserFigurineList likedList = listService.getOrCreatePredefinedList(userId, "LIKED");
+      UserFigurineList likedList = listService.getOrCreatePredefinedList(userId, "Liked");
       List<Figurine> likedFigurines = likedList.getFigurines()
         .stream()
         .map(UserFigurineListItem::getFigurine)
         .collect(Collectors.toList());
 
-      UserFigurineList wantedList = listService.getOrCreatePredefinedList(userId, "WANTED");
+      UserFigurineList wantedList = listService.getOrCreatePredefinedList(userId, "Wanted");
       List<Figurine> wantedFigurines = wantedList.getFigurines()
         .stream()
         .map(UserFigurineListItem::getFigurine)
