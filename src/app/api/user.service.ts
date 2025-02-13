@@ -14,7 +14,7 @@ export class UserService {
     //{ id: 3, email: "user2@figurines.pl", username: 'user2', password: 'user456', permission: 'USER' },
   //];
 
-  private API_URL = `${API_URL.BASE_URL}/users`;
+  private API_URL = `${API_URL.BASE_URL}/api/users`;
 
   private loggedInUser = new BehaviorSubject<User | null>(null);
 
@@ -73,6 +73,27 @@ export class UserService {
       })
     );
   }
+
+  uploadAvatar(userId: number, avatar: File): Observable<User> {
+    const formData = new FormData();
+    formData.append('avatar', avatar);
+  
+    return this.http.put<User>(`${this.API_URL}/${userId}/avatar`, formData).pipe(
+      tap((updatedUser) => {
+        const currentUser = this.loggedInUser.getValue();
+        if (currentUser && updatedUser.avatarUrl) {
+          currentUser.avatarUrl = updatedUser.avatarUrl;
+          this.loggedInUser.next(currentUser);
+          localStorage.setItem('loggedInUser', JSON.stringify(currentUser)); 
+        }
+      }),
+      catchError((error) => {
+        console.error('Error uploading avatar:', error);
+        return throwError(() => new Error(error.message || 'Avatar upload failed'));
+      })
+    );
+  }
+  
 
     // Update E-mail
     // updateEmail(userId: number, newEmail: string) {

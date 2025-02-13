@@ -9,7 +9,7 @@ import { API_URL } from './api-url';
   providedIn: 'root',
 })
 export class FigureListService {
-  private API_URL = `${API_URL.BASE_URL}/figurine-lists`;
+  private API_URL = `${API_URL.BASE_URL}/api/figurine-lists`;
 
   constructor(private http: HttpClient, private userService: UserService) {}
 

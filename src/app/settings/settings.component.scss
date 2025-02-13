@@ -59,7 +59,8 @@
     }
 
     .settings-menu {
-        width: 95%;
+        width: 100%;
+        box-sizing: border-box;
         padding: 10px; 
         margin: 0; 
         background-color: #fff;

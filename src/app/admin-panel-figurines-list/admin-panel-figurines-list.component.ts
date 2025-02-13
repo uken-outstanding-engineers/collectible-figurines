@@ -16,7 +16,7 @@ import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
 import { FandomService } from '../api/fandom.service';
 import { Fandom } from '../api/fandom.model';
-
+import { API_URL } from '../api/api-url';
 
 @Component({
   selector: 'app-admin-panel-figurines-list',
@@ -39,6 +39,7 @@ import { Fandom } from '../api/fandom.model';
 })
 export class AdminPanelFigurinesListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  apiUrl = API_URL.BASE_URL;
 
   figurines = new MatTableDataSource<Figure>([]);
   fandoms: Fandom[] = []; 
@@ -86,7 +87,7 @@ export class AdminPanelFigurinesListComponent {
       name: '',
       series: '',
       imageUrl: '',
-      hoverImageUrl: 'figurines-images/000000001b.jpg',
+      hoverImageUrl: '',
       chase: false,
       glowInDark: false,
       flocked: false,
@@ -123,7 +124,11 @@ export class AdminPanelFigurinesListComponent {
 
   closeEditDialog(): void {
     this.previewUrl = null;
+    this.hoverPreviewUrl = null;
+
     this.selectedFile = null;
+    this.selectedHoverFile = null;
+    
     this.editDialogVisible = false;
     this.editFigure = null;
   }
@@ -136,6 +141,10 @@ export class AdminPanelFigurinesListComponent {
   
       if (this.selectedFile) {
         formData.append('imageFile', this.selectedFile);
+      }
+  
+      if (this.selectedHoverFile) {
+        formData.append('hoverImageFile', this.selectedHoverFile);
       }
   
       if (this.editFigure.id !== null) {
@@ -158,13 +167,16 @@ export class AdminPanelFigurinesListComponent {
   }
   
   /* Drag and Drop */
-  isDragging: boolean = false;
+  isDraggingNormal: boolean = false;
+  isDraggingHover: boolean = false;
   previewUrl: string | ArrayBuffer | null = null;
+  hoverPreviewUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
+  selectedHoverFile: File | null = null;
 
-  onImageSelected(event: any): void {
+  onImageSelected(event: any, type: 'normal' | 'hover'): void {
     const file = event.target.files[0];
-    this.readImage(file);
+    this.readImage(file, type);
   }
   
   // private previewImage(file: File): void {
@@ -177,38 +189,59 @@ export class AdminPanelFigurinesListComponent {
   //   reader.readAsDataURL(file);
   // }
   
-  onDragOver(event: DragEvent): void {
+  onDragOver(event: DragEvent, type: 'normal' | 'hover'): void {
     event.preventDefault();
-    this.isDragging = true;
-  }
-  
-  onDragLeave(event: DragEvent): void {
-    event.preventDefault();
-    this.isDragging = false;
-  }
-  
-  onDrop(event: DragEvent): void {
-    event.preventDefault();
-    this.isDragging = false;
-    
-    const file = event.dataTransfer?.files[0];
-    if (file) {
-      this.readImage(file);
+    if (type === 'normal') {
+      this.isDraggingNormal = true;
+    } else {
+      this.isDraggingHover = true;
     }
   }
   
-  private readImage(file: File): void {
+  onDragLeave(event: DragEvent, type: 'normal' | 'hover'): void {
+    event.preventDefault();
+    if (type === 'normal') {
+      this.isDraggingNormal = false;
+    } else {
+      this.isDraggingHover = false;
+    }
+  }
+  
+  onDrop(event: DragEvent, type: 'normal' | 'hover'): void {
+    event.preventDefault();
+    if (type === 'normal') {
+      this.isDraggingNormal = false;
+    } else {
+      this.isDraggingHover = false;
+    }
+  
+    const file = event.dataTransfer?.files[0];
+    if (file) {
+      this.readImage(file, type);
+    }
+  }
+  
+  private readImage(file: File, type: 'normal' | 'hover'): void {
     if (file instanceof File) {
-      this.selectedFile = file; 
+      if (type === 'hover') {
+        this.selectedHoverFile = file;
+      } else {
+        this.selectedFile = file;
+      }
   
       const reader = new FileReader();
       reader.onload = (e: any) => {
         if (this.editFigure) {
-          this.previewUrl = e.target?.result;
-          this.editFigure.imageUrl = e.target.result;  
+          if (type === 'hover') {
+            this.hoverPreviewUrl = e.target?.result;
+            this.editFigure.hoverImageUrl = e.target.result;
+          } else {
+            this.previewUrl = e.target?.result;
+            this.editFigure.imageUrl = e.target.result;
+          }
         }
       };
-      reader.readAsDataURL(file);  
+      reader.readAsDataURL(file);
     }
   }
   

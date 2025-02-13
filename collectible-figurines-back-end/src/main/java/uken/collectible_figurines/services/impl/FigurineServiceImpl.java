@@ -29,27 +29,35 @@ public class FigurineServiceImpl implements FigurineService {
 
   @Override
   public List<Figurine> getAllFigurines() {
-    return figurineRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    return figurineRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
   }
 
-//  public Figurine saveFigurine(Figurine figurine) {
-//    return figurineRepository.save(figurine);
-//  }
-
   @Override
-  public Figurine saveFigurine(Figurine figurine, MultipartFile imageFile) throws IOException {
+  public Figurine saveFigurine(Figurine figurine, MultipartFile imageFile, MultipartFile hoverImageFile) throws IOException {
     if (imageFile != null && !imageFile.isEmpty()) {
-      String filename = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+      String imageUrl = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
       Path uploadPath = Paths.get("uploads/figurines-images");
 
       if (!Files.exists(uploadPath)) {
         Files.createDirectories(uploadPath);
       }
 
-      Path filePath = uploadPath.resolve(filename);
+      Path filePath = uploadPath.resolve(imageUrl);
       Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-      System.out.println("File path: " + filePath.toString());
-      figurine.setImageUrl("/api/images/figurines-images/" + filename);
+      figurine.setImageUrl("/api/images/figurines-images/" + imageUrl);
+    }
+
+    if (hoverImageFile  != null && !hoverImageFile .isEmpty()) {
+      String hoverImageURL = UUID.randomUUID().toString() + "_" + hoverImageFile.getOriginalFilename();
+      Path hoverUploadPath = Paths.get("uploads/figurines-images");
+
+      if (!Files.exists(hoverUploadPath)) {
+        Files.createDirectories(hoverUploadPath);
+      }
+
+      Path filePath = hoverUploadPath.resolve(hoverImageURL);
+      Files.copy(hoverImageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+      figurine.setHoverImageUrl("/api/images/figurines-images/" + hoverImageURL);
     }
 
     return figurineRepository.save(figurine);
@@ -67,9 +75,17 @@ public class FigurineServiceImpl implements FigurineService {
 
       try {
         Files.deleteIfExists(imagePath);
-        System.out.println("Deleted image file: " + imagePath);
       } catch (IOException e) {
         throw new RuntimeException("Failed to delete image file: " + imagePath, e);
+      }
+    }
+
+    if (figurine.getHoverImageUrl() != null && !figurine.getHoverImageUrl().isEmpty()) {
+      Path hoverImagePath = Paths.get("uploads/figurines-images", Paths.get(figurine.getHoverImageUrl()).getFileName().toString());
+      try {
+        Files.deleteIfExists(hoverImagePath);
+      } catch (IOException e) {
+        throw new RuntimeException("Failed to delete hover image file: " + hoverImagePath, e);
       }
     }
 

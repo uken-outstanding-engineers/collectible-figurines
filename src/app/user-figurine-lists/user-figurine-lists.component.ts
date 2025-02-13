@@ -4,6 +4,7 @@ import { MatListModule } from '@angular/material/list';
 import { Figure } from '../api/figure.model';
 import { FigureListService } from '../api/figure-list.service';
 import { UserService } from '../api/user.service';
+import { API_URL } from '../api/api-url';
 
 @Component({
   selector: 'app-user-figurine-lists',
@@ -16,6 +17,8 @@ import { UserService } from '../api/user.service';
   styleUrl: './user-figurine-lists.component.scss'
 })
 export class UserFigurineListsComponent {
+  apiUrl = API_URL.BASE_URL;
+
   activeItem: string = 'liked';
   figurineLists: { [key: string]: Figure[] } = {};
 

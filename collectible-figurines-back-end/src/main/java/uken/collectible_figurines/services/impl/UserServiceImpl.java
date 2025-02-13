@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import uken.collectible_figurines.dto.ErrorUserDTO;
 import uken.collectible_figurines.dto.UserDTO;
 import uken.collectible_figurines.model.Figurine;
@@ -12,12 +13,18 @@ import uken.collectible_figurines.model.User;
 import uken.collectible_figurines.repository.UserRepository;
 import uken.collectible_figurines.services.UserService;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +48,8 @@ public class UserServiceImpl implements UserService {
         user.getUsername(),
         null,
         user.getPermission(),
-        user.getLastLogin()
+        user.getLastLogin(),
+        user.getAvatarUrl()
       ))
       .collect(Collectors.toList());
   }
@@ -81,6 +89,32 @@ public class UserServiceImpl implements UserService {
   public int getActiveUsers() {
     LocalDateTime oneMonthAgo = LocalDateTime.now().minus(1, ChronoUnit.MONTHS);
     return userRepository.countUsersLoggedAfter(oneMonthAgo);
+  }
+
+  public User updateUserAvatar(Long userId, MultipartFile avatarFile) throws IOException {
+    User user = userRepository.findById(userId)
+      .orElseThrow(() -> new RuntimeException("User not found"));
+
+    if (user.getAvatarUrl() != null && !user.getAvatarUrl().isEmpty()) {
+      File oldFile = new File("uploads/avatars-images/" + user.getAvatarUrl());
+      if (oldFile.exists()) {
+        oldFile.delete();
+      }
+    }
+
+    Path directoryPath = Paths.get("uploads/avatars-images");
+
+    if (!Files.exists(directoryPath)) {
+      Files.createDirectories(directoryPath);
+    }
+
+    String fileName = UUID.randomUUID().toString() + "_" + avatarFile.getOriginalFilename();
+    Path filePath = Paths.get("uploads/avatars-images/" + fileName);
+    Files.createDirectories(filePath.getParent());
+    Files.write(filePath, avatarFile.getBytes());
+
+    user.setAvatarUrl("/api/images/avatars-images/" + fileName);
+    return userRepository.save(user);
   }
 
   public User updateEmail(Long userId, String newEmail) {

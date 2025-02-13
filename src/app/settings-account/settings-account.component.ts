@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { User } from '../api/user.model';
 import { UserService } from '../api/user.service';
+import { API_URL } from '../api/api-url';
 
 @Component({
   selector: 'app-settings-account',
@@ -25,6 +26,7 @@ import { UserService } from '../api/user.service';
 })
 export class SettingsAccountComponent {
   @ViewChild('errorBox') errorBox!: ElementRef;
+  apiUrl = API_URL.BASE_URL;
   
   user!: User;
   editDialogVisible = false;
@@ -151,5 +153,45 @@ export class SettingsAccountComponent {
     this.errorBox.nativeElement.classList.remove('show');
     void this.errorBox.nativeElement.offsetWidth; 
     this.errorBox.nativeElement.classList.add('show');
+  }
+
+  /* Upload Avatar */
+  avatarPreview: string | ArrayBuffer | null = null;
+  selectedFile: File | null = null;
+
+  triggerFileInput(): void {
+    const fileInput = document.getElementById('avatarUpload') as HTMLInputElement;
+    fileInput.click();
+  }
+
+  onAvatarSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = (e: any) => this.avatarPreview = e.target.result;
+      reader.readAsDataURL(file);
+    }
+  }
+
+  saveAvatar(): void {
+    if (!this.selectedFile) return;
+
+    const formData = new FormData();
+    formData.append('avatar', this.selectedFile);
+
+    this.userService.uploadAvatar(this.user.id, this.selectedFile).subscribe(updatedUser => {
+      this.user.avatarUrl = updatedUser.avatarUrl;
+      this.avatarPreview = null;
+    });
+  }
+
+  deleteAvatar() {
+    console.log("deleted avatar");
+    // this.userService.deleteAvatar(this.user.id).subscribe(() => {
+    //   this.user.avatarUrl = null; // Ustaw domyślny avatar
+    //   this.avatarPreview = null;
+    // });
   }
 }

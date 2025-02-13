@@ -30,11 +30,14 @@ public class User {
   @Column(name = "passwd", nullable = false)
   private String passwd;
 
-  @Column(name = "permission", nullable = false)
+  @Column(name = "permission")
   private String permission;
 
   @Column(name = "last_login")
   private LocalDateTime lastLogin;
+
+  @Column(name = "avatar_url")
+  private String avatarUrl;
 
   public Long getId() { return id; }
   public void setId(Long id) { this.id = id; }
@@ -48,4 +51,10 @@ public class User {
   public void setPermission(String permission) { this.permission = permission; }
   public LocalDateTime getLastLogin() { return lastLogin; }
   public void setLastLogin(LocalDateTime lastLogin) { this.lastLogin = lastLogin; }
+  public String getAvatarUrl() {
+    return avatarUrl;
+  }
+  public void setAvatarUrl(String avatarUrl) {
+    this.avatarUrl = avatarUrl;
+  }
 }

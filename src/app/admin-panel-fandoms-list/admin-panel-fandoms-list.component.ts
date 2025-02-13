@@ -14,6 +14,7 @@ import { MatMenuModule } from '@angular/material/menu';
 
 import { Fandom } from '../api/fandom.model';
 import { FandomService } from '../api/fandom.service';
+import { API_URL } from '../api/api-url';
 
 @Component({
   selector: 'app-admin-panel-fandoms-list',
@@ -35,7 +36,8 @@ import { FandomService } from '../api/fandom.service';
 })
 export class AdminPanelFandomsListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-    
+  apiUrl = API_URL.BASE_URL;
+  
   fandoms = new MatTableDataSource<Fandom>([]);
 
   displayedColumns: string[] = [
@@ -62,7 +64,7 @@ export class AdminPanelFandomsListComponent {
   /* Add */
   openAddDialog(): void {
     this.editFandom = {
-      id: 0,
+      id: null,
       name: '',
       imageUrl: '',
     };
@@ -71,7 +73,7 @@ export class AdminPanelFandomsListComponent {
 
   /* Edit */
   editDialogVisible = false;
-  editFandom: { id: number; name: string; imageUrl: string;} | null = null;
+  editFandom: { id: number | null; name: string; imageUrl: string;} | null = null;
 
   openEditDialog(fandom: { id: number; name: string; imageUrl: string; }): void {
     this.editFandom = { ...fandom };
@@ -80,6 +82,8 @@ export class AdminPanelFandomsListComponent {
   }
 
   closeEditDialog(): void {
+    this.previewUrl = null;
+    this.selectedFile = null;
     this.editDialogVisible = false;
     this.editFandom = null;
   }
@@ -87,18 +91,25 @@ export class AdminPanelFandomsListComponent {
   /* Edit & Add */
   saveChanges(): void {
     if (this.editFandom) {
-      const index = this.fandoms.data.findIndex(f => f.id === this.editFandom?.id);
+      const formData = new FormData();
   
-      if (index !== -1 && this.editFandom.id > 0) {
+      formData.append('fandom', new Blob([JSON.stringify(this.editFandom)], { type: 'application/json' }));
+  
+      if (this.selectedFile) {
+        formData.append('imageFile', this.selectedFile);
+      }
+
+      if (this.editFandom.id != null) {
         // Edit fandom
-        this.fandomService.editFandom(this.editFandom.id, this.editFandom).subscribe((updatedFandom) => {
-          this.fandoms.data[index] = { ...updatedFandom };
+        this.fandomService.editFandom(this.editFandom.id, formData).subscribe((updatedFandom) => {
+          const index = this.fandoms.data.findIndex(f => f.id === updatedFandom.id);
+          this.fandoms.data[index] = updatedFandom;
           this.fandoms._updateChangeSubscription(); 
           this.closeEditDialog();
         });
       } else {
         // Add new fadnom
-        this.fandomService.addFandom(this.editFandom).subscribe((newFandom) => {
+        this.fandomService.addFandom(formData).subscribe((newFandom) => {
           this.fandoms.data.push(newFandom);
           this.fandoms._updateChangeSubscription();
           this.closeEditDialog();
@@ -109,6 +120,8 @@ export class AdminPanelFandomsListComponent {
 
   /* Drag and Drop */
   isDragging: boolean = false;
+  previewUrl: string | ArrayBuffer | null = null;
+  selectedFile: File | null = null;
 
   onImageSelected(event: any): void {
     const file = event.target.files[0];
@@ -136,15 +149,19 @@ export class AdminPanelFandomsListComponent {
   }
   
   private readImage(file: File): void {
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      if (this.editFandom) {
-        this.editFandom.imageUrl = e.target.result;
-      }
-    };
-    reader.readAsDataURL(file);
+    if (file instanceof File) {
+      this.selectedFile = file; 
+  
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        if (this.editFandom) {
+          this.previewUrl = e.target?.result;
+          this.editFandom.imageUrl = e.target.result;  
+        }
+      };
+      reader.readAsDataURL(file);  
+    }
   }
-
   /* Delete */
   dialogVisible = false;
   selectedId: number | null = null;

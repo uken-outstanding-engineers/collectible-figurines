@@ -73,7 +73,7 @@
           <a [routerLink]="['/figure', figure.id]">
             <img 
               mat-card-image 
-              [src]="figure.imageUrl" 
+              [src]="apiUrl + figure.imageUrl" 
               [alt]="figure.name" 
               (mouseover)="onMouseOver(figure, $event)" 
               (mouseout)="onMouseOut(figure, $event)" 

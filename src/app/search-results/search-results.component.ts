@@ -9,6 +9,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
+import { API_URL } from '../api/api-url';
 
 @Component({
   selector: 'app-search-results',
@@ -25,6 +26,8 @@ import { FigureService } from '../api/figure.service';
   styleUrl: './search-results.component.scss'
 })
 export class SearchResultsComponent {
+  apiUrl = API_URL.BASE_URL;
+  
   searchResults$!: Observable<Figure[]>; 
   hoverTimeouts: { [key: string]: any } = {};
 
@@ -45,7 +48,7 @@ export class SearchResultsComponent {
         element.style.transition = 'opacity 0.5s ease-in-out';
         element.style.opacity = '0';
         setTimeout(() => {
-          element.src = figure.hoverImageUrl ?? figure.imageUrl;
+          element.src = this.apiUrl + figure.hoverImageUrl;
           element.style.opacity = '1';
         }, 250);
       }, 250);
@@ -58,7 +61,7 @@ export class SearchResultsComponent {
       element.style.transition = 'opacity 0.5s ease-in-out';
       element.style.opacity = '0';
       setTimeout(() => {
-        element.src = figure.imageUrl;
+        element.src = this.apiUrl + figure.imageUrl;
         element.style.opacity = '1';
       }, 250);
     }

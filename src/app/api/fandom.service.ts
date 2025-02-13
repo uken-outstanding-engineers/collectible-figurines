@@ -10,7 +10,7 @@ import { API_URL } from './api-url';
 export class FandomService {
   private searchResults = new BehaviorSubject<Fandom[]>([]);
 
-  private API_URL = `${API_URL.BASE_URL}/fandoms`;
+  private API_URL = `${API_URL.BASE_URL}/api/fandoms`;
 
   constructor(private http: HttpClient) {}
 
@@ -20,8 +20,8 @@ export class FandomService {
   }
 
   // Add a fandom to the database
-  addFandom(fandom: Fandom): Observable<Fandom> {
-    return this.http.post<Fandom>(`${this.API_URL}/add`, fandom);
+  addFandom(formData: FormData): Observable<Fandom> {
+    return this.http.post<Fandom>(`${this.API_URL}/add`, formData);
   }
 
   // Delete figurine
@@ -30,7 +30,7 @@ export class FandomService {
   }
 
   // Edit figurine
-  editFandom(id: number, fandom: Fandom): Observable<Fandom> {
-    return this.http.put<Fandom>(`${this.API_URL}/edit/${id}`, fandom);
+  editFandom(id: number, formData: FormData): Observable<Fandom> {
+    return this.http.put<Fandom>(`${this.API_URL}/edit/${id}`, formData);
   }
 }

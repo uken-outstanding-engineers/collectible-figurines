@@ -2,6 +2,7 @@ package uken.collectible_figurines.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import uken.collectible_figurines.dto.ErrorUserDTO;
 import uken.collectible_figurines.model.User;
@@ -9,6 +10,7 @@ import uken.collectible_figurines.services.FigurineService;
 import uken.collectible_figurines.services.UserService;
 import uken.collectible_figurines.dto.UserDTO;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -31,7 +33,7 @@ public class UserController {
 
     if(user != null && userService.checkPassword(passwd, user.getPasswd())) {
       userService.updateLastLogin(user);
-      return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPermission(), user.getLastLogin());
+      return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPermission(), user.getLastLogin(), user.getAvatarUrl());
     }
 
     return null;
@@ -51,7 +53,7 @@ public class UserController {
 
     if (newUser != null) {
       userService.updateLastLogin(newUser);
-      return new UserDTO(newUser.getId(), newUser.getUsername(), newUser.getEmail(), newUser.getPermission(), newUser.getLastLogin());
+      return new UserDTO(newUser.getId(), newUser.getUsername(), newUser.getEmail(), newUser.getPermission(), newUser.getLastLogin(), newUser.getAvatarUrl());
     }
 
     return new ErrorUserDTO("ERROR");
@@ -71,6 +73,11 @@ public class UserController {
   public String updateEmail(@PathVariable Long userId, @RequestBody String newEmail) {
     User updatedUser = userService.updateEmail(userId, newEmail);
     return updatedUser.getEmail();
+  }
+
+  @PutMapping("/{id}/avatar")
+  public User uploadAvatar(@PathVariable Long id, @RequestParam("avatar") MultipartFile avatarFile) throws IOException {
+    return userService.updateUserAvatar(id, avatarFile);
   }
 
 }

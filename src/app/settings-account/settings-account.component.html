@@ -2,10 +2,29 @@
   <!-- Profil Section -->
   <div class="profile-header">
     <div class="profile-picture">
-      <img src="figurines-images/000000001a.jpg" alt="Profilowe">
+      <img [src]="avatarPreview || (apiUrl + user.avatarUrl)" alt="Profilowe">
     </div>
-    <button mat-button class="upload-button">{{ 'settings.account_settings_page.select_photo' | translate }}</button>
+  
+    <!-- Przycisk wyboru pliku -->
+    <input type="file" id="avatarUpload" (change)="onAvatarSelected($event)" accept="image/*" hidden>
+  
+    <!-- Przycisk "Wybierz zdjęcie" -->
+    <button mat-button class="upload-button" (click)="triggerFileInput()">
+      {{ 'settings.account_settings_page.select_photo' | translate }}
+    </button>
+  
+    <!-- Przycisk "Zapisz" (ukrywany, jeśli nie wybrano pliku) -->
+    <button mat-button class="save-button" *ngIf="avatarPreview" (click)="saveAvatar()">
+      {{ 'settings.account_settings_page.save_photo' | translate }}
+    </button>
+  
+    <!-- Przycisk "Usuń zdjęcie" -->
+    <button mat-button class="delete-button" *ngIf="user.avatarUrl" (click)="deleteAvatar()">
+      {{ 'settings.account_settings_page.delete_photo' | translate }}
+    </button>
   </div>
+  
+  
   
   <!-- Form -->
   <div class="settings-form">

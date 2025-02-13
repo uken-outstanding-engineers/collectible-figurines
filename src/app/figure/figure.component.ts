@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
+import { API_URL } from '../api/api-url';
 
 @Component({
   selector: 'app-figure',
@@ -13,6 +14,8 @@ import { FigureService } from '../api/figure.service';
   styleUrl: './figure.component.scss'
 })
 export class FigureComponent {
+  apiUrl = API_URL.BASE_URL;
+  
   figure: Figure | undefined;
   currentImageUrl: string = '';
 
@@ -30,7 +33,7 @@ export class FigureComponent {
     this.figureService.getFigureById(id).subscribe((figure) => {
       if (figure) {
         this.figure = figure;
-        this.currentImageUrl = figure.imageUrl;
+        this.currentImageUrl = this.apiUrl + figure.imageUrl;
       } else {
         console.error('Figure not found');
       }
@@ -39,7 +42,7 @@ export class FigureComponent {
 
   showImage(type: 'main' | 'hover'): void {
     if (this.figure) {
-      this.currentImageUrl = type === 'main' ? this.figure.imageUrl : this.figure.hoverImageUrl;
+      this.currentImageUrl = type === 'main' ? this.apiUrl + this.figure.imageUrl : this.apiUrl + this.figure.hoverImageUrl;
     }
   }
 }

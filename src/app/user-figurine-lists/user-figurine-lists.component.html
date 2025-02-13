@@ -15,7 +15,7 @@
     <ng-container *ngIf="getActiveFigurines().length > 0; else noFigurines">
       <mat-list>
         <div class="figurine-item" *ngFor="let figurine of getActiveFigurines()">
-          <img [src]="figurine.imageUrl" alt="{{ figurine.name }}" />
+          <img [src]="apiUrl + figurine.imageUrl" alt="{{ figurine.name }}" />
           <span>{{ figurine.name }} ({{ figurine.series }})</span>
         </div>
       </mat-list>

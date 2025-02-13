@@ -1,5 +1,5 @@
 export interface Fandom {
-    id: number;
+    id: number | null;
     name: string;
     imageUrl: string;
 }

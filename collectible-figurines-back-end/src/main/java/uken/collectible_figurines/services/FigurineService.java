@@ -10,7 +10,7 @@ import java.util.List;
 public interface FigurineService {
   List<Figurine> getAllFigurines();
   //Figurine saveFigurine(Figurine figurine);
-  Figurine saveFigurine(Figurine figurine, MultipartFile imageFile) throws IOException;
+  Figurine saveFigurine(Figurine figurine, MultipartFile imageFile, MultipartFile hoverImageFile) throws IOException;
   void deleteFigurineById(Long id);
   Figurine getFigurineById(Long id);
   int getTotalFigurines();

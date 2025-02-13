@@ -4,16 +4,16 @@
 
         <div class="image-thumbnails">
             <img 
-            [src]="figure.imageUrl" 
+            [src]="apiUrl + figure.imageUrl" 
             (click)="showImage('main')" 
-            [class.selected]="currentImageUrl === figure.imageUrl" 
+            [class.selected]="currentImageUrl === apiUrl + figure.imageUrl" 
             alt="Main Thumbnail" 
             class="thumbnail-image">
             
             <img 
-            [src]="figure.hoverImageUrl" 
+            [src]="apiUrl + figure.hoverImageUrl" 
             (click)="showImage('hover')" 
-            [class.selected]="currentImageUrl === figure.hoverImageUrl" 
+            [class.selected]="currentImageUrl === apiUrl + figure.hoverImageUrl" 
             alt="Hover Thumbnail" 
             class="thumbnail-image">
         </div>

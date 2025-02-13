@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uken.collectible_figurines.model.Figurine;
 import uken.collectible_figurines.services.FigurineService;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -35,27 +36,65 @@ public class FigurineController {
 
   @PostMapping("/add")
   public Figurine addFigurine(@RequestPart("figurine") Figurine figurine,
-                              @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
-    return figurineService.saveFigurine(figurine, imageFile);
+                              @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+                              @RequestPart(value = "hoverImageFile", required = false) MultipartFile hoverImageFile) throws IOException {
+    return figurineService.saveFigurine(figurine, imageFile, hoverImageFile);
   }
 
 
   @PutMapping("/edit/{id}")
   public Figurine updateFigurine(@PathVariable Long id,
                                  @RequestPart("figurine") Figurine updatedFigurine,
-                                 @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+                                 @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+                                 @RequestPart(value = "hoverImageFile", required = false) MultipartFile hoverImageFile) throws IOException {
     Figurine existingFigurine = figurineService.getFigurineById(id);
 
     existingFigurine.setName(updatedFigurine.getName());
     existingFigurine.setSeries(updatedFigurine.getSeries());
-    existingFigurine.setHoverImageUrl(updatedFigurine.getHoverImageUrl());
     existingFigurine.setChase(updatedFigurine.getChase());
     existingFigurine.setGlowInDark(updatedFigurine.getGlowInDark());
     existingFigurine.setFlocked(updatedFigurine.getFlocked());
     existingFigurine.setExclusive(updatedFigurine.getExclusive());
     existingFigurine.setFandomId(updatedFigurine.getFandomId());
 
-    return figurineService.saveFigurine(existingFigurine, imageFile);
+    if (imageFile != null && !imageFile.isEmpty()) {
+      String imageUrl = existingFigurine.getImageUrl();
+
+      if (imageUrl.startsWith("/api/images/")) {
+        imageUrl = imageUrl.replace("/api/images/", "");
+      }
+
+      String oldImagePath = "uploads/" + imageUrl;
+
+
+      File oldImageFile = new File(oldImagePath);
+      if (oldImageFile.exists() && oldImageFile.isFile()) {
+        boolean deleted = oldImageFile.delete();
+        if (!deleted) {
+          throw new IOException("Photo deletion failed: " + oldImagePath);
+        }
+      }
+    }
+
+    if (hoverImageFile != null && !hoverImageFile.isEmpty()) {
+      String hoverImageUrl = existingFigurine.getHoverImageUrl();
+
+      if (hoverImageUrl.startsWith("/api/images/")) {
+        hoverImageUrl = hoverImageUrl.replace("/api/images/", "");
+      }
+
+      String oldHoverImagePath = "uploads/" + hoverImageUrl;
+
+      File oldHoverImageFile = new File(oldHoverImagePath);
+      if (oldHoverImageFile.exists() && oldHoverImageFile.isFile()) {
+        boolean deleted = oldHoverImageFile.delete();
+        if (!deleted) {
+          throw new IOException("Photo deletion failed: " + oldHoverImagePath);
+        }
+      }
+    }
+
+    return figurineService.saveFigurine(existingFigurine, imageFile, hoverImageFile);
   }
 
   @DeleteMapping("/delete/{id}")

@@ -11,7 +11,7 @@ import { API_URL } from './api-url';
 export class FigureService {
   private searchResults = new BehaviorSubject<Figure[]>([]);
 
-  private API_URL = `${API_URL.BASE_URL}/figurines`;
+  private API_URL = `${API_URL.BASE_URL}/api/figurines`;
 
   constructor(private http: HttpClient, private userService: UserService) {}
 

@@ -1,10 +1,13 @@
 package uken.collectible_figurines.controllers;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uken.collectible_figurines.model.Fandom;
 import uken.collectible_figurines.model.Figurine;
 import uken.collectible_figurines.services.FandomService;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -23,21 +26,39 @@ public class FandomController {
   }
 
   @PostMapping("/add")
-  public Fandom addFandom(@RequestBody Fandom fandom) {
-    if (fandom.getId() != null) {
-      fandom.setId(null);
-    }
-    return fandomService.saveFandom(fandom);
+  public Fandom addFandom(@RequestPart("fandom") Fandom fandom,
+                          @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+    return fandomService.saveFandom(fandom, imageFile);
   }
 
   @PutMapping("/edit/{id}")
-  public Fandom updateFandom(@PathVariable Long id, @RequestBody Fandom updatedFandom) {
-    Fandom fandom = fandomService.getFandomById(id);
+  public Fandom updateFandom(@PathVariable Long id,
+                             @RequestPart("fandom") Fandom updatedFandom,
+                             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+    Fandom existingFandom = fandomService.getFandomById(id);
 
-    fandom.setName(updatedFandom.getName());
-    fandom.setImageUrl(updatedFandom.getImageUrl());
+    existingFandom.setName(updatedFandom.getName());
+    //existingFandom.setImageUrl(updatedFandom.getImageUrl());
 
-    return fandomService.saveFandom(fandom);
+    if (imageFile != null && !imageFile.isEmpty()) {
+      String imageUrl = existingFandom.getImageUrl();
+
+      if (imageUrl.startsWith("/api/images/")) {
+        imageUrl = imageUrl.replace("/api/images/", "");
+      }
+
+      String oldImagePath = "uploads/" + imageUrl;
+
+
+      File oldImageFile = new File(oldImagePath);
+      if (oldImageFile.exists() && oldImageFile.isFile()) {
+        boolean deleted = oldImageFile.delete();
+        if (!deleted) {
+          throw new IOException("Photo deletion failed: " + oldImagePath);
+        }
+      }
+    }
+    return fandomService.saveFandom(existingFandom, imageFile);
   }
 
   @DeleteMapping("/delete/{id}")
