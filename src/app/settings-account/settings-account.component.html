@@ -1,125 +1,68 @@
-<div class="account-settings">
-  <!-- Profil Section -->
-  <div class="profile-header">
-    <div class="profile-picture">
-      <img [src]="avatarPreview || (apiUrl + user.avatarUrl)" alt="Profilowe">
-    </div>
+<form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+    <div class="profile-container">
+      <h2 class="profile-title">Konto</h2>
+      <p class="avatar-description">Zaktualizuj dane dotyczące konta.</p>
   
-    <!-- Przycisk wyboru pliku -->
-    <input type="file" id="avatarUpload" (change)="onAvatarSelected($event)" accept="image/*" hidden>
+      <p class="separator"></p>
   
-    <!-- Przycisk "Wybierz zdjęcie" -->
-    <button mat-button class="upload-button" (click)="triggerFileInput()">
-      {{ 'settings.account_settings_page.select_photo' | translate }}
-    </button>
-  
-    <!-- Przycisk "Zapisz" (ukrywany, jeśli nie wybrano pliku) -->
-    <button mat-button class="save-button" *ngIf="avatarPreview" (click)="saveAvatar()">
-      {{ 'settings.account_settings_page.save_photo' | translate }}
-    </button>
-  
-    <!-- Przycisk "Usuń zdjęcie" -->
-    <button mat-button class="delete-button" *ngIf="user.avatarUrl" (click)="deleteAvatar()">
-      {{ 'settings.account_settings_page.delete_photo' | translate }}
-    </button>
-  </div>
-  
-  
-  
-  <!-- Form -->
-  <div class="settings-form">
-    <div class="input-group">
-      <span>{{ user.email }}</span>
-      <button mat-button class="edit-button" (click)="openEditDialog('Email', user.email)">{{ 'settings.account_settings_page.change' | translate }}</button>
-    </div>
-    <div class="input-group">
-      <span>{{ user.username }}</span>
-      <button mat-button class="edit-button" (click)="openEditDialog('Username', user.username)">{{ 'settings.account_settings_page.change' | translate }}</button>
-    </div>
-    <div class="input-group">
-      <span>Hasło</span>
-      <button mat-button class="edit-button" (click)="openEditDialog('Password', '')">{{ 'settings.account_settings_page.change' | translate }}</button>
-    </div>
-  </div>
-      
-  <!-- Delete Account -->
-  <div class="delete-section">
-    <button mat-button class="delete-button">
-      <mat-icon>delete</mat-icon> {{ 'settings.account_settings_page.delete_account' | translate }}
-    </button>
-  </div>
-</div>
-
-<!-- Dialog for Editing -->
-<div class="dialog-edit-container" *ngIf="editDialogVisible">
-  <div class="dialog-backdrop" (click)="closeEditDialog()"></div>
-  <div class="dialog">
-    <h2>Edit {{ editField }}</h2>
-    <form (ngSubmit)="saveChanges()">
-      
-      <div class="form-group">
-        <label for="editInput">{{ editField }}<span *ngIf="editField != 'Password'">: {{ currentValue }}</span></label>
-
-        <div *ngIf="editField != 'Password'">
-          <input 
-            id="editInput"
-            [(ngModel)]="editValue"
-            name="editInput"
-            type="text"
-            required
-            minlength="3"
-            placeholder="Enter new {{ editField | lowercase }}"
-          />
-
-          <input 
-            id="editInput"
-            [(ngModel)]="editConfirmValue"
-            name="editInput"
-            type="text"
-            required
-            minlength="3"
-            placeholder="Confirm new {{ editField | lowercase }}"
-          />
+      <!-- Email -->
+      <div class="input-group">
+        <label class="title" for="email">E-mail:</label>
+        <div class="input-wrapper">
+          <mat-icon class="ac">mail</mat-icon>
+          <input type="email" id="email" formControlName="email" placeholder="E-mail">
         </div>
-
-        <div *ngIf="editField === 'Password'">
-          <input 
-            id="currentPassword"
-            [(ngModel)]="currentPassword"
-            name="currentPassword"
-            type="password"
-            placeholder="Current Password"
-            required 
-          />
-          <input 
-            id="newPassword"
-            [(ngModel)]="newPassword"
-            name="newPassword"
-            type="password"
-            placeholder="New Password"
-            required 
-          />
-          <input 
-            id="confirmNewPassword"
-            [(ngModel)]="confirmNewPassword"
-            name="confirmNewPassword"
-            type="password"
-            placeholder="Confirm New Password"
-            required 
-          />
+        <mat-error *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+          Wprowadź poprawny adres email
+        </mat-error>         
+      </div>
+  
+      <!-- Aktualne hasło -->
+      <div class="input-group">
+        <label class="title" for="current-password">Aktualne hasło:</label>
+        <div class="input-wrapper">
+          <mat-icon class="ac">lock</mat-icon>
+          <input type="password" id="current-password" formControlName="currentPassword" placeholder="Aktualne hasło">
         </div>
-        <span class="error-message" [class.show]="errorMessage" #errorBox>{{ errorMessage }}</span>
-        <!-- <span class="error-message" #errorBox>{{ errorMessage }}</span> -->
+        <mat-error *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+            Hasło jest wymagane
+        </mat-error>
       </div>
-
-      <div class="button-group">
-        <button type="button" class="no" (click)="closeEditDialog()">{{ 'settings.account_settings_page.cancel' | translate }}</button>
-        <button type="submit" class="yes">{{ 'settings.account_settings_page.save' | translate }}</button>
+  
+      <!-- Nowe hasło -->
+      <div class="input-group">
+        <label class="title" for="new-password">Nowe hasło:</label>
+        <div class="input-wrapper">
+          <mat-icon class="ac">lock</mat-icon>
+          <input type="password" id="new-password" formControlName="newPassword" placeholder="Nowe hasło">
+        </div>
+        <mat-error *ngIf="profileForm.get('newPassword')?.hasError('minlength') && profileForm.get('newPassword')?.touched">
+            Hasło musi mieć minimum 8 znaków
+        </mat-error>
+        <mat-error *ngIf="profileForm.get('newPassword')?.hasError('requiredIfOtherExists')">
+            Oba pola hasła muszą być wypełnione
+        </mat-error>
       </div>
-    </form>
-
-    <button class="close-btn" (click)="closeEditDialog()">×</button>
-  </div>
-</div>
-
+  
+      <!-- Powtórz nowe hasło -->
+      <div class="input-group">
+        <label class="title" for="confirm-password">Powtórz nowe hasło:</label>
+        <div class="input-wrapper">
+          <mat-icon class="ac">lock</mat-icon>
+          <input type="password" id="confirm-password" formControlName="confirmPassword" placeholder="Powtórz nowe hasło">
+        </div>
+        <mat-error *ngIf="profileForm.get('confirmPassword')?.hasError('minlength') && profileForm.get('confirmPassword')?.touched">
+            Hasło musi mieć minimum 8 znaków
+        </mat-error>
+        <mat-error *ngIf="profileForm.get('confirmPassword')?.hasError('mismatch')">
+          Hasła nie są identyczne
+        </mat-error>
+        <mat-error *ngIf="profileForm.get('confirmPassword')?.hasError('requiredIfOtherExists')">
+            Oba pola hasła muszą być wypełnione
+        </mat-error>
+      </div>
+  
+      <button mat-button class="save-button" type="submit" [disabled]="profileForm.invalid">Zapisz profil</button>
+    </div>
+</form>
   

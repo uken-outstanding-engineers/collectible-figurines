@@ -5,6 +5,6 @@ export interface User {
     password: string;
     permission: string;
     lastLogin: string | number | Date;
-    avatarUrl: string;
+    avatarUrl: string | null;
   }
   

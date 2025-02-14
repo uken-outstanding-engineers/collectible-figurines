@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uken.collectible_figurines.dto.ErrorUserDTO;
 import uken.collectible_figurines.dto.UserDTO;
+import uken.collectible_figurines.dto.UserUpdateAccountDTO;
 import uken.collectible_figurines.model.Figurine;
 import uken.collectible_figurines.model.User;
 import uken.collectible_figurines.repository.UserRepository;
@@ -21,10 +22,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +31,17 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final BCryptPasswordEncoder passwordEncoder;
+
+  private UserDTO convertToDTO(User user) {
+    return new UserDTO(
+      user.getId(),
+      user.getUsername(),
+      user.getEmail(),
+      user.getPermission(),
+      user.getLastLogin(),
+      user.getAvatarUrl()
+    );
+  }
 
   @Override
   public User findByUsername(String username) {
@@ -95,38 +104,63 @@ public class UserServiceImpl implements UserService {
     User user = userRepository.findById(userId)
       .orElseThrow(() -> new RuntimeException("User not found"));
 
+    if (avatarFile == null || avatarFile.isEmpty()) { // Obsługa pustego pliku
+      if (user.getAvatarUrl() != null && !user.getAvatarUrl().isEmpty()) {
+        File oldFile = new File("uploads/avatars-images/" + user.getAvatarUrl().replace("/api/images/avatars-images/", ""));
+        if (oldFile.exists()) {
+          oldFile.delete();
+        }
+      }
+      user.setAvatarUrl(null);
+      return userRepository.save(user);
+    }
+
     if (user.getAvatarUrl() != null && !user.getAvatarUrl().isEmpty()) {
-      File oldFile = new File("uploads/avatars-images/" + user.getAvatarUrl());
+      String oldFileName = user.getAvatarUrl().replace("/api/images/avatars-images/", "");
+      File oldFile = new File("uploads/avatars-images/" + oldFileName);
       if (oldFile.exists()) {
         oldFile.delete();
       }
     }
 
     Path directoryPath = Paths.get("uploads/avatars-images");
-
     if (!Files.exists(directoryPath)) {
       Files.createDirectories(directoryPath);
     }
 
     String fileName = UUID.randomUUID().toString() + "_" + avatarFile.getOriginalFilename();
-    Path filePath = Paths.get("uploads/avatars-images/" + fileName);
-    Files.createDirectories(filePath.getParent());
+    Path filePath = directoryPath.resolve(fileName);
     Files.write(filePath, avatarFile.getBytes());
 
     user.setAvatarUrl("/api/images/avatars-images/" + fileName);
     return userRepository.save(user);
   }
 
-  public User updateEmail(Long userId, String newEmail) {
+  public Object updateUserAccount(Long userId, UserUpdateAccountDTO userUpdate) {
     User user = userRepository.findById(userId)
-      .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + userId));
+      .orElse(null);
 
-    if(user.getEmail().equals(newEmail)) {
-      throw new IllegalArgumentException("The new email must be different from the current one!");
+    if (user == null) {
+      return Map.of("error", "NOT_EXIST");
     }
 
-    user.setEmail(newEmail);
-    return userRepository.save(user);
-  }
+    if (userUpdate.getEmail() != null && !userUpdate.getEmail().isEmpty()) {
+      user.setEmail(userUpdate.getEmail());
+    }
 
+    if (userUpdate.getNewPassword() != null && !userUpdate.getNewPassword().isEmpty()) {
+      if (userUpdate.getCurrentPassword() == null || userUpdate.getCurrentPassword().isEmpty()) {
+        return Map.of("error", "CURRENT_PASSWORD_REQUIRED");
+      }
+
+      if (!passwordEncoder.matches(userUpdate.getCurrentPassword(), user.getPasswd())) {
+        return Map.of("error", "WRONG_PASSWORD");
+      }
+
+      user.setPasswd(passwordEncoder.encode(userUpdate.getNewPassword()));
+    }
+
+    User updatedUser = userRepository.save(user);
+    return convertToDTO(updatedUser);
+  }
 }

@@ -74,17 +74,24 @@ export class UserService {
     );
   }
 
-  uploadAvatar(userId: number, avatar: File): Observable<User> {
+  //Uplad Avatar
+  uploadAvatar(userId: number, avatar: File | null): Observable<User> {
     const formData = new FormData();
-    formData.append('avatar', avatar);
+  
+    if (avatar) {
+      formData.append('avatar', avatar);
+    } else {
+      formData.append('avatar', new Blob()); 
+    }
   
     return this.http.put<User>(`${this.API_URL}/${userId}/avatar`, formData).pipe(
       tap((updatedUser) => {
         const currentUser = this.loggedInUser.getValue();
-        if (currentUser && updatedUser.avatarUrl) {
-          currentUser.avatarUrl = updatedUser.avatarUrl;
+        if (currentUser) {
+          console.log("Updated avatarUrl from server:", updatedUser.avatarUrl);
+          currentUser.avatarUrl = updatedUser.avatarUrl || null; 
           this.loggedInUser.next(currentUser);
-          localStorage.setItem('loggedInUser', JSON.stringify(currentUser)); 
+          localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
         }
       }),
       catchError((error) => {
@@ -92,22 +99,27 @@ export class UserService {
         return throwError(() => new Error(error.message || 'Avatar upload failed'));
       })
     );
+  }    
+
+  //Update User Account
+  updateUserAccount(userId: number, userData: any): Observable<any> {
+    return this.http.put(`${this.API_URL}/${userId}/update-account`, userData).pipe(
+      tap((updatedUser: any) => {
+        if (updatedUser.error) { 
+          console.error('Error updating profile:', updatedUser.error);
+          return;  
+        }
+        this.loggedInUser.next(updatedUser);
+        localStorage.setItem('loggedInUser', JSON.stringify(updatedUser)); 
+      }),
+      catchError((error) => {
+        console.error('Profile update error:', error);
+        return throwError(() => new Error(error.message || 'Profile update failed'));
+      })
+    );
   }
   
-
-    // Update E-mail
-    // updateEmail(userId: number, newEmail: string) {
-    //   return this.http.put<string>(`${this.API_URL}${userId}/newEmail`, newEmail).pipe(
-    //     tap(updatedEmail => {
-    //       const currentUser = this.loggedInUser.getValue();
-    //       if (currentUser) {
-    //         currentUser.email = updatedEmail;  
-    //         this.loggedInUser.next(currentUser);
-    //       }
-    //     })
-    //   );
-    // }
-    
+  
   
   logout(): void {
     this.loggedInUser.next(null); 

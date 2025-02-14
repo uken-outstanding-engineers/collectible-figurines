@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import uken.collectible_figurines.dto.ErrorUserDTO;
+import uken.collectible_figurines.dto.UserUpdateAccountDTO;
 import uken.collectible_figurines.model.User;
 import uken.collectible_figurines.services.FigurineService;
 import uken.collectible_figurines.services.UserService;
@@ -69,15 +70,14 @@ public class UserController {
     return userService.getActiveUsers();
   }
 
-  @PutMapping("/{userId}/newEmail")
-  public String updateEmail(@PathVariable Long userId, @RequestBody String newEmail) {
-    User updatedUser = userService.updateEmail(userId, newEmail);
-    return updatedUser.getEmail();
-  }
-
   @PutMapping("/{id}/avatar")
   public User uploadAvatar(@PathVariable Long id, @RequestParam("avatar") MultipartFile avatarFile) throws IOException {
     return userService.updateUserAvatar(id, avatarFile);
+  }
+
+  @PutMapping("/{id}/update-account")
+  public Object updateUserAccount(@PathVariable Long id, @RequestBody UserUpdateAccountDTO userUpdate) {
+    return userService.updateUserAccount(id, userUpdate);
   }
 
 }

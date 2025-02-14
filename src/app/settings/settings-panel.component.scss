@@ -1,0 +1,202 @@
+$button-color: #2a2a2a;
+$button-hover-color: #9c9ea3;
+$font-poppins: 'Poppins', sans-serif;
+
+.profile-container {
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: $font-poppins;
+}
+
+.profile-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+    border-radius: 8px;
+}
+
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.default-avatar {
+    background-color: white;
+    font-size: 75px;
+    color: #888;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-description {
+    margin: 0;
+}
+
+.separator {
+    width: 100%;
+    height: 1px; 
+    background-color: #ccc; 
+    border: none; 
+    margin: 50px 0 50px 0; 
+}
+
+.title {
+    font-size: 16px;
+    font-weight: bold;
+}
+  
+.profile-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.upload-button, .delete-photo-button {
+    background-color: transparent;
+    border: 2px solid $button-color;
+    color: $button-color;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 6px;
+    font-family: $font-poppins;
+    cursor: pointer;
+}
+
+.upload-button:hover{
+    color: $button-hover-color;
+    border-color: $button-hover-color;
+}
+
+.delete-photo-button {
+    $deleted: red;
+    border-color: $deleted;
+    color: $deleted;
+}
+
+.delete-photo-button:hover {
+    $deleted-hover: #ff4d4d;
+    border-color: $deleted-hover;
+    color: $deleted-hover;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper mat-icon  {
+    position: absolute;
+
+    color: #2a2a2a;
+}
+
+.input-wrapper .username  {
+    top: 9px;
+    left: 15px;  
+    font-size: 28px;
+}
+
+.input-wrapper .ac  {
+    top: 10px;
+    left: 15px;  
+    font-size: 26px;
+}
+
+.input-group label {
+    margin: 0 0 5px 0;
+}
+
+.input-group input {
+    padding: 10px 10px 10px 50px; 
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 80%;
+    color: #444444;
+    font-family: $font-poppins;
+}
+
+input[disabled] {
+    background-color: #dfdfdf; 
+    opacity: 0.6; 
+}
+  
+
+.info {
+    margin: 10px 0 0 5px;
+}
+
+.avatar-description, .info {
+    font-size: 14px;
+    color: #777;
+    font-style: italic;
+}
+
+.save-button {
+    margin-top: 40px;
+    background-color: $button-color;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border-color: transparent;
+    font-family: $font-poppins;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    background-color:#4e4e4e;
+}
+
+@media (max-width: 1024px) {
+    .input-group input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+        margin-left: 0;
+    }
+}

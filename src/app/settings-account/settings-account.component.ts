@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon'
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { FormBuilder, FormGroup, FormsModule, NgForm, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 import { User } from '../api/user.model';
 import { UserService } from '../api/user.service';
@@ -19,179 +20,92 @@ import { API_URL } from '../api/api-url';
     MatFormFieldModule,
     FormsModule,
     MatDialogModule,
-    TranslateModule
+    ReactiveFormsModule,
   ],
   templateUrl: './settings-account.component.html',
-  styleUrl: './settings-account.component.scss'
+  styleUrl: '../settings/settings-panel.component.scss'
 })
 export class SettingsAccountComponent {
-  @ViewChild('errorBox') errorBox!: ElementRef;
   apiUrl = API_URL.BASE_URL;
-  
+
   user!: User;
-  editDialogVisible = false;
-  editField: string = '';
 
-  currentValue: string = '';
-  editValue: string = ''; 
-  editConfirmValue: string = '';
+  profileForm: FormGroup;
+  formSubmitted = false;
 
-  currentPassword: string = ''; 
-  newPassword: string = ''; 
-  confirmNewPassword: string = ''; 
-
-  errorMessage: string = '';
-
-  constructor(private userService: UserService) {}
+  constructor(
+    private fb: FormBuilder, 
+    private userService: UserService
+  ) {
+    this.profileForm = this.fb.group(
+      {
+        email: ['', [Validators.required, Validators.email]],
+        currentPassword: ['', [Validators.required]],
+        newPassword: ['', [Validators.minLength(8)]],
+        confirmPassword: ['', [Validators.minLength(8)]]
+      },
+      { 
+        validators: [this.passwordsMatch, this.passwordsRequiredIfOneExists], 
+        updateOn: 'change' 
+      }
+    );
+  }
 
   ngOnInit(): void {
     this.userService.getCurrentUser().subscribe((user: User) => {
       this.user = user;
+      this.profileForm.patchValue({ email: user.email });
     });
   }
 
-  openEditDialog(field: string, value: string) {
-    this.errorMessage = '';
-    this.editField = field;
-    this.currentValue = value;
-    this.editDialogVisible = true;
-  }
-
-  closeEditDialog() {
-    this.editValue = ''; 
-    this.editConfirmValue = '';
+  passwordsMatch(form: FormGroup) {
+    const newPassword = form.get('newPassword');
+    const confirmPassword = form.get('confirmPassword');
   
-    this.currentPassword = ''; 
-    this.newPassword = ''; 
-    this.confirmNewPassword = ''; 
-
-    this.editDialogVisible = false;
+    if (newPassword?.value && confirmPassword?.value && newPassword.value !== confirmPassword.value) {
+      confirmPassword.setErrors({ mismatch: true });
+    } else {
+      if (confirmPassword?.hasError('mismatch')) {
+        confirmPassword.setErrors(null);
+      }
+    }
+  }
+  
+  passwordsRequiredIfOneExists(form: FormGroup) {
+    const newPassword = form.get('newPassword');
+    const confirmPassword = form.get('confirmPassword');
+  
+    if ((newPassword?.value && !confirmPassword?.value) || (!newPassword?.value && confirmPassword?.value)) {
+      newPassword?.setErrors({ requiredIfOtherExists: true });
+      confirmPassword?.setErrors({ requiredIfOtherExists: true });
+    } else {
+      if (newPassword?.hasError('requiredIfOtherExists')) {
+        newPassword.setErrors(null);
+      }
+      if (confirmPassword?.hasError('requiredIfOtherExists')) {
+        confirmPassword.setErrors(null);
+      }
+    }
   }
 
-  saveChanges() {
-    if (this.currentValue === this.editValue) {
-      this.errorMessage = `${this.editField} musi być inny od obecnego!`;
-      this.showErrorMessage();
+  saveProfile(): void {
+    this.formSubmitted = true;
+    if (this.profileForm.invalid) {
       return;
     }
 
-    if (this.editField === 'Email') {
-      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-      if (!emailPattern.test(this.editValue)) {
-        this.errorMessage = 'Wprowadź poprawny adres email!';
-        this.showErrorMessage();
+    const formData = this.profileForm.value;
+
+    this.userService.updateUserAccount(this.user.id, formData).subscribe(response => {
+      if(response.error) {
+        console.log(response.error)
         return;
       }
 
-      if (this.editValue !== this.editConfirmValue) {
-        this.errorMessage = 'Email nie jest zgodny!';
-        this.showErrorMessage();
-        return;
-      }
-
-      this.user.email = this.editValue;
-      console.log('Email updated successfully');
-
-      // this.userService.updateEmail(this.user.id, this.editValue).subscribe(
-      //   (data) => {
-          
-      //   },
-      //   (error) => {
-      //     this.errorMessage = 'Błąd podczas aktualizacji e-maila';
-      //     this.showErrorMessage();
-      //   }
-      // );
-  
-    } else if (this.editField === 'Username') {
-      if (this.editValue.length < 3) {
-        this.errorMessage = 'Nazwa użytkownika musi mieć min. 3 znaki!';
-        this.showErrorMessage();
-        return;
-      }
-
-      if (this.editValue !== this.editConfirmValue) {
-        this.errorMessage = 'Nazwa użytkonika nie jest zgdona!';
-        this.showErrorMessage();
-        return;
-      }
-
-      this.user.username = this.editValue;
-      console.log('Saving new username:', this.editValue);
-  
-    } else if (this.editField === 'Password') {
-      if (!this.newPassword || !this.confirmNewPassword) {
-        this.errorMessage = 'Wprowadź dane!';
-        this.showErrorMessage();
-        return;
-      }
-      
-      if (this.newPassword === this.confirmNewPassword) {
-        this.errorMessage = 'Nowe hasło nie może być takie same!';
-        this.showErrorMessage();
-        return;
-      }
-
-      if (this.newPassword !== this.confirmNewPassword) {
-        this.errorMessage = 'Hasła nie są zgodne!';
-        this.showErrorMessage();
-        return;
-      }
-  
-      if (this.newPassword.length < 8) {
-        this.errorMessage = 'Hasło musi mieć min. 8 znaków!';
-        this.showErrorMessage();
-        return;
-      }
-  
-      console.log('Saving new password');
-    }
-  
-    this.closeEditDialog();
-  }
-
-  showErrorMessage() {
-    this.errorBox.nativeElement.classList.remove('show');
-    void this.errorBox.nativeElement.offsetWidth; 
-    this.errorBox.nativeElement.classList.add('show');
-  }
-
-  /* Upload Avatar */
-  avatarPreview: string | ArrayBuffer | null = null;
-  selectedFile: File | null = null;
-
-  triggerFileInput(): void {
-    const fileInput = document.getElementById('avatarUpload') as HTMLInputElement;
-    fileInput.click();
-  }
-
-  onAvatarSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-
-      const reader = new FileReader();
-      reader.onload = (e: any) => this.avatarPreview = e.target.result;
-      reader.readAsDataURL(file);
-    }
-  }
-
-  saveAvatar(): void {
-    if (!this.selectedFile) return;
-
-    const formData = new FormData();
-    formData.append('avatar', this.selectedFile);
-
-    this.userService.uploadAvatar(this.user.id, this.selectedFile).subscribe(updatedUser => {
-      this.user.avatarUrl = updatedUser.avatarUrl;
-      this.avatarPreview = null;
+      this.profileForm.get('currentPassword')?.reset();
+      this.profileForm.get('newPassword')?.reset();
+      this.profileForm.get('confirmPassword')?.reset();
     });
   }
-
-  deleteAvatar() {
-    console.log("deleted avatar");
-    // this.userService.deleteAvatar(this.user.id).subscribe(() => {
-    //   this.user.avatarUrl = null; // Ustaw domyślny avatar
-    //   this.avatarPreview = null;
-    // });
-  }
 }
+

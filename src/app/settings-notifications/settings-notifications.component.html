@@ -1,7 +1,12 @@
 <div class="account-settings">
     <div class="settings-form">
       <h2>{{ 'settings.notifications_page.notifications' | translate }}</h2>
+      <p class="description">Spersonalizuj swoje powiadomienia.</p>
   
+      <p class="separator"></p>
+
+      <!-- <h2 class="profile-title">Konto</h2> -->
+
       <div class="notification-group">
         <span>Email Notifications</span>
         <mat-slide-toggle [(ngModel)]="notifications.email"></mat-slide-toggle>

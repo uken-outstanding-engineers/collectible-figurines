@@ -1,9 +1,8 @@
 package uken.collectible_figurines.services;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 import uken.collectible_figurines.dto.UserDTO;
+import uken.collectible_figurines.dto.UserUpdateAccountDTO;
 import uken.collectible_figurines.model.User;
 
 import java.io.IOException;
@@ -19,5 +18,5 @@ public interface UserService {
   int getTotalUsers();
   int getActiveUsers();
   User updateUserAvatar(Long userId, MultipartFile avatarFile) throws IOException;
-  User updateEmail(Long userId, String newEmail);
+  Object updateUserAccount(Long userId, UserUpdateAccountDTO userUpdate);
 }

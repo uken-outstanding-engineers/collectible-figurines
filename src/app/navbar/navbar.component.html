@@ -18,6 +18,14 @@
             [matMenuTriggerFor]="menu" 
             *ngIf="isLoggedIn; else loginRedirect"
         >
+            <!-- <ng-container *ngIf="!this.currentUser?.avatarUrl; else avatarImage">
+                <mat-icon fontIcon="person" class="default-avatar"></mat-icon>
+            </ng-container>
+            
+            <ng-template #avatarImage>
+                <img [src]="apiUrl + this.currentUser?.avatarUrl" alt="Profilowe">
+            </ng-template> -->
+
             <mat-icon fontIcon="person"></mat-icon>
         </button>
 

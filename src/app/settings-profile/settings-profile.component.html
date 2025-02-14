@@ -1,0 +1,39 @@
+<div class="profile-container">
+    <h2 class="profile-title">Twój profil</h2>
+    <p class="avatar-description">Pokaż, jak będą cię widzieć inni na stronie.</p>
+
+    <p class="separator"></p>
+
+    <label class="title" for="avatar">Twój awatar:</label>
+    <div class="profile-header">
+        <div class="profile-content">
+            <div class="profile-picture">
+                <img *ngIf="user.avatarUrl || selectedFile; else defaultAvatar" [src]="avatarPreview || (apiUrl + user.avatarUrl)" alt="Profilowe">
+                
+                <ng-template #defaultAvatar>
+                    <mat-icon class="default-avatar">person</mat-icon>
+                </ng-template>
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <input type="file" id="avatarUpload" (change)="onAvatarSelected($event)" accept="image/*" hidden>
+            <button mat-button class="upload-button" (click)="triggerFileInput()">Prześlij zdjęcie...</button>
+            <button mat-button *ngIf="user.avatarUrl || selectedFile" class="delete-photo-button" (click)="deleteAvatar()">Usuń zdjęcie</button>
+        </div>
+        
+    </div>
+    <p class="info">Ustaw swój awatar.</p>
+
+    <div class="input-group">
+        <label class="title" for="username">Nazwa użytkownika:</label>
+        <div class="input-wrapper">
+            <mat-icon class="username">person</mat-icon>
+            <input type="text" id="username" [(ngModel)]="user.username" placeholder="Nazwa użytkownika" [disabled]="isDisabledUsername">
+        </div>
+          
+        <p class="info">Zmiana nazwy użytkownika jest możliwa tylko raz na 30 dni.</p>
+    </div>
+    
+    <button mat-button class="save-button" (click)="saveProfile()">Zapisz profil</button>
+</div>

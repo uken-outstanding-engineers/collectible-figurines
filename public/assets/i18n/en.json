@@ -52,8 +52,9 @@
     },
     "settings": {
         "settings": "Settings",
-        "account_settings": "Account settings",
+        "profile": "Profile",
         "notifications": "Notifications",
+        "account": "Account",
 
         "account_settings_page": {
             "select_photo": "Select photo",

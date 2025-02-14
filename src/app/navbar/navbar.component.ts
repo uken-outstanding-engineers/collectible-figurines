@@ -8,6 +8,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { filter } from 'rxjs';
 
 import { LanguageModule } from '../language/language.module';
 
@@ -15,10 +18,7 @@ import { FigureService } from '../api/figure.service';
 import { LanguageService } from '../language/language.service'; 
 import { UserService } from '../api/user.service';
 import { User } from '../api/user.model';
-
-import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { filter } from 'rxjs';
+import { API_URL } from '../api/api-url';
 
 @Component({
   selector: 'app-navbar',
@@ -40,6 +40,7 @@ import { filter } from 'rxjs';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
+  apiUrl = API_URL.BASE_URL;
   
   currentLanguage: string = 'pl';
   searchTerm: string = '';
@@ -68,6 +69,7 @@ export class NavbarComponent {
     this.userService.getLoggedInUser().subscribe(user => {
       this.isLoggedIn = !!user; 
       this.currentUser = user; 
+      console.log(this.currentUser?.avatarUrl);
     });
 
     const savedLanguage = localStorage.getItem('language') || 'pl';

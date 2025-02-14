@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 
 import { User } from '../api/user.model';
 import { UserService } from '../api/user.service';
+import { API_URL } from '../api/api-url';
 
 @Component({
   selector: 'app-admin-panel-users',
@@ -34,6 +35,7 @@ import { UserService } from '../api/user.service';
 })
 export class AdminPanelUsersComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  apiUrl = API_URL.BASE_URL;
   
   users = new MatTableDataSource<User>([]);
 

@@ -1,5 +1,7 @@
 package uken.collectible_figurines.dto;
 
+import uken.collectible_figurines.model.User;
+
 import java.time.LocalDateTime;
 
 public class UserDTO {
@@ -10,15 +12,14 @@ public class UserDTO {
   private LocalDateTime lastLogin;
   private String avatarUrl;
 
-  public UserDTO(Long id, String username, String email, String permission, LocalDateTime lastLogin, String avaterUrl) {
+  public UserDTO(Long id, String username, String email, String permission, LocalDateTime lastLogin, String avatarUrl) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.permission = permission;
     this.lastLogin = lastLogin;
-    this.avatarUrl = avaterUrl;
+    this.avatarUrl = avatarUrl;
   }
-
   public Long getId() {
     return id;
   }
