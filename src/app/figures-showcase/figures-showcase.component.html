@@ -68,7 +68,7 @@
     </div>
 
     <div class="card-container">
-      <mat-card *ngFor="let figure of paginatedFigures" class="card" appearance="outlined">
+      <mat-card *ngFor="let figure of paginatedFigures" class="card" [ngClass]="{ 'card-log-in': userId }" appearance="outlined">
         <div class="image-container">
           <a [routerLink]="['/figure', figure.id]">
             <img 
@@ -86,13 +86,16 @@
           <br>
           <p class="figure-name">{{ figure.name }}</p>
         </mat-card-content>
-        <mat-card-actions class="card-actions">
+        <mat-card-actions class="card-actions" *ngIf="this.userId">
           <button mat-mini-fab [ngClass]="{'active': figure.isLiked}" (click)="toggleListActive(figure, 'Liked')" class="action-button">
             <mat-icon>favorite</mat-icon>
           </button>
-          <!-- <button mat-mini-fab class="action-button">
-            <mat-icon>favorite_border</mat-icon>
-          </button> -->
+          <button mat-mini-fab [ngClass]="{'active': figure.isWanted}" (click)="toggleListActive(figure, 'Wanted')" class="action-button" >
+            <mat-icon>star_border</mat-icon>
+          </button>
+          <button mat-mini-fab [ngClass]="{'active': figure.isOwned}" (click)="toggleListActive(figure, 'Owned')" class="action-button" >
+            <mat-icon class="material-symbols-outlined">package_2</mat-icon>
+          </button>
         </mat-card-actions>        
       </mat-card>
     </div>

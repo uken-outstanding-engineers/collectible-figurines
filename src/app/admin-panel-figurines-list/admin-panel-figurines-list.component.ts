@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
@@ -29,6 +30,7 @@ import { API_URL } from '../api/api-url';
     MatPaginator,
     MatMenuModule,
     FormsModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,
@@ -44,13 +46,19 @@ export class AdminPanelFigurinesListComponent {
   figurines = new MatTableDataSource<Figure>([]);
   fandoms: Fandom[] = []; 
 
+  errorForm!: string;
+
   displayedColumns: string[] = [
     'imageUrl', 'name', 'series', 'variants', 'action',
   ];
 
   private subscription: Subscription;
 
-  constructor(private figureService: FigureService, private fandomService: FandomService) {
+  constructor(
+    private figureService: FigureService, 
+    private fandomService: FandomService,
+    private fb: FormBuilder
+  ) {
     //Figurines
     this.subscription = this.figureService.getFigures().subscribe((data: Figure[]) => {
       this.figurines.data = data;
@@ -86,6 +94,7 @@ export class AdminPanelFigurinesListComponent {
       id: null,
       name: '',
       series: '',
+      number: null,
       imageUrl: '',
       hoverImageUrl: '',
       chase: false,
@@ -99,7 +108,15 @@ export class AdminPanelFigurinesListComponent {
 
   /* Edit */
   editDialogVisible = false;
-  editFigure: { id: number | null; name: string; series: string; imageUrl: string; hoverImageUrl: string; [key: string]: any } | null = null;
+  editFigure: { 
+    id: number | null;
+    name: string;  
+    series: string; 
+    number: number | null;
+    imageUrl: string; 
+    hoverImageUrl: string; 
+    [key: string]: any 
+  } | null = null;
 
   variants = [
     { key: 'chase', label: 'Chase' },
@@ -108,10 +125,16 @@ export class AdminPanelFigurinesListComponent {
     { key: 'exclusive', label: 'Exclusive' },
   ];
 
-  openEditDialog(figure: { id: number; name: string; series: string; imageUrl: string; hoverImageUrl: string; [key: string]: any }): void {
+  openEditDialog(figure: { 
+    id: number; 
+    name: string; 
+    series: string; 
+    number: number | null;
+    imageUrl: string; 
+    hoverImageUrl: string; 
+    [key: string]: any 
+  }): void {
     this.editFigure = { ...figure };
-    console.log(this.previewUrl);
-    console.log(this.selectedFile);
 
     this.variants.forEach((variant) => {
       if (this.editFigure![variant.key] === undefined) {
@@ -131,9 +154,13 @@ export class AdminPanelFigurinesListComponent {
     
     this.editDialogVisible = false;
     this.editFigure = null;
+
+    this.errorForm = '';
   }
 
   saveChanges(): void {
+    
+
     if (this.editFigure) {
       const formData = new FormData();
   
@@ -146,6 +173,19 @@ export class AdminPanelFigurinesListComponent {
       if (this.selectedHoverFile) {
         formData.append('hoverImageFile', this.selectedHoverFile);
       }
+
+      const requiredFields = [
+        this.editFigure.imageUrl,
+        this.editFigure.hoverImageUrl,
+        this.editFigure.name,
+        this.editFigure.series
+      ];
+      
+      if (requiredFields.some(field => !field)) {
+        this.errorForm = "Zdjęcia, nazwa oraz seria nie mogą być puste!";
+        return;
+      }
+      
   
       if (this.editFigure.id !== null) {
         // Edit figurine
@@ -166,6 +206,7 @@ export class AdminPanelFigurinesListComponent {
     }
   }
   
+
   /* Drag and Drop */
   isDraggingNormal: boolean = false;
   isDraggingHover: boolean = false;

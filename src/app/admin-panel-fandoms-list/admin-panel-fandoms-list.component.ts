@@ -40,6 +40,8 @@ export class AdminPanelFandomsListComponent {
   
   fandoms = new MatTableDataSource<Fandom>([]);
 
+  errorForm!: string;
+
   displayedColumns: string[] = [
     'imageUrl', 'name', 'action'
   ];
@@ -84,8 +86,11 @@ export class AdminPanelFandomsListComponent {
   closeEditDialog(): void {
     this.previewUrl = null;
     this.selectedFile = null;
+
     this.editDialogVisible = false;
     this.editFandom = null;
+
+    this.errorForm = '';
   }
 
   /* Edit & Add */
@@ -97,6 +102,16 @@ export class AdminPanelFandomsListComponent {
   
       if (this.selectedFile) {
         formData.append('imageFile', this.selectedFile);
+      }
+
+      const requiredFields = [
+        this.editFandom.imageUrl,
+        this.editFandom.name,
+      ];
+      
+      if (requiredFields.some(field => !field)) {
+        this.errorForm = "Zdjęcie oraz nazwa nie mogą być puste!";
+        return;
       }
 
       if (this.editFandom.id != null) {

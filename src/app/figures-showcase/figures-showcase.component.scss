@@ -193,7 +193,15 @@
     flex-direction: column;
     justify-content: space-between;
     position: relative;
-    height: 480px; 
+    height: 400px;
+}
+
+.card-log-in {
+    height: 480px !important;
+}
+
+.card-log-in .card-content {
+    height: 100px;
 }
 
 .image-container {
@@ -217,7 +225,7 @@
     flex-direction: column;
     justify-content: flex-start;
     padding-top: 10px; 
-    height: 100px; 
+    //height: 100px; 
 }
 
 .figure-series {

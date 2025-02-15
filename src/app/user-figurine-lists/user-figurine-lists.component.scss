@@ -99,7 +99,7 @@
     color: #777;
     font-size: 1.1rem;
     font-family: 'Poppins', sans-serif;
-    margin-top: 40px;
+    margin-top: 30vh;
 }
 
 @media (max-width: 1124px) {
@@ -121,6 +121,10 @@
 
     .figurine-panel {
         margin-top: 10px;
+    }
+
+    .no-figures {
+        margin-top: 10vh;
     }
 }
 

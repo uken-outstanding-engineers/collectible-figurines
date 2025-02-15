@@ -23,6 +23,9 @@ public class Figurine {
   @Column(name = "series")
   private String series;
 
+  @Column(name = "number")
+  private Long number;
+
   @Column(name = "image_url")
   private String imageUrl;
 
@@ -60,6 +63,12 @@ public class Figurine {
     return series;
   }
   public void setSeries(String series) { this.series = series; }
+  public Long getNumber() {
+    return number;
+  }
+  public void setNumber(Long number) {
+    this.number = number;
+  }
   public String getImageUrl() { return imageUrl; }
   public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
   public String getHoverImageUrl() { return hoverImageUrl; }

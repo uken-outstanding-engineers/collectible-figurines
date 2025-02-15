@@ -36,7 +36,7 @@ mat-toolbar a {
 
 .search-input {
     flex: 1; 
-    width: 60%;
+    width: 100%;
     padding: 0 10%;
     max-width: 500px; 
 }
@@ -48,18 +48,39 @@ mat-toolbar a {
     padding-left: 5%;
 }
 
-.search-button {
-    background-color: #007bff; 
-    color: white;
-    border: none; 
-    border-radius: 4px; 
-    height: 48px;
-    padding: 12px 16px; 
-    cursor: pointer; 
+.search-results {
+    position: absolute;
+    top: 75%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 500px;
+    overflow-y: auto;
+    z-index: 1000;
+    color: black;
 }
 
-.search-button mat-icon {
-    font-size: 24px; 
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    
+    &:hover {
+        background: #f0f0f0;
+    }
+
+    img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 30px;
+    }
 }
 
 .profile-language {
@@ -72,8 +93,19 @@ mat-toolbar a {
     margin-right: 16px;
 }
 
+.avatar {
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%; 
+    object-fit: cover; 
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .logged-in {
-    color: grey; 
+    //color: grey; zalogownay kolor zmienić
     margin-right: 16px;
 }
 
@@ -93,35 +125,68 @@ mat-toolbar a {
     color: white;
 }
 
-.menu-toolbar {
-    background-color: #2a2a2a;
-    padding: 0 5%;
-    justify-content: flex-start; 
+.custom-menu.mat-mdc-menu-panel {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-width: 350px !important;  
+    max-width: 400px !important;
+    text-align: center;
 }
 
-.menu-toolbar nav {
-    display: flex;
-    justify-content: flex-start; 
-    width: 100%;
-    padding: 15px 0;
-
+.mat-mdc-menu-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
 }
 
-.menu-toolbar a {
-    color: white;
+::ng-deep.mat-mdc-menu-content {
+    padding: 0 !important;
+}
+
+.menu-header {
+    padding: 12px 24px;
+    width: 150px;
+}
+
+.username {
+    font-size: 16px;
     font-weight: bold;
-    font-size: 18px;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    text-decoration: none;
-    padding: 0 2%;
 }
 
-.menu-toolbar a:hover {
-    color: #e4e4a4;
+.horizontal-divider {
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
+// .menu-toolbar {
+//     background-color: #2a2a2a;
+//     padding: 0 5%;
+//     justify-content: flex-start; 
+// }
 
-@media (max-width: 768px) {
+// .menu-toolbar nav {
+//     display: flex;
+//     justify-content: flex-start; 
+//     width: 100%;
+//     padding: 15px 0;
+
+// }
+
+// .menu-toolbar a {
+//     color: white;
+//     font-weight: bold;
+//     font-size: 18px;
+//     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+//     text-decoration: none;
+//     padding: 0 2%;
+// }
+
+// .menu-toolbar a:hover {
+//     color: #e4e4a4;
+// }
+
+@media (max-width: 1024px) {
     mat-toolbar {
         flex-direction: column;
         padding: 20px 5% 250px 5%;

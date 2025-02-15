@@ -51,6 +51,7 @@ public class FigurineController {
 
     existingFigurine.setName(updatedFigurine.getName());
     existingFigurine.setSeries(updatedFigurine.getSeries());
+    existingFigurine.setNumber(updatedFigurine.getNumber());
     existingFigurine.setChase(updatedFigurine.getChase());
     existingFigurine.setGlowInDark(updatedFigurine.getGlowInDark());
     existingFigurine.setFlocked(updatedFigurine.getFlocked());

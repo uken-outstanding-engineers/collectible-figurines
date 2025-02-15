@@ -37,10 +37,9 @@ export class UserFigurineListsComponent {
   }
 
   getListNames(): string[] {
-    const fixedLists = ['liked', 'wanted'];
+    const fixedLists = ['liked', 'wanted', 'owned'];
     const allLists = Object.keys(this.figurineLists);
   
-
     const customLists = allLists.filter(list => !fixedLists.includes(list));
   
     return [...fixedLists, ...customLists]; 

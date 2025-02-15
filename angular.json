@@ -56,8 +56,8 @@
               "deployUrl": "/collectible-figurines/",
               "fileReplacements": [
                 {
-                  "replace": "src/api/api-url.ts",
-                  "with": "src/api/api-url.prod.ts"
+                  "replace": "src/app/api/api-url.ts",
+                  "with": "src/app/api/api-url.prod.ts"
                 }
               ]
             },

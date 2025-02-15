@@ -35,9 +35,16 @@ public class UserFigurineListController {
         .map(UserFigurineListItem::getFigurine)
         .collect(Collectors.toList());
 
+      UserFigurineList ownedList = listService.getOrCreatePredefinedList(userId, "Owned");
+      List<Figurine> ownedFigurines = ownedList.getFigurines()
+        .stream()
+        .map(UserFigurineListItem::getFigurine)
+        .collect(Collectors.toList());
+
       Map<String, List<Figurine>> response = new HashMap<>();
       response.put("liked", likedFigurines);
       response.put("wanted", wantedFigurines);
+      response.put("owned", ownedFigurines);
 
       return ResponseEntity.ok(response);
     }

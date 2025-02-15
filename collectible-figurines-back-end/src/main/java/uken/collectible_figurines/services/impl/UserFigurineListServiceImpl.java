@@ -27,7 +27,7 @@ public class UserFigurineListServiceImpl implements UserFigurineListService {
   public UserFigurineList getOrCreatePredefinedList(Long userId, String name) {
     String type;
 
-    if ("Liked".equalsIgnoreCase(name) || "Wanted".equalsIgnoreCase(name)) {
+    if ("Liked".equalsIgnoreCase(name) || "Wanted".equalsIgnoreCase(name) || "Owned".equalsIgnoreCase(name)) {
       type = name.toUpperCase();
     } else {
       type = "CUSTOM";

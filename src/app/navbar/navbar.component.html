@@ -7,26 +7,46 @@
 
     <div class="search-container">
         <mat-form-field class="search-input">
-            <input matInput placeholder="{{ 'navbar.search_placeholder' | translate }}" [(ngModel)]="searchTerm" (input)="searchFigures()">
+          <input 
+            matInput 
+            placeholder="{{ 'navbar.search_placeholder' | translate }}" 
+            [(ngModel)]="searchTerm" 
+            (input)="searchFigures()"
+            (focus)="showResults = true" 
+            (blur)="hideResults()"
+          >
         </mat-form-field>        
+      
+        <!-- Dropdown wyników -->
+        <div class="search-results" *ngIf="showResults && searchResults.length > 0">
+          <div 
+            class="search-result-item" 
+            *ngFor="let figure of searchResults" 
+            (mousedown)="selectFigure(figure)">
+            
+            <img [src]="apiUrl + figure.imageUrl" alt="{{ figure.name }}">
+            <span>{{ figure.name }}</span>
+          </div>
+        </div>
     </div>
-    
+      
     <div class="profile-language">
         <button 
             mat-icon-button 
             class="logged-in"
             [matMenuTriggerFor]="menu" 
+            [matMenuTriggerData]="{ xPosition: 'center', yPosition: 'above' }"
             *ngIf="isLoggedIn; else loginRedirect"
         >
-            <!-- <ng-container *ngIf="!this.currentUser?.avatarUrl; else avatarImage">
-                <mat-icon fontIcon="person" class="default-avatar"></mat-icon>
+            <ng-container *ngIf="!this.currentUser?.avatarUrl; else avatarImage">
+                <mat-icon fontIcon="person"></mat-icon>
             </ng-container>
             
             <ng-template #avatarImage>
-                <img [src]="apiUrl + this.currentUser?.avatarUrl" alt="Profilowe">
-            </ng-template> -->
+                <img class="avatar" [src]="apiUrl + this.currentUser?.avatarUrl" alt="Profilowe">
+            </ng-template>
 
-            <mat-icon fontIcon="person"></mat-icon>
+            <!-- <mat-icon fontIcon="person"></mat-icon> -->
         </button>
 
         <ng-template #loginRedirect>
@@ -35,25 +55,35 @@
             </button>
         </ng-template>
 
-        <mat-menu #menu="matMenu">
+        <mat-menu #menu="matMenu" class="custom-menu">
+
+            <!-- Username -->
+            <div class="menu-header">
+                <span class="username">{{ currentUser?.username }}</span>
+            </div>
+    
+            <div class="horizontal-divider"></div>
+    
             <!-- Admin Panel - only admin -->
             <button mat-menu-item routerLink="/admin" *ngIf="currentUser?.permission === 'ADMIN'">
                 <mat-icon>admin_panel_settings</mat-icon>
                 <span>{{ 'navbar.admin_panel' | translate }}</span>
             </button>
-
+    
             <!-- Figurine Lists -->
             <button mat-menu-item routerLink="/figurine-lists">
-                <mat-icon>smart_toy</mat-icon>
-                <span>{{ 'navbar.figurine_lists' | translate }}</span>
+                <mat-icon>person</mat-icon>
+                <span>{{ 'navbar.profile' | translate }}</span>
             </button>
-
+    
             <!-- Settings -->
             <button mat-menu-item routerLink="/settings">
-                <mat-icon>format_list_bulleted</mat-icon>
+                <mat-icon>settings</mat-icon>
                 <span>{{ 'navbar.settings' | translate }}</span>
             </button>
-
+    
+            <div class="horizontal-divider"></div>
+    
             <!-- Logout -->
             <button mat-menu-item (click)="logout()">
                 <mat-icon>logout</mat-icon>

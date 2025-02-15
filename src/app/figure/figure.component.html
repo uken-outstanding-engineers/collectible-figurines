@@ -22,7 +22,7 @@
     </div>
     
     <div class="figure-info">
-        <h2>{{ figure.name }} - {{ figure.series }}</h2>
+        <h2>{{ figure.name }} <span *ngIf="figure.number">#{{ figure.number }}</span> - {{ figure.series }}  </h2>
         <ul>
             <li *ngIf="figure.chase">Chase Edition</li>
             <li *ngIf="figure.glowInDark">Glow in the Dark</li>
