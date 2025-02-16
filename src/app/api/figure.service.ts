@@ -62,11 +62,6 @@ export class FigureService {
     );
   }
 
-
-  //getFiguresByFandomId(fandomId: number): Observable<Figure[]> {
-    //return of(this.figures.filter(figure => figure.fandomId === fandomId));
-  //}
-
   getFigureById(id: number): Observable<Figure | undefined> {
     return this.getFigures().pipe(
       map((figures) => figures.find((figure) => figure.id === id))

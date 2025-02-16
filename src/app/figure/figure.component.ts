@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
@@ -9,7 +11,11 @@ import { API_URL } from '../api/api-url';
 @Component({
   selector: 'app-figure',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatIconModule
+  ],
   templateUrl: './figure.component.html',
   styleUrl: './figure.component.scss'
 })
@@ -25,8 +31,10 @@ export class FigureComponent {
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadFigureDetails(id);
+    this.route.params.subscribe(params => {
+      const id = Number(params['id']);
+      this.loadFigureDetails(id);
+    });
   }
 
   loadFigureDetails(id: number): void {

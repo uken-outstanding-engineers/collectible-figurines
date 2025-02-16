@@ -108,7 +108,8 @@
 <div class="dialog-edit-container" *ngIf="editDialogVisible">
   <div class="dialog-backdrop" (click)="closeEditDialog()"></div>
   <div class="dialog">
-    <h2>Edit Figurine</h2>
+    <h2 *ngIf="!editFigure?.id">Add Figurine</h2>
+    <h2 *ngIf="editFigure?.id">Edit Figurine</h2>
     <form (ngSubmit)="saveChanges()" *ngIf="editFigure" #editForm="ngForm">
       
 

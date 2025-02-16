@@ -90,7 +90,8 @@
   <div class="dialog-edit-container" *ngIf="editDialogVisible">
     <div class="dialog-backdrop" (click)="closeEditDialog()"></div>
     <div class="dialog">
-      <h2>Edit Fandom</h2>
+      <h2 *ngIf="!editFandom?.id">Add Fandom</h2>
+      <h2 *ngIf="editFandom?.id">Edit Fandom</h2>
       <form (ngSubmit)="saveChanges()" *ngIf="editFandom">
 
         <div class="form-group">

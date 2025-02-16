@@ -12,12 +12,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { Overlay } from '@angular/cdk/overlay';
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
 import { FandomService } from '../api/fandom.service';
 import { Fandom } from '../api/fandom.model';
 import { API_URL } from '../api/api-url';
+import { AdminPanelService } from '../services/admin-panel.service';
 
 @Component({
   selector: 'app-admin-panel-figurines-list',
@@ -57,7 +60,8 @@ export class AdminPanelFigurinesListComponent {
   constructor(
     private figureService: FigureService, 
     private fandomService: FandomService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private adminPanelService: AdminPanelService
   ) {
     //Figurines
     this.subscription = this.figureService.getFigures().subscribe((data: Figure[]) => {
@@ -103,6 +107,7 @@ export class AdminPanelFigurinesListComponent {
       exclusive: false,
       fandomId: null,
     };
+    this.adminPanelService.openDialog();
     this.editDialogVisible = true;
   }
 
@@ -117,7 +122,7 @@ export class AdminPanelFigurinesListComponent {
     hoverImageUrl: string; 
     [key: string]: any 
   } | null = null;
-
+  
   variants = [
     { key: 'chase', label: 'Chase' },
     { key: 'glowInDark', label: 'Glow in the Dark' },
@@ -135,13 +140,14 @@ export class AdminPanelFigurinesListComponent {
     [key: string]: any 
   }): void {
     this.editFigure = { ...figure };
-
+    
     this.variants.forEach((variant) => {
       if (this.editFigure![variant.key] === undefined) {
         this.editFigure![variant.key] = false;
       }
     });
 
+    this.adminPanelService.openDialog();
     this.editDialogVisible = true;
   }
 
@@ -156,11 +162,11 @@ export class AdminPanelFigurinesListComponent {
     this.editFigure = null;
 
     this.errorForm = '';
+
+    this.adminPanelService.closeDialog();
   }
 
   saveChanges(): void {
-    
-
     if (this.editFigure) {
       const formData = new FormData();
   
@@ -219,16 +225,6 @@ export class AdminPanelFigurinesListComponent {
     const file = event.target.files[0];
     this.readImage(file, type);
   }
-  
-  // private previewImage(file: File): void {
-  //   const reader = new FileReader();
-  //   reader.onload = (e: any) => {
-  //     if (this.editFigure) {
-  //       this.editFigure.imageUrl = e.target.result; 
-  //     }
-  //   };
-  //   reader.readAsDataURL(file);
-  // }
   
   onDragOver(event: DragEvent, type: 'normal' | 'hover'): void {
     event.preventDefault();
@@ -295,12 +291,14 @@ export class AdminPanelFigurinesListComponent {
     this.selectedId = id;
     this.selectedName = name;
     this.dialogVisible = true;
+    this.adminPanelService.openDialog();
   }
 
   closeDeleteDialog(): void {
     this.dialogVisible = false;
     this.selectedId = null;
     this.selectedName = null;
+    this.adminPanelService.closeDialog();
   }
 
   confirmDelete(): void {

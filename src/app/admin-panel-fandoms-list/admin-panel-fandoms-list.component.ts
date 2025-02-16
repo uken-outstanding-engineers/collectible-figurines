@@ -15,6 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Fandom } from '../api/fandom.model';
 import { FandomService } from '../api/fandom.service';
 import { API_URL } from '../api/api-url';
+import { AdminPanelService } from '../services/admin-panel.service';
 
 @Component({
   selector: 'app-admin-panel-fandoms-list',
@@ -48,7 +49,10 @@ export class AdminPanelFandomsListComponent {
 
   private subscription: Subscription;
 
-  constructor(private fandomService: FandomService) {
+  constructor(
+    private fandomService: FandomService,
+    private adminPanelService: AdminPanelService
+  ) {
     this.subscription = this.fandomService.getFandoms().subscribe((data: Fandom[]) => {
       this.fandoms.data = data;
     });
@@ -70,6 +74,7 @@ export class AdminPanelFandomsListComponent {
       name: '',
       imageUrl: '',
     };
+    this.adminPanelService.openDialog();
     this.editDialogVisible = true;
   }
 
@@ -79,7 +84,8 @@ export class AdminPanelFandomsListComponent {
 
   openEditDialog(fandom: { id: number; name: string; imageUrl: string; }): void {
     this.editFandom = { ...fandom };
-    console.log(this.editFandom.imageUrl);
+    
+    this.adminPanelService.openDialog();
     this.editDialogVisible = true;
   }
 
@@ -91,6 +97,8 @@ export class AdminPanelFandomsListComponent {
     this.editFandom = null;
 
     this.errorForm = '';
+
+    this.adminPanelService.closeDialog();
   }
 
   /* Edit & Add */
@@ -186,12 +194,14 @@ export class AdminPanelFandomsListComponent {
     this.selectedId = id;
     this.selectedName = name;
     this.dialogVisible = true;
+    this.adminPanelService.openDialog();
   }
 
   closeDeleteDialog(): void {
     this.dialogVisible = false;
     this.selectedId = null;
     this.selectedName = null;
+    this.adminPanelService.closeDialog();
   }
 
   confirmDelete(): void {

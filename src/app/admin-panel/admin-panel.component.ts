@@ -60,7 +60,6 @@ const TREE_DATA: InterfaceNode[] = [
   styleUrls: ['./admin-panel.component.scss'],
 })
 export class AdminPanelComponent {
-  //@ViewChild('sidenav') sidenav!: MatSidenav;
   isSidenavOpened: boolean = true;
   screenWidth!: number;
   
@@ -90,7 +89,6 @@ export class AdminPanelComponent {
 
   constructor(private router: Router) {
     this.dataSource.data = TREE_DATA;
-    //this.translatedText = this.translate.instant('collectible_figures');
   }
 
   ngOnInit() {

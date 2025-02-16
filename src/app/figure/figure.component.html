@@ -4,25 +4,39 @@
 
         <div class="image-thumbnails">
             <img 
-            [src]="apiUrl + figure.imageUrl" 
-            (click)="showImage('main')" 
-            [class.selected]="currentImageUrl === apiUrl + figure.imageUrl" 
-            alt="Main Thumbnail" 
-            class="thumbnail-image">
+                [src]="apiUrl + figure.imageUrl" 
+                (click)="showImage('main')" 
+                [class.selected]="currentImageUrl === apiUrl + figure.imageUrl" 
+                alt="Main Thumbnail" 
+                class="thumbnail-image">
             
             <img 
-            [src]="apiUrl + figure.hoverImageUrl" 
-            (click)="showImage('hover')" 
-            [class.selected]="currentImageUrl === apiUrl + figure.hoverImageUrl" 
-            alt="Hover Thumbnail" 
-            class="thumbnail-image">
+                [src]="apiUrl + figure.hoverImageUrl" 
+                (click)="showImage('hover')" 
+                [class.selected]="currentImageUrl === apiUrl + figure.hoverImageUrl" 
+                alt="Hover Thumbnail" 
+                class="thumbnail-image">
         </div>
 
         <img [src]="currentImageUrl" alt="Figure Image" class="figure-main-image pc">
+<!-- 
+        <div class="figure-actions">
+            <mat-card-actions class="card-actions">
+                <button mat-mini-fab [ngClass]="{'active': figure.isLiked}" class="action-button">
+                    <mat-icon>favorite</mat-icon>
+                </button>
+                <button mat-mini-fab [ngClass]="{'active': figure.isWanted}" class="action-button">
+                    <mat-icon>star_border</mat-icon>
+                </button>
+                <button mat-mini-fab [ngClass]="{'active': figure.isOwned}" class="action-button">
+                    <mat-icon class="material-symbols-outlined">package_2</mat-icon>
+                </button>
+            </mat-card-actions>
+        </div> -->
     </div>
     
     <div class="figure-info">
-        <h2>{{ figure.name }} <span *ngIf="figure.number">#{{ figure.number }}</span> - {{ figure.series }}  </h2>
+        <h2>{{ figure.name }} <span *ngIf="figure.number">#{{ figure.number }}</span> - {{ figure.series }}</h2>
         <ul>
             <li *ngIf="figure.chase">Chase Edition</li>
             <li *ngIf="figure.glowInDark">Glow in the Dark</li>
