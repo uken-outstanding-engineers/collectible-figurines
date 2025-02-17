@@ -18,11 +18,23 @@ mat-toolbar a {
     text-decoration: none;
 }
 
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 5px; 
+}
+
+.logo {
+    height: 60px; 
+    width: auto;
+}
+
 .figures-showcase span {
     font-size: 24px;
     font-weight: bold;
     color: white;
     text-decoration: none;
+    font-family: 'Courier Prime', monospace; 
 }
 
 .search-container {

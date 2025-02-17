@@ -43,12 +43,12 @@ export class NavbarComponent {
   apiUrl = API_URL.BASE_URL;
   
   currentLanguage: string = 'pl';
-  // searchTerm: string = '';
   translatedText: string;
 
   isLoggedIn: boolean = true;
   currentUser: User | null = null;
 
+  private lastSearchTerm: string = '';
   private searchSubject = new Subject<string>();
 
   constructor(
@@ -126,14 +126,26 @@ export class NavbarComponent {
     this.searchSubject.next(this.searchTerm); 
   }
 
+  onFocus() {
+    if (this.searchTerm.length >= 2 && this.searchTerm !== this.lastSearchTerm) {
+      this.showResults = true;
+    }
+  }
+  
+  onBlur() {
+    setTimeout(() => {
+      this.showResults = false;
+    }, 200); 
+  }
+  
+  onInputChange() {
+    this.lastSearchTerm = this.searchTerm;
+  }
+
   selectFigure(figure: Figure) {
     this.searchTerm = figure.name;
     this.searchResults = [];
     this.showResults = false;
     this.router.navigate(['/figure', figure.id]);
-  }
-
-  hideResults() {
-    setTimeout(() => this.showResults = false, 200);
   }
 }

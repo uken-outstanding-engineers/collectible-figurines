@@ -36,12 +36,60 @@
     </div>
     
     <div class="figure-info">
-        <h2>{{ figure.name }} <span *ngIf="figure.number">#{{ figure.number }}</span> - {{ figure.series }}</h2>
+        <h2>Name: {{ figure.name }} 
+            <span *ngIf="figure.number">#{{ figure.number }}</span>  
+            <!-- poprawić -->
+            <br>Series: {{ figure.series }}
+        </h2>
         <ul>
             <li *ngIf="figure.chase">Chase Edition</li>
             <li *ngIf="figure.glowInDark">Glow in the Dark</li>
             <li *ngIf="figure.flocked">Flocked</li>
             <li *ngIf="figure.exclusive">Exclusive Edition</li>
         </ul>
+    </div>
+</div>
+
+<div class="recommended-figurines">
+    <div class="header-container">
+        <h3>Polecane Figurki</h3>
+      
+        <div class="controls">
+          <button class="arrow left-arrow" (click)="scrollLeft()">
+            <img src="assets/undraw_arrow_dark.svg" alt="Left Arrow">
+          </button>
+          <button class="arrow right-arrow" (click)="scrollRight()">
+            <img src="assets/undraw_arrow_dark.svg" alt="Right Arrow">
+          </button>
+        </div>
+    </div>
+      
+    <div class="cards-wrapper" #cardsWrapper>
+        <div class="card-container">
+            <mat-card *ngFor="let figure of visibleFigures" class="card" appearance="outlined">
+              <div class="image-container">
+                <a [routerLink]="['/figure', figure.id]">
+                  <img 
+                    mat-card-image 
+                    [src]="apiUrl + figure.imageUrl" 
+                    [alt]="figure.name" 
+                    class="figure-image"
+                  >
+                </a>
+              </div>
+              <mat-card-content class="card-content">
+                <p class="figure-series">{{ figure.series }}</p>
+                <br>
+                <p class="figure-name">{{ figure.name }}</p>
+              </mat-card-content>       
+            </mat-card>
+          </div>
+    </div>
+  
+    <div class="dots-container">
+      <span *ngFor="let dot of dots; let i = index"
+            class="dot"
+            [class.active]="i === activeDotIndex"
+            (click)="scrollToIndex(i)"></span>
     </div>
 </div>
