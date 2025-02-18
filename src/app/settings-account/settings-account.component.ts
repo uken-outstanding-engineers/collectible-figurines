@@ -5,11 +5,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormsModule, NgForm, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { User } from '../api/user.model';
 import { UserService } from '../api/user.service';
 import { API_URL } from '../api/api-url';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-settings-account',
@@ -35,7 +36,9 @@ export class SettingsAccountComponent {
 
   constructor(
     private fb: FormBuilder, 
-    private userService: UserService
+    private userService: UserService,
+    private snackBar: MatSnackBar,
+    private snackBarService: SnackbarService
   ) {
     this.profileForm = this.fb.group(
       {
@@ -97,15 +100,26 @@ export class SettingsAccountComponent {
     const formData = this.profileForm.value;
 
     this.userService.updateUserAccount(this.user.id, formData).subscribe(response => {
-      if(response.error) {
-        console.log(response.error)
+      if (response.error) {
+        if (response.error === 'WRONG_PASSWORD') {
+          this.snackBarService.showError('Nieprawidłowe hasło.');
+        }
         return;
       }
 
+      this.snackBarService.showSuccess('Konto zostało zaktualizowane!');
+      
       this.profileForm.get('currentPassword')?.reset();
       this.profileForm.get('newPassword')?.reset();
       this.profileForm.get('confirmPassword')?.reset();
     });
   }
+
+  deleteAccount() {
+    if (confirm("Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć!")) {
+      console.log("Konto usunięte");
+    }
+  }
+  
 }
 

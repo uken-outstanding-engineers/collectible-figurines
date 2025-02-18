@@ -10,3 +10,23 @@ body {
 .dialog-open {
     overflow: hidden !important;
 }
+
+:root {
+    --mdc-snackbar-supporting-text-color: white; 
+    --mdc-snackbar-container-shape: 4px;
+    --mdc-snackbar-container-color: #323232; 
+}
+  
+:root {
+    .error-snackbar {
+        --mdc-snackbar-container-color: #ac4f48; 
+        --mat-snack-bar-button-color: white;  
+    }
+}
+
+:root {
+    .success-snackbar {
+        --mdc-snackbar-container-color: #448046;
+        --mat-snack-bar-button-color: white;  
+    }
+}

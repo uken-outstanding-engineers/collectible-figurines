@@ -65,25 +65,26 @@
     </div>
       
     <div class="cards-wrapper" #cardsWrapper>
-        <div class="card-container">
-            <mat-card *ngFor="let figure of visibleFigures" class="card" appearance="outlined">
-              <div class="image-container">
-                <a [routerLink]="['/figure', figure.id]">
-                  <img 
-                    mat-card-image 
-                    [src]="apiUrl + figure.imageUrl" 
-                    [alt]="figure.name" 
-                    class="figure-image"
-                  >
-                </a>
-              </div>
-              <mat-card-content class="card-content">
-                <p class="figure-series">{{ figure.series }}</p>
-                <br>
-                <p class="figure-name">{{ figure.name }}</p>
-              </mat-card-content>       
-            </mat-card>
+      <div class="card-container">
+        <mat-card *ngFor="let figure of visibleFigures" class="card" appearance="outlined">
+          <div class="image-container">
+            <a [routerLink]="['/figure', figure.id]">
+              <img 
+                mat-card-image 
+                [src]="apiUrl + figure.imageUrl" 
+                [alt]="figure.name" 
+                class="figure-image"
+                loading="lazy"
+              >
+            </a>
           </div>
+          <mat-card-content class="card-content">
+            <p class="figure-series">{{ figure.series }}</p>
+            <br>
+            <p class="figure-name">{{ figure.name }}</p>
+          </mat-card-content>       
+        </mat-card>
+      </div>
     </div>
   
     <div class="dots-container">

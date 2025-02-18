@@ -70,13 +70,22 @@ margin-top: 2px;
 table {
   border-collapse: collapse;
   width: 100%; 
+  table-layout: fixed;
 }
 
 th, td {
   padding: 10px;
   text-align: center;
   border-bottom: 1px solid #ddd;
-  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+td {
+  word-break: break-word;
+  max-width: 200px; 
+  overflow-wrap: break-word;
 }
 
 th {
@@ -142,6 +151,10 @@ mat-icon {
   .add-figurine-button {
     align-self: flex-end;
     margin: 15px 0px;
+  }
+
+  td {
+    max-width: 50px; 
   }
 }
 

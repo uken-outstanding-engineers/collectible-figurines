@@ -88,7 +88,6 @@ export class UserService {
       tap((updatedUser) => {
         const currentUser = this.loggedInUser.getValue();
         if (currentUser) {
-          console.log("Updated avatarUrl from server:", updatedUser.avatarUrl);
           currentUser.avatarUrl = updatedUser.avatarUrl || null; 
           this.loggedInUser.next(currentUser);
           localStorage.setItem('loggedInUser', JSON.stringify(currentUser));

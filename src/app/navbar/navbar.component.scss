@@ -27,6 +27,7 @@ mat-toolbar a {
 .logo {
     height: 60px; 
     width: auto;
+    cursor: pointer;
 }
 
 .figures-showcase span {
@@ -244,4 +245,10 @@ mat-toolbar a {
         display: none;
     }
 
+}
+
+@media (max-width: 512px) {
+    .figures-showcase span{
+        font-size: 20px;
+    }
 }

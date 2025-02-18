@@ -18,6 +18,7 @@ import { AdminPanelDashboardComponent } from './admin-panel-dashboard/admin-pane
 import { UserFigurineListsComponent } from './user-figurine-lists/user-figurine-lists.component';
 import { AdminPanelFandomsListComponent } from './admin-panel-fandoms-list/admin-panel-fandoms-list.component';
 import { SettingsProfileComponent } from './settings-profile/settings-profile.component';
+import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/figures-showcase', pathMatch: 'full' }, 
@@ -51,6 +52,7 @@ export const routes: Routes = [
       ],
     },
     { path: 'figurine-lists', component: UserFigurineListsComponent },
+    { path: 'profile', component: ProfileComponent },
     { path: '**', redirectTo: '/figures-showcase' },
   ];
   

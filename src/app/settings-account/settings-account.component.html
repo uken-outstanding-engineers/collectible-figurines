@@ -61,8 +61,11 @@
             Oba pola hasła muszą być wypełnione
         </mat-error>
       </div>
-  
-      <button mat-button class="save-button" type="submit" [disabled]="profileForm.invalid">Zapisz profil</button>
+      
+      <div class="footer-buttons-container">
+        <button mat-button class="save-button footer-button" type="submit" [disabled]="profileForm.invalid">Zapisz profil</button>
+        <button mat-button class="delete-account-button footer-button" type="button" (click)="deleteAccount()">Usuń konto</button>
+      </div>  
     </div>
 </form>
   

@@ -1,1 +1,62 @@
-<p>profile works!</p>
+<div class="profile-box">
+    <div class="profile-image">
+        <img [src]="apiUrl + user.avatarUrl" alt="Zdjęcie użytkownika">
+    </div>
+    <div class="profile-info">
+        <h2 class="username">{{ user.username }}</h2>
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-label">Polubione:</span>
+                <span class="stat-value">10</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Chciane:</span>
+                <span class="stat-value">5</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Posiadane:</span>
+                <span class="stat-value">8</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="buttons-box">
+    <button class="btn" id="favorite" (click)="setActive('liked')" [class.active]="activeItem === 'liked'">
+      Ulubione
+    </button>
+    <button class="btn" id="wanted" (click)="setActive('wanted')" [class.active]="activeItem === 'wanted'">
+      Szukane
+    </button>
+    <button class="btn" id="owned" (click)="setActive('owned')" [class.active]="activeItem === 'owned'">
+      Posiadane
+    </button>
+</div>
+  
+<div class="figurine-panel">
+    <ng-container *ngIf="getActiveFigurines().length > 0; else noFigurines">
+        <div class="figurine-list">
+            <div class="figurine-item" *ngFor="let figurine of getActiveFigurines(); let i = index" [ngClass]="{ 'new-row': i % 2 === 0 }">
+                <mat-card class="figurine" appearance="outlined">
+                    <div class="image-container">
+                        <img 
+                            mat-card-image 
+                            [src]="apiUrl + figurine.imageUrl" 
+                            [alt]="figurine.name" 
+                            class="figure-image" 
+                            loading="lazy">
+                    </div>
+                    <mat-card-content class="figurine-content">
+                        <p class="figure-name">{{ figurine.name }}</p>
+                        <p class="figure-series">{{ figurine.series }}</p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-template #noFigurines>
+        <p class="no-figures">Brak figurek na tej liście.</p>
+    </ng-template>
+</div>
+  

@@ -87,6 +87,9 @@
     background-color: #fff;
     padding: 20px 40px;
     border: 2px solid #e1e3e4;
+    overflow: hidden;
+    word-break: break-word;
+    max-width: 100%;
 }
 
 h2 {
@@ -144,6 +147,7 @@ li {
         height: 400px;
         transition: box-shadow 0.3s ease;
         cursor: pointer;
+        margin: 20px 0;
 
         &:hover {
           box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -178,7 +182,7 @@ li {
         flex-direction: column;
         justify-content: flex-start;
         padding-top: 10px; 
-        //height: 100px; 
+        
     }
 
     .figure-series {
@@ -193,7 +197,6 @@ li {
         margin: 0;
         line-height: 1.2;
         font-weight: bold;
-        //font-family: Lato; //change font
         font-family: 'Courier Prime', monospace; 
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -206,14 +209,9 @@ li {
         box-orient: vertical; 
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-
-    .figure-series {
-        font-size: 12px;
-    }
-
-    .figure-name {
-        font-size: 16px;
+        white-space: normal;
+        max-width: 100%;
+        word-break: break-word;
     }
 
     .controls {
@@ -250,7 +248,7 @@ li {
     }
 
     .left-arrow img {
-        transform: scaleX(-1); /* Odbicie lustrzane */
+        transform: scaleX(-1);
     }
     
     .arrow img {

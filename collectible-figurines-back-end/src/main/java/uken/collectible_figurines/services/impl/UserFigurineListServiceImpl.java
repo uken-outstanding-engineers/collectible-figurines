@@ -56,6 +56,14 @@ public class UserFigurineListServiceImpl implements UserFigurineListService {
       itemRepository.delete(existingItem.get());
       return false;
     } else {
+      if ("OWNED".equalsIgnoreCase(listName)) {
+        removeFigurineFromList(userId, figurineId, "WANTED");
+      }
+
+      if ("WANTED".equalsIgnoreCase(listName)) {
+        removeFigurineFromList(userId, figurineId, "OWNED");
+      }
+
       Figurine figurine = figurineRepository.findById(figurineId).orElseThrow();
       UserFigurineListItem newItem = new UserFigurineListItem();
       newItem.setList(userList);
@@ -64,6 +72,14 @@ public class UserFigurineListServiceImpl implements UserFigurineListService {
 
       itemRepository.save(newItem);
       return true;
+    }
+  }
+
+  public void removeFigurineFromList(Long userId, Long figurineId, String listType) {
+    UserFigurineList list = listRepository.findByUserIdAndType(userId, listType.toUpperCase()).orElse(null);
+    if (list != null) {
+      list.getFigurines().removeIf(item -> item.getFigurine().getId().equals(figurineId));
+      listRepository.save(list);
     }
   }
 }

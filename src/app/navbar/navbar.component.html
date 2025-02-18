@@ -1,8 +1,8 @@
 <mat-toolbar>
     <div class="logo-container">
-        <img src="assets/logo.png" class="logo" alt="logo" >
+        <img src="assets/logo.png" class="logo" alt="logo" routerLink="figures-showcase">
         <a routerLink="figures-showcase" class="figures-showcase">       
-            <span>{{ 'navbar.collectible_figures' | translate }}</span>
+            <span class="split-text">{{ 'navbar.collectible_figures' | translate }}</span>
         </a>
     </div>
 
@@ -48,8 +48,6 @@
             <ng-template #avatarImage>
                 <img class="avatar" [src]="apiUrl + this.currentUser?.avatarUrl" alt="Profilowe">
             </ng-template>
-
-            <!-- <mat-icon fontIcon="person"></mat-icon> -->
         </button>
 
         <ng-template #loginRedirect>
@@ -74,7 +72,7 @@
             </button>
     
             <!-- Figurine Lists -->
-            <button mat-menu-item routerLink="/figurine-lists">
+            <button mat-menu-item routerLink="/profile">
                 <mat-icon>person</mat-icon>
                 <span>{{ 'navbar.profile' | translate }}</span>
             </button>

@@ -324,26 +324,20 @@ export class FiguresShowcaseComponent implements OnInit {
   
     if (figure.id !== null) {
       this.figureListService.toggleFigurine(this.userId, figure.id, listName).subscribe(response => {
-        listName = "is" + listName;
-        if (figure.hasOwnProperty(listName)) {
-          figure[listName] = !figure[listName];
+        const property = "is" + listName;
+  
+        if (figure.hasOwnProperty(property)) {
+          figure[property] = !figure[property];
+  
+          if (listName === "Owned" && figure.isOwned) {
+            figure.isWanted = false;
+          } else if (listName === "Wanted" && figure.isWanted) {
+            figure.isOwned = false;
+          }
         }
       });
     }
   }
-  
-  // toggleListActive(figure: Figure, listName: string): void {
-  //   if (!this.userId) return;
-  
-  //   if (figure.id !== null) {
-  //     this.figureListService.toggleFigurine(this.userId, figure.id, listName).subscribe(response => {
-  //       // Dynamiczne przypisanie na podstawie listName
-  //       if (figure.hasOwnProperty(listName)) {
-  //         figure[listName] = !figure[listName];
-  //       }
-  //     });
-  //   }
-  // }
   
 
   loadFiguresProperty(property: string, listKey: string): void {

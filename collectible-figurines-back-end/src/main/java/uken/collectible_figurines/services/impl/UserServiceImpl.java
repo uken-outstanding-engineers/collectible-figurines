@@ -148,19 +148,21 @@ public class UserServiceImpl implements UserService {
       user.setEmail(userUpdate.getEmail());
     }
 
+    if (!checkPassword(userUpdate.getCurrentPassword(), user.getPasswd())) {
+      return Map.of("error", "WRONG_PASSWORD");
+    }
+
     if (userUpdate.getNewPassword() != null && !userUpdate.getNewPassword().isEmpty()) {
       if (userUpdate.getCurrentPassword() == null || userUpdate.getCurrentPassword().isEmpty()) {
         return Map.of("error", "CURRENT_PASSWORD_REQUIRED");
       }
 
-      if (!passwordEncoder.matches(userUpdate.getCurrentPassword(), user.getPasswd())) {
-        return Map.of("error", "WRONG_PASSWORD");
-      }
-
-      user.setPasswd(passwordEncoder.encode(userUpdate.getNewPassword()));
+      String encodedNewPassword = passwordEncoder.encode(userUpdate.getNewPassword());
+      user.setPasswd(encodedNewPassword);
     }
 
     User updatedUser = userRepository.save(user);
     return convertToDTO(updatedUser);
   }
+
 }
