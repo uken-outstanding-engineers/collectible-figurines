@@ -201,6 +201,14 @@
         margin-right: 0;
     }
 
+    .stat {
+        margin: 10px;
+    }
+
+    .stat .stat-label {
+        font-size: 12px;
+    }
+
     ::ng-deep .mat-mdc-card-content {
         padding: 0 !important;
     }
@@ -209,5 +217,20 @@
         font-size: 14px;
     }
 
+    .btn {
+        width: 80%;
+    }
+
+    .figurine {
+        padding: 5px;
+    }
+
+    .figure-name {
+        font-size: 12px;
+    }
+
+    .figure-series {
+        font-size: 10px;
+    }
 }
 

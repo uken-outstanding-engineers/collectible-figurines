@@ -118,8 +118,6 @@ export class UserService {
     );
   }
   
-  
-  
   logout(): void {
     this.loggedInUser.next(null); 
     localStorage.removeItem('loggedInUser');
@@ -154,6 +152,20 @@ export class UserService {
     if (user && user.permission === 'ADMIN') { 
       return true;
     } 
+    return false;
+  }
+
+  hasLogin(): boolean {
+    const userString = localStorage.getItem('loggedInUser'); 
+    if (!userString) {
+      return false;
+    }
+
+    const user = JSON.parse(userString);
+    if (user) { 
+      return true;
+    }
+
     return false;
   }
 }

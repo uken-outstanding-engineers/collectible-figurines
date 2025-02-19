@@ -362,6 +362,12 @@ mat-icon {
     .form-group {
       margin-bottom: 15px;
 
+      mat-checkbox {
+        font-family: "Montserrat", sans-serif;
+        color: #555;
+        margin: 5px 0;
+      }
+
       .image-upload-box {
         width: 250px;
         height: 250px;

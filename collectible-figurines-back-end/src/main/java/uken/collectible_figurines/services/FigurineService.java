@@ -14,4 +14,5 @@ public interface FigurineService {
   void deleteFigurineById(Long id);
   Figurine getFigurineById(Long id);
   int getTotalFigurines();
+  long countByTypeForFigurine(Long figurineId, String listType);
 }

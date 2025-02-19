@@ -35,10 +35,14 @@ export class FigureService {
     return this.http.put<Figure>(`${this.API_URL}/edit/${id}`, formData);
   }
   
-
   // Download the number of figurines
   getTotalFigurines(): Observable<number> {
     return this.http.get<number>(`${this.API_URL}/total`);
+  }
+
+  //Download count figure in list 
+  getCountForFigurine(figurineId: number, listType: string): Observable<number> {
+    return this.http.get<number>(`${this.API_URL}/count/${figurineId}/${listType}`);
   }
 
   getSearchResults(): Observable<Figure[]> {

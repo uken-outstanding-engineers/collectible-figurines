@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LanguageModule } from './language/language.module';
@@ -20,12 +20,4 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class AppComponent {
   title = 'collectible-figurines';
-
-  constructor(private router: Router) {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        //window.scrollTo(0, 0); przewijanei na góre, tylko dla figure
-      }
-    });
-  }
 }

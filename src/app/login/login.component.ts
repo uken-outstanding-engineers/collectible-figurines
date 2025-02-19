@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms'; 
 
 import { UserService } from '../api/user.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -26,18 +27,16 @@ import { UserService } from '../api/user.service';
 export class LoginComponent {
   username: string = '';
   password: string = '';
-  errorMessage: string = '';
-  @ViewChild('errorBox') errorBox!: ElementRef;
-
+  
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackbarService
   ) {}
 
   login(): void { 
     if (this.username.trim() === "" || this.password.trim() === "") {
-      this.errorMessage = "Wszystkie pola muszą być wypełnione.";
-      this.showErrorMessage();
+      this.snackBarService.showError('Wszystkie pola muszą być wypełnione.');
       return;
     }
 
@@ -45,15 +44,8 @@ export class LoginComponent {
       if (user) {
         this.router.navigate(['/figures-showcase']);
       } else {
-        this.errorMessage = "Nieprawidłowy nazwa użytkonika lub hasło.";
-        this.showErrorMessage();
+        this.snackBarService.showError('Nieprawidłowy nazwa użytkonika lub hasło.');
       }
     });
-  }
-
-  showErrorMessage() {
-    this.errorBox.nativeElement.classList.remove('show');
-    void this.errorBox.nativeElement.offsetWidth; 
-    this.errorBox.nativeElement.classList.add('show');
   }
 }

@@ -12,8 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { Overlay } from '@angular/cdk/overlay';
+import { MatCheckboxModule } from '@angular/material/checkbox'
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
@@ -21,6 +20,7 @@ import { FandomService } from '../api/fandom.service';
 import { Fandom } from '../api/fandom.model';
 import { API_URL } from '../api/api-url';
 import { AdminPanelService } from '../services/admin-panel.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-admin-panel-figurines-list',
@@ -38,6 +38,7 @@ import { AdminPanelService } from '../services/admin-panel.service';
     MatInputModule,
     MatCardModule,
     MatSelectModule,
+    MatCheckboxModule
 ],
   templateUrl: './admin-panel-figurines-list.component.html',
   styleUrl: '../admin-panel/admin-panel-main.component.scss'
@@ -49,7 +50,8 @@ export class AdminPanelFigurinesListComponent {
   figurines = new MatTableDataSource<Figure>([]);
   fandoms: Fandom[] = []; 
 
-  errorForm!: string;
+  isSeriesFandomSame: boolean = false;
+  fandomValue: string = '';  
 
   displayedColumns: string[] = [
     'imageUrl', 'name', 'series', 'variants', 'action',
@@ -61,7 +63,8 @@ export class AdminPanelFigurinesListComponent {
     private figureService: FigureService, 
     private fandomService: FandomService,
     private fb: FormBuilder,
-    private adminPanelService: AdminPanelService
+    private adminPanelService: AdminPanelService,
+    private snackBarService: SnackbarService
   ) {
     //Figurines
     this.subscription = this.figureService.getFigures().subscribe((data: Figure[]) => {
@@ -140,6 +143,11 @@ export class AdminPanelFigurinesListComponent {
     [key: string]: any 
   }): void {
     this.editFigure = { ...figure };
+
+    // this.fandomValue = this.getFandomName(this.editFigure.fandomId);  // Pobierz nazwę fandomu
+
+    // // Ustaw checkbox na zaznaczony, jeśli fandomId istnieje
+    // this.isSeriesFandomSame = !!this.editFigure.fandomId;
     
     this.variants.forEach((variant) => {
       if (this.editFigure![variant.key] === undefined) {
@@ -160,8 +168,6 @@ export class AdminPanelFigurinesListComponent {
     
     this.editDialogVisible = false;
     this.editFigure = null;
-
-    this.errorForm = '';
 
     this.adminPanelService.closeDialog();
   }
@@ -188,31 +194,93 @@ export class AdminPanelFigurinesListComponent {
       ];
       
       if (requiredFields.some(field => !field)) {
-        this.errorForm = "Zdjęcia, nazwa oraz seria nie mogą być puste!";
+        this.snackBarService.showError('Zdjęcia, nazwa oraz seria nie mogą być puste!');
         return;
       }
       
   
       if (this.editFigure.id !== null) {
         // Edit figurine
-        this.figureService.editFigure(this.editFigure.id, formData).subscribe(updatedFigure => {
-          const index = this.figurines.data.findIndex(f => f.id === updatedFigure.id);
-          this.figurines.data[index] = updatedFigure;
-          this.figurines._updateChangeSubscription();
-          this.closeEditDialog();
-        });
+        this.figureService.editFigure(this.editFigure.id, formData).subscribe(
+          updatedFigure => {
+            const index = this.figurines.data.findIndex(f => f.id === updatedFigure.id);
+            this.figurines.data[index] = updatedFigure;
+            this.figurines._updateChangeSubscription();
+            this.snackBarService.showSuccess('Figurka została zaktualizowana!');
+            this.closeEditDialog();
+          },
+          error => {
+            this.snackBarService.showError('Oj, coś poszło nie tak!');
+          }
+      );
       } else {
         // Add figurine
-        this.figureService.addFigure(formData).subscribe(newFigure => {
-          this.figurines.data.push(newFigure);
-          this.figurines._updateChangeSubscription();
-          this.closeEditDialog();
-        });
+        this.figureService.addFigure(formData).subscribe(
+          newFigure => {
+            this.figurines.data.unshift(newFigure);
+            this.figurines._updateChangeSubscription();
+            this.closeEditDialog();
+            this.snackBarService.showSuccess('Figurka została dodana!');
+          },
+          error => {
+            this.snackBarService.showError('Oj, coś poszło nie tak!');
+          }
+        );
       }
     }
   }
-  
 
+  onCheckboxChange() {
+    if (this.editFigure) {
+      if (this.isSeriesFandomSame) {
+        const fandomId = this.editFigure["fandomId"] - 1;
+        this.editFigure['series'] = this.fandoms[fandomId].name.toUpperCase();
+      } 
+    }
+  }
+
+   /* Delete */
+   dialogVisible = false;
+   selectedId: number | null = null;
+   selectedName: string | null = null; 
+ 
+   openDeleteDialog(id: number, name: string): void {
+     this.selectedId = id;
+     this.selectedName = name;
+     this.dialogVisible = true;
+     this.adminPanelService.openDialog();
+   }
+ 
+   closeDeleteDialog(): void {
+     this.dialogVisible = false;
+     this.selectedId = null;
+     this.selectedName = null;
+     this.adminPanelService.closeDialog();
+   }
+ 
+   confirmDelete(): void {
+    const id: number | null = this.selectedId;
+    if (id !== null) {
+      this.figureService.deleteFigure(id).subscribe(
+        () => {
+          const index = this.figurines.data.findIndex(figure => figure.id === id);
+
+          if (index !== -1) {
+            this.figurines.data.splice(index, 1); 
+            this.figurines._updateChangeSubscription();
+          }
+  
+          this.snackBarService.showSuccess('Figurka została usunięta!');
+        },
+        (error) => {
+          this.snackBarService.showError('Oj, coś poszło nie tak!');
+        }
+      );
+    }
+    this.closeDeleteDialog();
+  }
+  
+  
   /* Drag and Drop */
   isDraggingNormal: boolean = false;
   isDraggingHover: boolean = false;
@@ -281,39 +349,4 @@ export class AdminPanelFigurinesListComponent {
       reader.readAsDataURL(file);
     }
   }
-  
-  /* Delete */
-  dialogVisible = false;
-  selectedId: number | null = null;
-  selectedName: string | null = null; 
-
-  openDeleteDialog(id: number, name: string): void {
-    this.selectedId = id;
-    this.selectedName = name;
-    this.dialogVisible = true;
-    this.adminPanelService.openDialog();
-  }
-
-  closeDeleteDialog(): void {
-    this.dialogVisible = false;
-    this.selectedId = null;
-    this.selectedName = null;
-    this.adminPanelService.closeDialog();
-  }
-
-  confirmDelete(): void {
-    if (this.selectedId !== null) {
-      this.figureService.deleteFigure(this.selectedId).subscribe(
-        () => {
-          this.figurines.data = this.figurines.data.filter(figure => figure.id !== this.selectedId);
-          this.figurines._updateChangeSubscription();
-          this.closeDeleteDialog();  
-          //console.log('The figurine has been removed');
-        },
-        (error) => {
-          //console.error('Error while deleting figure', error);
-        }
-      );
-    }
-  }  
 }

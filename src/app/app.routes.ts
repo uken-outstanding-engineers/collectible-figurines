@@ -9,7 +9,8 @@ import { FigureComponent } from './figure/figure.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { AdminPanelFigurinesListComponent } from './admin-panel-figurines-list/admin-panel-figurines-list.component';
 import { AdminPanelUsersComponent } from './admin-panel-users-list/admin-panel-users-list.component';
-import { AuthGuard } from './authorization/auth.guard';
+import { AuthAdminGuard } from './authorization/authAdmin.guard';
+import { AuthLoginGuard } from './authorization/authLogin.guard';
 import { AdminPanelVariantsListComponent } from './admin-panel-variants-list/admin-panel-variants-list.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsAccountComponent } from './settings-account/settings-account.component';
@@ -24,14 +25,14 @@ export const routes: Routes = [
     { path: '', redirectTo: '/figures-showcase', pathMatch: 'full' }, 
     { path: 'figures-showcase', component: FiguresShowcaseComponent },
     { path: 'figure/:id', component: FigureComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
+    { path: 'login', component: LoginComponent, canActivate: [AuthLoginGuard] },
+    { path: 'register', component: RegisterComponent, canActivate: [AuthLoginGuard] },
     { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'fandoms', component: FandomsComponent },
     {
       path: 'admin',
       component: AdminPanelComponent,
-      canActivate: [AuthGuard],
+      canActivate: [AuthAdminGuard],
       children: [
         { path: 'dashboard', component: AdminPanelDashboardComponent },
         { path: 'figurines', component: AdminPanelFigurinesListComponent },

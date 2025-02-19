@@ -2,8 +2,6 @@
   <h1 class="register-title">{{ 'register.register' | translate }}</h1>
   <p class="register-subtitle">{{ 'register.enter-data' | translate }}</p>
 
-  <span class="error-message" [class.show]="errorMessage" #errorBox>{{ errorMessage }}</span>
-
   <form [formGroup]="registerForm" (ngSubmit)="register()">
     <!-- Username -->
     <mat-form-field class="register-input" appearance="fill">

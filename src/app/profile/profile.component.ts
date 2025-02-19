@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
+import { RouterModule } from '@angular/router';
 
 import { UserService } from '../api/user.service';
 import { User } from '../api/user.model';
@@ -15,7 +16,8 @@ import { FigureListService } from '../api/figure-list.service';
   imports: [
     CommonModule,
     MatListModule,
-    MatCardModule
+    MatCardModule,
+    RouterModule 
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -66,10 +68,14 @@ export class ProfileComponent {
     this.userService.getLoggedInUser().subscribe(user => {
       if (user && user.id) {
         this.figureListService.getUserFigurineLists(user.id).subscribe(lists => {
-          this.figurineLists = lists;
+          this.figurineLists = Object.fromEntries(
+            Object.entries(lists)
+              .map(([key, figures]) => [key, figures.filter(f => f !== null)])
+          );
         });
       }
     });
   }
+  
 
 }

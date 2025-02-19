@@ -11,6 +11,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ChangeDetectorRef } from '@angular/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
@@ -19,6 +20,7 @@ import { FigureListService } from '../api/figure-list.service';
 import { UserService } from '../api/user.service';
 import { Fandom } from '../api/fandom.model';
 import { API_URL } from '../api/api-url';
+import { toggleListActiveFigurine } from '../services/figurine-status.service';
 
 interface FunkoNode {
   name: string;
@@ -47,7 +49,8 @@ interface FunkoFlatNode {
     MatPaginatorModule,
     MatIconModule,
     TranslateModule ,
-    RouterModule
+    RouterModule,
+    MatTooltipModule
   ],
   templateUrl: './figures-showcase.component.html',
   styleUrl: './figures-showcase.component.scss'
@@ -189,9 +192,7 @@ export class FiguresShowcaseComponent implements OnInit {
       }
     });
 
-    this.loadFiguresProperty('isLiked', 'liked');
-    this.loadFiguresProperty('isWanted', 'wanted');
-    this.loadFiguresProperty('isOwned', 'owned');
+    this.loadFiguresProperties(['isLiked', 'isWanted', 'isOwned'], ['liked', 'wanted', 'owned']);
   }
 
   loadTreeData(license: string): void {
@@ -320,39 +321,25 @@ export class FiguresShowcaseComponent implements OnInit {
   }
 
   toggleListActive(figure: Figure, listName: string): void {
-    if (!this.userId) return;
-  
-    if (figure.id !== null) {
-      this.figureListService.toggleFigurine(this.userId, figure.id, listName).subscribe(response => {
-        const property = "is" + listName;
-  
-        if (figure.hasOwnProperty(property)) {
-          figure[property] = !figure[property];
-  
-          if (listName === "Owned" && figure.isOwned) {
-            figure.isWanted = false;
-          } else if (listName === "Wanted" && figure.isWanted) {
-            figure.isOwned = false;
-          }
-        }
-      });
-    }
+    toggleListActiveFigurine(figure, this.userId, listName, this.figureListService);
   }
-  
 
-  loadFiguresProperty(property: string, listKey: string): void {
+  loadFiguresProperties(properties: string[], listKeys: string[]): void {
     if (!this.userId) return;
   
     this.figureListService.getUserFigurineLists(this.userId).subscribe(lists => {
-      if (lists[listKey]) {
-        const figureIds = lists[listKey].map(figurine => figurine.id).filter(id => id !== null) as number[];
+      properties.forEach((property, index) => {
+        const listKey = listKeys[index];
+        if (lists[listKey]) {
+          const figureIds = lists[listKey].map(figurine => figurine.id).filter(id => id !== null) as number[];
   
-        this.figures.forEach(figure => {
-          if (figure.id !== null) {
-            figure[property] = figureIds.includes(figure.id);
-          }
-        });
-      }
+          this.figures.forEach(figure => {
+            if (figure.id !== null) {
+              figure[property] = figureIds.includes(figure.id);
+            }
+          });
+        }
+      });
     });
   }
 
@@ -383,7 +370,6 @@ export class FiguresShowcaseComponent implements OnInit {
  
   onCheckboxChange(node: any): void {
     node.checked = !node.checked;
-  
     if (node.checked) {
       this.selectedFilters.push(node.name);
     } else {

@@ -28,6 +28,7 @@ export class SettingsProfileComponent {
   apiUrl = API_URL.BASE_URL;
   
   user!: User;
+  photoBefore: boolean = false;
   isDisabledUsername: boolean = true;
 
   constructor(
@@ -55,24 +56,29 @@ export class SettingsProfileComponent {
   }
 
   saveAvatar(): void {
+    if (!this.selectedFile && !this.photoBefore) {
+      this.snackBarService.showMessage('Nic nie zostało zmienione!');
+      return;
+    } 
+
     if (!this.selectedFile && this.user.avatarUrl === null) { 
       this.userService.uploadAvatar(this.user.id, null).subscribe(updatedUser => {
         this.snackBarService.showSuccess('Dane zostały zaktualizowane!');
+        this.photoBefore = false;
       });
       return;
     }
-  
-    if (!this.selectedFile) return;
-
 
     this.userService.uploadAvatar(this.user.id, this.selectedFile).subscribe(updatedUser => {
       this.user.avatarUrl = updatedUser.avatarUrl;
       this.avatarPreview = null;
+      this.photoBefore = true;
       this.snackBarService.showSuccess('Dane zostały zaktualizowane!');
     });
   }
 
   onAvatarSelected(event: any): void {
+    console.log(event);
     const file = event.target.files[0];
     if (file) {
       this.selectedFile = file;
@@ -80,6 +86,8 @@ export class SettingsProfileComponent {
       const reader = new FileReader();
       reader.onload = (e: any) => this.avatarPreview = e.target.result;
       reader.readAsDataURL(file);
+
+      event.target.value = '';
     }
   }
 

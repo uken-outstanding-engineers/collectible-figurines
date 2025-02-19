@@ -16,6 +16,7 @@ import { Fandom } from '../api/fandom.model';
 import { FandomService } from '../api/fandom.service';
 import { API_URL } from '../api/api-url';
 import { AdminPanelService } from '../services/admin-panel.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-admin-panel-fandoms-list',
@@ -51,7 +52,8 @@ export class AdminPanelFandomsListComponent {
 
   constructor(
     private fandomService: FandomService,
-    private adminPanelService: AdminPanelService
+    private adminPanelService: AdminPanelService,
+    private snackBarService: SnackbarService
   ) {
     this.subscription = this.fandomService.getFandoms().subscribe((data: Fandom[]) => {
       this.fandoms.data = data;
@@ -124,22 +126,75 @@ export class AdminPanelFandomsListComponent {
 
       if (this.editFandom.id != null) {
         // Edit fandom
-        this.fandomService.editFandom(this.editFandom.id, formData).subscribe((updatedFandom) => {
-          const index = this.fandoms.data.findIndex(f => f.id === updatedFandom.id);
-          this.fandoms.data[index] = updatedFandom;
-          this.fandoms._updateChangeSubscription(); 
-          this.closeEditDialog();
-        });
+        this.fandomService.editFandom(this.editFandom.id, formData).subscribe(
+          (updatedFandom) => {
+            const index = this.fandoms.data.findIndex(f => f.id === updatedFandom.id);
+            this.fandoms.data[index] = updatedFandom;
+            this.fandoms._updateChangeSubscription(); 
+            this.closeEditDialog();
+            this.snackBarService.showSuccess('Fandom został zaktualizowany!');
+          },
+          error => {
+            this.snackBarService.showError('Oj, coś poszło nie tak!');
+          }
+        );
       } else {
         // Add new fadnom
-        this.fandomService.addFandom(formData).subscribe((newFandom) => {
-          this.fandoms.data.push(newFandom);
-          this.fandoms._updateChangeSubscription();
-          this.closeEditDialog();
-        });
+        this.fandomService.addFandom(formData).subscribe(
+          (newFandom) => {
+            this.fandoms.data.unshift(newFandom);
+            this.fandoms._updateChangeSubscription();
+            this.closeEditDialog();
+            this.snackBarService.showSuccess('Fandom został dodany!');
+          },
+          error => {
+            this.snackBarService.showError('Oj, coś poszło nie tak!');
+          }
+        );
       }
     }
   }
+
+  /* Delete */
+  dialogVisible = false;
+  selectedId: number | null = null;
+  selectedName: string | null = null; 
+
+  openDeleteDialog(id: number, name: string): void {
+    this.selectedId = id;
+    this.selectedName = name;
+    this.dialogVisible = true;
+    this.adminPanelService.openDialog();
+  }
+
+  closeDeleteDialog(): void {
+    this.dialogVisible = false;
+    this.selectedId = null;
+    this.selectedName = null;
+    this.adminPanelService.closeDialog();
+  }
+
+  confirmDelete(): void {
+    const id: number | null = this.selectedId;
+    if (id !== null) {
+      this.fandomService.deleteFandom(id).subscribe(
+        () => {
+          const index = this.fandoms.data.findIndex(fandoms => fandoms.id === id);
+
+          if (index !== -1) {
+            this.fandoms.data.splice(index, 1); 
+            this.fandoms._updateChangeSubscription();
+          }
+
+          this.snackBarService.showSuccess('Fandom został usunięty!');
+        },
+        (error) => {
+          this.snackBarService.showError('Oj, coś poszło nie tak!');
+        }
+      );
+    }
+    this.closeDeleteDialog(); 
+  } 
 
   /* Drag and Drop */
   isDragging: boolean = false;
@@ -184,38 +239,5 @@ export class AdminPanelFandomsListComponent {
       };
       reader.readAsDataURL(file);  
     }
-  }
-  /* Delete */
-  dialogVisible = false;
-  selectedId: number | null = null;
-  selectedName: string | null = null; 
-
-  openDeleteDialog(id: number, name: string): void {
-    this.selectedId = id;
-    this.selectedName = name;
-    this.dialogVisible = true;
-    this.adminPanelService.openDialog();
-  }
-
-  closeDeleteDialog(): void {
-    this.dialogVisible = false;
-    this.selectedId = null;
-    this.selectedName = null;
-    this.adminPanelService.closeDialog();
-  }
-
-  confirmDelete(): void {
-    if (this.selectedId !== null) {
-      this.fandomService.deleteFandom(this.selectedId).subscribe(
-        () => {
-          this.fandoms.data = this.fandoms.data.filter(fandoms => fandoms.id !== this.selectedId);
-          this.fandoms._updateChangeSubscription();
-          this.closeDeleteDialog();  
-        },
-        (error) => {
-          //console.error('Error while deleting fandoms', error);
-        }
-      );
-    }
-  }   
+  }  
 }

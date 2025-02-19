@@ -87,13 +87,31 @@
           <p class="figure-name">{{ figure.name }}</p>
         </mat-card-content>
         <mat-card-actions class="card-actions" *ngIf="this.userId">
-          <button mat-mini-fab [ngClass]="{'active': figure.isLiked}" (click)="toggleListActive(figure, 'Liked')" class="action-button">
+          <button mat-mini-fab 
+            [ngClass]="{'active': figure.isLiked}" 
+            (click)="toggleListActive(figure, 'Liked')" 
+            class="action-button" 
+            matTooltip="Liked"
+            matTooltipPosition="above"
+          >
             <mat-icon>favorite</mat-icon>
           </button>
-          <button mat-mini-fab [ngClass]="{'active': figure.isWanted}" (click)="toggleListActive(figure, 'Wanted')" class="action-button" >
+          <button mat-mini-fab 
+            [ngClass]="{'active': figure.isWanted}" 
+            (click)="toggleListActive(figure, 'Wanted')" 
+            class="action-button" 
+            matTooltip="Wanted"
+            matTooltipPosition="above"
+          >
             <mat-icon>star_border</mat-icon>
           </button>
-          <button mat-mini-fab [ngClass]="{'active': figure.isOwned}" (click)="toggleListActive(figure, 'Owned')" class="action-button" >
+          <button mat-mini-fab 
+            [ngClass]="{'active': figure.isOwned}" 
+            (click)="toggleListActive(figure, 'Owned')" 
+            class="action-button"
+            matTooltip="Owned"
+            matTooltipPosition="above"
+           >
             <mat-icon class="material-symbols-outlined">package_2</mat-icon>
           </button>
         </mat-card-actions>        

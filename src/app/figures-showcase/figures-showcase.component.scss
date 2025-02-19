@@ -1,12 +1,10 @@
 .main-container {
     display: flex;
-    //flex-direction: column;
     align-items: flex-start;
     margin: 5% 5% 5% 5%;
 }
 
 .filters-container {
-    //margin: 5% 5% 5% 5%;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -225,7 +223,6 @@
     flex-direction: column;
     justify-content: flex-start;
     padding-top: 10px; 
-    //height: 100px; 
 }
 
 .figure-series {
@@ -241,7 +238,6 @@
     margin: 0;
     line-height: 1.2;
     font-weight: bold;
-    //font-family: Lato; //change font
     font-family: 'Courier Prime', monospace; 
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -264,7 +260,6 @@
 }
 
 .card-actions button {
-    //position: absolute;
     bottom: 10px;
     left: 10px;
     background-color: #696969;

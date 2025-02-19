@@ -107,4 +107,20 @@ public class FigurineController {
   public int getTotalFigurines() {
     return figurineService.getTotalFigurines();
   }
+
+  @GetMapping("/count/{figurineId}/{listType}")
+  public long getCountForFigurineByType(
+    @PathVariable Long figurineId,
+    @PathVariable String listType
+  ) {
+    List<String> validTypes = List.of("LIKED", "WANTED", "OWNED");
+
+    if (!validTypes.contains(listType.toUpperCase())) {
+      throw new IllegalArgumentException("Invalid list type: " + listType);
+    }
+
+    return figurineService.countByTypeForFigurine(figurineId, listType.toUpperCase());
+  }
+
+
 }

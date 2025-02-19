@@ -37,7 +37,7 @@
     <ng-container *ngIf="getActiveFigurines().length > 0; else noFigurines">
         <div class="figurine-list">
             <div class="figurine-item" *ngFor="let figurine of getActiveFigurines(); let i = index" [ngClass]="{ 'new-row': i % 2 === 0 }">
-                <mat-card class="figurine" appearance="outlined">
+                <mat-card class="figurine" appearance="outlined" [routerLink]="['/figure', figurine.id]">
                     <div class="image-container">
                         <img 
                             mat-card-image 
@@ -47,8 +47,8 @@
                             loading="lazy">
                     </div>
                     <mat-card-content class="figurine-content">
-                        <p class="figure-name">{{ figurine.name }}</p>
                         <p class="figure-series">{{ figurine.series }}</p>
+                        <p class="figure-name">{{ figurine.name }}</p>
                     </mat-card-content>
                 </mat-card>
             </div>

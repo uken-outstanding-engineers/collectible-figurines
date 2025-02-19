@@ -97,4 +97,8 @@ public class FigurineServiceImpl implements FigurineService {
   }
 
   public int getTotalFigurines() { return (int) figurineRepository.count(); }
+
+  public long countByTypeForFigurine(Long figurineId, String listType) {
+    return userFigurineListItemRepository.countByTypeForFigurine(figurineId, listType);
+  }
 }

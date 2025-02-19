@@ -5,7 +5,7 @@ import { UserService } from '../api/user.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthAdminGuard implements CanActivate {
 
   constructor(private userService: UserService, private router: Router) {}
 
@@ -13,9 +13,8 @@ export class AuthGuard implements CanActivate {
     if (this.userService.hasAccess()) {
       return true; 
     } 
-    else {
-      this.router.navigate(['/']);
-      return false;
-    }
+    
+    this.router.navigate(['/']);
+    return false;
   }
 }

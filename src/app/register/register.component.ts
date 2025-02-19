@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { UserService } from '../api/user.service';
 import { Router } from '@angular/router';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-register',
@@ -26,16 +27,14 @@ import { Router } from '@angular/router';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
-  @ViewChild('errorBox') errorBox!: ElementRef;
-  
   registerForm: FormGroup;
-  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackbarService
   ) {
     this.registerForm = this.fb.group(
       {
@@ -75,20 +74,13 @@ export class RegisterComponent {
         this.router.navigate(['/figures-showcase']);
       } else {
         if (user.error === 'USER_EXIST') {
-          this.errorMessage = "Nazwa użytkownika jest już zajęta.";
+          this.snackBarService.showError('Nazwa użytkownika jest już zajęta.');
         } else if (user.error === 'EMAIL_EXIST') {
-          this.errorMessage = "Podany e-mail jest już używany.";
+          this.snackBarService.showError('Podany e-mail jest już używany.');
         } else {
-          this.errorMessage = "Wystąpił nieznany błąd. Spróbuj ponownie.";
+          this.snackBarService.showError('Wystąpił nieznany błąd. Spróbuj ponownie.');
         }
-        this.showErrorMessage();
       }
     });
-  }
-
-  showErrorMessage() {
-    this.errorBox.nativeElement.classList.remove('show');
-    void this.errorBox.nativeElement.offsetWidth; 
-    this.errorBox.nativeElement.classList.add('show');
   }
 }
