@@ -45,7 +45,7 @@ export class NavbarComponent {
   currentLanguage: string = 'pl';
   translatedText: string;
 
-  isLoggedIn: boolean = true;
+  isLoggedIn: boolean = false;
   currentUser: User | null = null;
 
   private lastSearchTerm: string = '';
@@ -69,20 +69,15 @@ export class NavbarComponent {
 
   ngOnInit(): void {
     this.userService.getLoggedInUser().subscribe(user => {
-      this.isLoggedIn = !!user; 
-      
-      console.log(user);
+      this.isLoggedIn = !!user;
+      this.currentUser = user;
     });
-
-    this.currentUser = {
-      id: this.userService.getUserId() || 0,
-      email: '',
-      username: this.userService.getUsername() || '',
-      password: '',
-      permission: this.userService.getPermission() || '',
-      lastLogin: '',
-      avatarUrl: null
-    };
+    
+  
+    // this.isLoggedIn = !!this.userService.getUser(); 
+    // this.currentUser = this.userService.getUser();
+    // console.log("Login: " + this.isLoggedIn);
+    // console.log("User: " + this.currentUser?.avatarUrl);
 
     const savedLanguage = localStorage.getItem('language') || 'pl';
     this.currentLanguage = savedLanguage;

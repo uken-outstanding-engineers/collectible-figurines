@@ -1,9 +1,9 @@
 package uken.collectible_figurines.model.dto;
 
-public class LoginResponse {
+public class TokenResponse {
   private String token;
 
-  public LoginResponse(String token) {
+  public TokenResponse(String token) {
     this.token = token;
   }
 

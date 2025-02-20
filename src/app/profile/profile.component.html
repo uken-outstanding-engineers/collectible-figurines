@@ -1,16 +1,19 @@
 <div class="profile-box">
     <div class="profile-image">
-        <img [src]="apiUrl + user.avatarUrl" alt="Zdjęcie użytkownika">
+        <img *ngIf="user?.avatarUrl; else defaultAvatar" [src]="apiUrl + user?.avatarUrl" alt="Zdjęcie użytkownika">
+        <ng-template #defaultAvatar>
+            <mat-icon class="default-avatar">person</mat-icon>
+        </ng-template>
     </div>
     <div class="profile-info">
-        <h2 class="username">{{ user.username }}</h2>
+        <h2 class="username">{{ user?.username }}</h2>
         <div class="stats">
             <div class="stat">
                 <span class="stat-label">Polubione:</span>
                 <span class="stat-value">{{ stats.liked }}</span>
             </div>
             <div class="stat">
-                <span class="stat-label">Chciane:</span>
+                <span class="stat-label">Szukane:</span>
                 <span class="stat-value">{{ stats.wanted }}</span>
             </div>
             <div class="stat">

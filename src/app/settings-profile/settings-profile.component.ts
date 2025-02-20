@@ -27,7 +27,7 @@ import { UserService } from '../api/user.service';
 export class SettingsProfileComponent {
   apiUrl = API_URL.BASE_URL;
   
-  user!: User;
+  user: User | null = null;;
   photoBefore: boolean = false;
   isDisabledUsername: boolean = true;
 
@@ -39,7 +39,7 @@ export class SettingsProfileComponent {
   ngOnInit(): void {
     this.userService.getCurrentUser().subscribe((user: User) => {
       this.user = user;
-    });
+    });    
   }
 
   saveProfile(): void {
@@ -56,10 +56,13 @@ export class SettingsProfileComponent {
   }
 
   saveAvatar(): void {
-    if (!this.selectedFile && !this.photoBefore) {
-      this.snackBarService.showMessage('Nic nie zostało zmienione!');
-      return;
-    } 
+    //console.log(!this.selectedFile);
+    // if (this.selectedFile != null && !this.photoBefore) {
+    //   this.snackBarService.showMessage('Nic nie zostało zmienione!');
+    //   return;
+    // } 
+
+    if(!this.user) return;
 
     if (!this.selectedFile && this.user.avatarUrl === null) { 
       this.userService.uploadAvatar(this.user.id, null).subscribe(updatedUser => {
@@ -70,7 +73,8 @@ export class SettingsProfileComponent {
     }
 
     this.userService.uploadAvatar(this.user.id, this.selectedFile).subscribe(updatedUser => {
-      this.user.avatarUrl = updatedUser.avatarUrl;
+      //this.user!.avatarUrl = updatedUser.avatarUrl;
+      this.user!.avatarUrl = this.userService.getAvatarUrl();
       this.avatarPreview = null;
       this.photoBefore = true;
       this.snackBarService.showSuccess('Dane zostały zaktualizowane!');
@@ -78,7 +82,6 @@ export class SettingsProfileComponent {
   }
 
   onAvatarSelected(event: any): void {
-    console.log(event);
     const file = event.target.files[0];
     if (file) {
       this.selectedFile = file;
@@ -94,6 +97,6 @@ export class SettingsProfileComponent {
   deleteAvatar(): void {
     this.selectedFile = null;
     this.avatarPreview = null;
-    this.user.avatarUrl = null;
+    this.user!.avatarUrl = null;
   }
 }

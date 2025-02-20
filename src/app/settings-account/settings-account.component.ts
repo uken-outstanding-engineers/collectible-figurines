@@ -29,7 +29,7 @@ import { SnackbarService } from '../services/snackbar.service';
 export class SettingsAccountComponent {
   apiUrl = API_URL.BASE_URL;
 
-  user!: User;
+  user: User | null = null;
 
   profileForm: FormGroup;
   formSubmitted = false;
@@ -59,6 +59,8 @@ export class SettingsAccountComponent {
       this.user = user;
       this.profileForm.patchValue({ email: user.email });
     });
+    //this.user = this.userService.getUser();
+    //this.profileForm.patchValue({ email: this.userService.getEmail() });
   }
 
   passwordsMatch(form: FormGroup) {
@@ -98,21 +100,25 @@ export class SettingsAccountComponent {
     }
 
     const formData = this.profileForm.value;
-
-    this.userService.updateUserAccount(this.user.id, formData).subscribe(response => {
-      if (response.error) {
-        if (response.error === 'WRONG_PASSWORD') {
-          this.snackBarService.showError('Nieprawidłowe hasło.');
+    if(this.user) {
+      this.userService.updateUserAccount(this.user.id, formData).subscribe(response => {
+        if (response?.error) {
+          if (response.error === 'WRONG_PASSWORD') {
+            this.snackBarService.showError('Nieprawidłowe hasło.');
+          }
+          else {
+            this.snackBarService.showError('Wystąpił nieoczekiwany błąd!');
+          }
+          return;
         }
-        return;
-      }
 
-      this.snackBarService.showSuccess('Konto zostało zaktualizowane!');
-      
-      this.profileForm.get('currentPassword')?.reset();
-      this.profileForm.get('newPassword')?.reset();
-      this.profileForm.get('confirmPassword')?.reset();
-    });
+        this.snackBarService.showSuccess('Konto zostało zaktualizowane!');
+        
+        this.profileForm.get('currentPassword')?.reset();
+        this.profileForm.get('newPassword')?.reset();
+        this.profileForm.get('confirmPassword')?.reset();
+      });
+    }
   }
 
   deleteAccount() {

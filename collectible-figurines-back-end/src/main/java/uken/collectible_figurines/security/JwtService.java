@@ -1,5 +1,6 @@
 package uken.collectible_figurines.security;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -16,15 +17,18 @@ public class JwtService {
 
   private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-  public String generateToken(Long userId, String username, String email, String role) {
+  public String generateToken(Long userId, String username, String email, String permission, String avatarUrl) {
+    String avatar = (avatarUrl != null) ? avatarUrl : "";
+
     return Jwts.builder()
       .setSubject(username)
       .setIssuedAt(new Date())
-      .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+      .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Token wygasa po 10 godzinach
       .addClaims(Map.of(
         "id", userId,
         "email", email,
-        "roles", role
+        "permission", permission,
+        "avatarUrl", avatar
       ))
       .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
       .compact();
@@ -43,10 +47,16 @@ public class JwtService {
   }
 
   private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-    Claims claims = Jwts.parser()
-      .setSigningKey(SECRET_KEY)
-      .parseClaimsJws(token)
-      .getBody();
-    return claimsResolver.apply(claims);
+    try {
+      Claims claims = Jwts.parserBuilder()
+        .setSigningKey(SECRET_KEY)
+        .build()
+        .parseClaimsJws(token)
+        .getBody();
+      return claimsResolver.apply(claims);
+    } catch (JwtException | IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
+      return null;
+    }
   }
 }

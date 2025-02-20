@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uken.collectible_figurines.model.dto.ErrorUserDTO;
-import uken.collectible_figurines.model.dto.LoginResponse;
+import uken.collectible_figurines.model.dto.TokenResponse;
 import uken.collectible_figurines.model.dto.UserUpdateAccountDTO;
 import uken.collectible_figurines.model.User;
+import uken.collectible_figurines.response.ApiResponse;
 import uken.collectible_figurines.security.JwtService;
 import uken.collectible_figurines.services.UserService;
 import uken.collectible_figurines.model.dto.UserDTO;
@@ -31,14 +32,13 @@ public class UserController {
   public List<UserDTO> getAllUsers() { return userService.getAllUsers(); }
 
   @PostMapping("/login")
-  public LoginResponse loginUser(@RequestParam String username, @RequestParam String passwd) {
+  public TokenResponse loginUser(@RequestParam String username, @RequestParam String passwd) {
     User user = userService.findByUsername(username.trim().toLowerCase());
 
     if(user != null && userService.checkPassword(passwd, user.getPasswd())) {
       userService.updateLastLogin(user);
-      String token = jwtService.generateToken(user.getId(),user.getUsername(), user.getEmail(), user.getPermission());
-      return new LoginResponse(token);
-      //return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPermission(), user.getLastLogin(), user.getAvatarUrl());
+      String token = jwtService.generateToken(user.getId(),user.getUsername(), user.getEmail(), user.getPermission(), user.getAvatarUrl());
+      return new TokenResponse(token);
     }
 
     return null;
@@ -75,13 +75,42 @@ public class UserController {
   }
 
   @PutMapping("/{id}/avatar")
-  public User uploadAvatar(@PathVariable Long id, @RequestParam("avatar") MultipartFile avatarFile) throws IOException {
-    return userService.updateUserAvatar(id, avatarFile);
+  public TokenResponse uploadAvatar(@PathVariable Long id, @RequestParam("avatar") MultipartFile avatarFile) throws IOException {
+    User updatedUser = userService.updateUserAvatar(id, avatarFile);
+    String token = jwtService.generateToken(
+      updatedUser.getId(),
+      updatedUser.getUsername(),
+      updatedUser.getEmail(),
+      updatedUser.getPermission(),
+      updatedUser.getAvatarUrl()
+    );
+    return new TokenResponse(token);
   }
 
   @PutMapping("/{id}/update-account")
-  public Object updateUserAccount(@PathVariable Long id, @RequestBody UserUpdateAccountDTO userUpdate) {
-    return userService.updateUserAccount(id, userUpdate);
+  public ApiResponse<TokenResponse> updateUserAccount(
+    @PathVariable Long id,
+    @RequestBody UserUpdateAccountDTO userUpdate) {
+
+    Object result = userService.updateUserAccount(id, userUpdate);
+
+    if (result instanceof Map) {
+      Map<String, String> errorMap = (Map<String, String>) result;
+      return new ApiResponse<>(false, errorMap.get("error"), null);
+    }
+
+    if (result instanceof UserDTO userDTO) {
+      String token = jwtService.generateToken(
+        userDTO.getId(),
+        userDTO.getUsername(),
+        userDTO.getEmail(),
+        userDTO.getPermission(),
+        userDTO.getAvatarUrl()
+      );
+      return new ApiResponse<>(true, "SUCCESS", new TokenResponse(token));
+    }
+
+    return new ApiResponse<>(false, "ERROR", null);
   }
 
   @GetMapping("/{userId}/stats")

@@ -27,7 +27,7 @@ import { FigureListService } from '../api/figure-list.service';
 export class ProfileComponent {
   apiUrl = API_URL.BASE_URL;
 
-  user!: User;
+  user: User | null = null;
   stats = { liked: 0, wanted: 0, owned: 0 };
 
   activeItem: string = 'liked';
@@ -39,19 +39,23 @@ export class ProfileComponent {
   ) {}
 
   ngOnInit(): void {
-    this.userService.getCurrentUser().subscribe((user: User) => {
-      this.user = user;
-    });
+    // this.userService.getCurrentUser().subscribe((user: User) => {
+    //   this.user = user;
+    // });
 
-    this.userService.getUserStats(this.user.id).subscribe(
-      stats => {
-        this.stats = {
-          liked: stats["LIKED"] || 0,
-          wanted: stats["WANTED"] || 0,
-          owned: stats["OWNED"] || 0
-        };
-      });
-
+    this.user = this.userService.getUser();
+    
+    if(this.user) {
+      this.userService.getUserStats(this.user.id).subscribe(
+        stats => {
+          this.stats = {
+            liked: stats["LIKED"] || 0,
+            wanted: stats["WANTED"] || 0,
+            owned: stats["OWNED"] || 0
+          };
+        }
+      );
+    }
     this.loadUserFigurineLists();
   }
 
@@ -78,17 +82,13 @@ export class ProfileComponent {
   }
 
   loadUserFigurineLists(): void {
-    this.userService.getLoggedInUser().subscribe(user => {
-      if (user && user.id) {
-        this.figureListService.getUserFigurineLists(user.id).subscribe(lists => {
-          this.figurineLists = Object.fromEntries(
-            Object.entries(lists)
-              .map(([key, figures]) => [key, figures.filter(f => f !== null)])
-          );
-        });
-      }
-    });
+    if (this.user && this.user.id) {
+      this.figureListService.getUserFigurineLists(this.user.id).subscribe(lists => {
+        this.figurineLists = Object.fromEntries(
+          Object.entries(lists)
+            .map(([key, figures]) => [key, figures.filter(f => f !== null)])
+        );
+      });
+    };
   }
-  
-
 }

@@ -6,6 +6,18 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { User } from './user.model';
 import { API_URL } from './api-url';
 
+interface TokenResponse {
+  token: string;
+  error?: string;
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -19,9 +31,10 @@ export class UserService {
   private API_URL = `${API_URL.BASE_URL}/api/users`;
 
   private loggedInUser = new BehaviorSubject<User | null>(null);
+  //public currentUser$ = this.loggedInUser.asObservable();
 
   constructor(private http: HttpClient) {
-    this.loadUserFromStorage();
+    //this.loadUserFromStorage();
   }
 
   // Download the users list
@@ -46,10 +59,10 @@ export class UserService {
       responseType: 'json',
     }).pipe(
       tap((user: any) => {
-        if (user) {
+        if (user && user.token) {
           const userWithToken = { ...user, token: user.token };
-          this.loggedInUser.next(userWithToken);
           localStorage.setItem('loggedInUser', JSON.stringify(userWithToken));
+          this.addDataToUser();
         }
       }),
       catchError((error) => {
@@ -58,7 +71,7 @@ export class UserService {
       })
     );
   }
-  
+
   //Register user
   register(username: string, email: string, passwd: string) {
     const registerData = { username, email, passwd };
@@ -81,25 +94,25 @@ export class UserService {
       })
     );
   }
-  
 
   //Uplad Avatar
-  uploadAvatar(userId: number, avatar: File | null): Observable<User> {
+  uploadAvatar(userId: number, avatar: File | null): Observable<void> {
     const formData = new FormData();
   
     if (avatar) {
       formData.append('avatar', avatar);
     } else {
-      formData.append('avatar', new Blob()); 
+      formData.append('avatar', new Blob());
     }
+
+    return this.http.put<TokenResponse>(`${this.API_URL}/${userId}/avatar`, formData).pipe(
+      tap((user: any) => {
+        
+        if (user && user.token) {
+          const userWithToken = { ...user, token: user.token };
+          localStorage.setItem('loggedInUser', JSON.stringify(userWithToken));
   
-    return this.http.put<User>(`${this.API_URL}/${userId}/avatar`, formData).pipe(
-      tap((updatedUser) => {
-        const currentUser = this.loggedInUser.getValue();
-        if (currentUser) {
-          currentUser.avatarUrl = updatedUser.avatarUrl || null; 
-          this.loggedInUser.next(currentUser);
-          localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+          this.addDataToUser();
         }
       }),
       catchError((error) => {
@@ -107,44 +120,65 @@ export class UserService {
         return throwError(() => new Error(error.message || 'Avatar upload failed'));
       })
     );
-  }    
-
+  }
+    
   //Update User Account
-  updateUserAccount(userId: number, userData: any): Observable<any> {
-    return this.http.put(`${this.API_URL}/${userId}/update-account`, userData).pipe(
-      tap((updatedUser: any) => {
-        if (updatedUser.error) { 
-          console.error('Error updating profile:', updatedUser.error);
-          return;  
+  updateUserAccount(userId: number, userData: any): Observable<TokenResponse | null> {
+    return this.http.put<ApiResponse<TokenResponse>>(`${this.API_URL}/${userId}/update-account`, userData).pipe(
+      map(response => {
+        if (!response.success) {
+          const errorResponse = { ...response.data, error: response.message || 'ERROR' };
+          return errorResponse;
         }
-        this.loggedInUser.next(updatedUser);
-        localStorage.setItem('loggedInUser', JSON.stringify(updatedUser)); 
+  
+        if (response.data?.token) {
+          const userWithToken = { ...response, token: response.data.token };
+          localStorage.setItem('loggedInUser', JSON.stringify(userWithToken));
+          this.addDataToUser();
+        }
+  
+        return response.data;
       }),
-      catchError((error) => {
-        console.error('Profile update error:', error);
+      catchError(error => {
         return throwError(() => new Error(error.message || 'Profile update failed'));
       })
     );
   }
+  
 
   //Get user stats about figurines
   getUserStats(userId: number): Observable<{ [key: string]: number }> {
     return this.http.get<{ [key: string]: number }>(`${this.API_URL}/${userId}/stats`);
   }
+
+  addDataToUser() {
+    const decodedUser = this.decodeToken();
+    if (decodedUser) {
+      const userFromToken: User = this.getUser() || {
+        id: 0,
+        username: '',
+        email: '',
+        password: '',
+        permission: '',
+        lastLogin: '',
+        avatarUrl: null
+      };
+
+      this.loggedInUser.next(userFromToken);
+    }
+  }
   
   logout(): void {
-    //this.loggedInUser.next(null);
     localStorage.removeItem('loggedInUser');
+    this.loggedInUser.next(null);
   }
 
-  getLoggedInUser() {
+  getLoggedInUser(): Observable<User | null> {
+    const user = this.getUser(); 
+    this.loggedInUser.next(user); 
     return this.loggedInUser.asObservable(); 
   }
-
-  // isAuthenticated(): boolean {
-  //   return this.loggedInUser !== null;
-  // }
-
+  
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
@@ -153,49 +187,29 @@ export class UserService {
     return this.loggedInUser;
   }
 
-  private loadUserFromStorage(): void {
-    const storedUser = localStorage.getItem('loggedInUser');
-    
-    if (storedUser && storedUser !== 'undefined') {
-      try {
-        const user = JSON.parse(storedUser);
-        this.loggedInUser.next(user);
-      } catch (e) {
-        console.error('Error parsing user data from localStorage', e);
-        this.loggedInUser.next(null);
-      }
-    } else {
-      this.loggedInUser.next(null);
-    }
-  }
+  // private loadUserFromStorage(): void {
+  //   const storedUser = localStorage.getItem('loggedInUser');
+
+  //   if (storedUser) {
+  //     try {
+  //       const user = JSON.parse(storedUser);
+  //       this.loggedInUser.next(user);
+  //     } catch (e) {
+  //       console.error('Błąd parsowania danych użytkownika:', e);
+  //       this.loggedInUser.next(null);
+  //     }
+  //   }
+  // }
 
   hasAccess(): boolean {
-    const userString = localStorage.getItem('loggedInUser'); 
-    if (!userString) {
-      return false;
-    }
-
-    const user = JSON.parse(userString);
-    if (user && user.permission === 'ADMIN') { 
-      return true;
-    } 
-    return false;
+    return this.getPermission() === 'ADMIN';
   }
-
+  
   hasLogin(): boolean {
-    const userString = localStorage.getItem('loggedInUser'); 
-    if (!userString) {
-      return false;
-    }
-
-    const user = JSON.parse(userString);
-    if (user) { 
-      return true;
-    }
-
+    //return !!this.getUser();
     return false;
   }
-
+  
   /* TOKEN */
   getToken(): string | null {
     const userWithToken = localStorage.getItem('loggedInUser');
@@ -205,6 +219,7 @@ export class UserService {
     }
     return null;
   }
+  
 
   decodeToken(): any {
     const token = this.getToken();
@@ -228,6 +243,24 @@ export class UserService {
     }
   }
 
+  getUser(): User | null {
+    const decodedToken = this.decodeToken();
+    if (!decodedToken) {
+      return null;
+    }
+  
+    return {
+      id: decodedToken.id,
+      email: decodedToken.email,
+      username: decodedToken.sub, 
+      password: '', 
+      permission: decodedToken.permission,
+      lastLogin: '', 
+      avatarUrl: decodedToken.avatarUrl || '', 
+    };
+  }
+  
+  
   getUserId(): number | null {
     const decodedToken = this.decodeToken();
     return decodedToken ? decodedToken.id : null;
@@ -245,11 +278,13 @@ export class UserService {
 
   getPermission(): string {
     const decodedToken = this.decodeToken();
-    return decodedToken && decodedToken.roles ? decodedToken.roles : '';
+    return decodedToken && decodedToken.permission ? decodedToken.permission : '';
   }
 
-  // hasRole(role: string): boolean {
-  //   return this.getRoles().includes(role);
-  // }
+  getAvatarUrl(): string {
+    const decodedToken = this.decodeToken();
+    return decodedToken && decodedToken.avatarUrl ? decodedToken.avatarUrl : '';
+  }
+
 }
 

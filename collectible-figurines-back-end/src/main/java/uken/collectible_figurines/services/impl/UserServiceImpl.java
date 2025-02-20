@@ -11,6 +11,7 @@ import uken.collectible_figurines.model.User;
 import uken.collectible_figurines.repository.UserFigurineListItemRepository;
 import uken.collectible_figurines.repository.UserRepository;
 import uken.collectible_figurines.services.UserService;
+import uken.collectible_figurines.response.ApiResponse;
 
 import java.io.File;
 import java.io.IOException;
@@ -135,28 +136,25 @@ public class UserServiceImpl implements UserService {
   }
 
   public Object updateUserAccount(Long userId, UserUpdateAccountDTO userUpdate) {
-    User user = userRepository.findById(userId)
-      .orElse(null);
+    User user = userRepository.findById(userId).orElse(null);
 
     if (user == null) {
       return Map.of("error", "NOT_EXIST");
-    }
-
-    if (userUpdate.getEmail() != null && !userUpdate.getEmail().isEmpty()) {
-      user.setEmail(userUpdate.getEmail());
     }
 
     if (!checkPassword(userUpdate.getCurrentPassword(), user.getPasswd())) {
       return Map.of("error", "WRONG_PASSWORD");
     }
 
+    if (userUpdate.getEmail() != null && !userUpdate.getEmail().isEmpty()) {
+      user.setEmail(userUpdate.getEmail());
+    }
+
     if (userUpdate.getNewPassword() != null && !userUpdate.getNewPassword().isEmpty()) {
       if (userUpdate.getCurrentPassword() == null || userUpdate.getCurrentPassword().isEmpty()) {
         return Map.of("error", "CURRENT_PASSWORD_REQUIRED");
       }
-
-      String encodedNewPassword = passwordEncoder.encode(userUpdate.getNewPassword());
-      user.setPasswd(encodedNewPassword);
+      user.setPasswd(passwordEncoder.encode(userUpdate.getNewPassword()));
     }
 
     User updatedUser = userRepository.save(user);
@@ -177,5 +175,4 @@ public class UserServiceImpl implements UserService {
 
     return stats;
   }
-
 }
