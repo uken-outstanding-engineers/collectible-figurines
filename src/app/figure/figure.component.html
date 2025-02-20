@@ -34,34 +34,29 @@
             <li *ngIf="figure.exclusive">Exclusive Edition</li>
         </ul>
         <mat-card-actions class="card-actions" *ngIf="this.userId">
-          <div class="action-button-container" [ngClass]="{'active': figure.isLiked}">
-            <button mat-mini-fab 
-              (click)="toggleListActive(figure, 'Liked')" 
-              class="action-button" 
-            >
+          <div class="action-button-container" 
+            [ngClass]="{'active': figure.isLiked}" 
+            (click)="toggleListActive(figure, 'Liked')">
+            <button mat-mini-fab class="action-button">
                 <mat-icon>favorite</mat-icon>
             </button>
             <span class="action-label">Liked</span>
           </div>
 
           <div class="action-button-container" 
-            [ngClass]="{'active': figure.isWanted}">
-            <button mat-mini-fab 
-              (click)="toggleListActive(figure, 'Wanted')" 
-              class="action-button" 
-            >
+            [ngClass]="{'active': figure.isWanted}"
+            (click)="toggleListActive(figure, 'Wanted')">
+            <button mat-mini-fab class="action-button">
                 <mat-icon>star_border</mat-icon>
             </button>
             <span class="action-label">Wanted</span>
           </div>
 
           <div class="action-button-container" 
-            [ngClass]="{'active': figure.isOwned}">
-            <button mat-mini-fab 
-              (click)="toggleListActive(figure, 'Owned')" 
-              class="action-button" 
-            >
-            <mat-icon class="material-symbols-outlined">package_2</mat-icon>
+            [ngClass]="{'active': figure.isOwned}"
+            (click)="toggleListActive(figure, 'Owned')">
+            <button mat-mini-fab class="action-button">
+              <mat-icon class="material-symbols-outlined">package_2</mat-icon>
             </button>
             <span class="action-label">Owned</span>
           </div>

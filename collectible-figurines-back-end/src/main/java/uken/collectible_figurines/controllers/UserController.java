@@ -1,40 +1,44 @@
 package uken.collectible_figurines.controllers;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-import uken.collectible_figurines.dto.ErrorUserDTO;
-import uken.collectible_figurines.dto.UserUpdateAccountDTO;
+import uken.collectible_figurines.model.dto.ErrorUserDTO;
+import uken.collectible_figurines.model.dto.LoginResponse;
+import uken.collectible_figurines.model.dto.UserUpdateAccountDTO;
 import uken.collectible_figurines.model.User;
-import uken.collectible_figurines.services.FigurineService;
+import uken.collectible_figurines.security.JwtService;
 import uken.collectible_figurines.services.UserService;
-import uken.collectible_figurines.dto.UserDTO;
-
+import uken.collectible_figurines.model.dto.UserDTO;
+import java.util.Map;
 import java.io.IOException;
 import java.util.List;
-
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
   private final UserService userService;
+  private final JwtService jwtService;
 
-  public UserController(UserService userService) {
+  @Autowired
+  public UserController(UserService userService, JwtService jwtService) {
     this.userService = userService;
+    this.jwtService = jwtService;
   }
 
   @GetMapping("/all")
   public List<UserDTO> getAllUsers() { return userService.getAllUsers(); }
 
   @PostMapping("/login")
-  public UserDTO loginUser(@RequestParam String username, @RequestParam String passwd) {
-    User user = userService.findByUsername(username);
+  public LoginResponse loginUser(@RequestParam String username, @RequestParam String passwd) {
+    User user = userService.findByUsername(username.trim().toLowerCase());
 
     if(user != null && userService.checkPassword(passwd, user.getPasswd())) {
       userService.updateLastLogin(user);
-      return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPermission(), user.getLastLogin(), user.getAvatarUrl());
+      String token = jwtService.generateToken(user.getId(),user.getUsername(), user.getEmail(), user.getPermission());
+      return new LoginResponse(token);
+      //return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPermission(), user.getLastLogin(), user.getAvatarUrl());
     }
 
     return null;
@@ -42,11 +46,11 @@ public class UserController {
 
   @PostMapping("/register")
   public Object registerUser(@RequestBody User user) {
-    if (userService.findByUsername(user.getUsername()) != null) {
+    if (userService.findByUsername(user.getUsername().toLowerCase()) != null) {
       return new ErrorUserDTO("USER_EXIST");
     }
 
-    if (userService.findByEmail(user.getEmail()) != null) {
+    if (userService.findByEmail(user.getEmail().toLowerCase()) != null) {
       return new ErrorUserDTO("EMAIL_EXIST");
     }
 
@@ -80,4 +84,9 @@ public class UserController {
     return userService.updateUserAccount(id, userUpdate);
   }
 
+  @GetMapping("/{userId}/stats")
+  public Map<String, Long> getUserFigurineStats(@PathVariable Long userId) {
+    return userService.getUserFigurineStats(userId);
+  }
 }
+

@@ -211,7 +211,9 @@
           id="number"
           [(ngModel)]="editFigure.number"
           name="number"
-          type="text"
+          type="number"
+          [min]="0"
+          [max]="99999"
           required
         />       
       </div>

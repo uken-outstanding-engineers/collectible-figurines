@@ -186,6 +186,9 @@ export class AdminPanelFigurinesListComponent {
         formData.append('hoverImageFile', this.selectedHoverFile);
       }
 
+      this.editFigure.name = this.editFigure.name.trim();
+      this.editFigure.series = this.editFigure.series.trim();
+
       const requiredFields = [
         this.editFigure.imageUrl,
         this.editFigure.hoverImageUrl,
@@ -198,7 +201,6 @@ export class AdminPanelFigurinesListComponent {
         return;
       }
       
-  
       if (this.editFigure.id !== null) {
         // Edit figurine
         this.figureService.editFigure(this.editFigure.id, formData).subscribe(
@@ -327,7 +329,16 @@ export class AdminPanelFigurinesListComponent {
   }
   
   private readImage(file: File, type: 'normal' | 'hover'): void {
+    const MAX_SIZE_MB = 1024;
+    const MAX_SIZE_BYTES = MAX_SIZE_MB * MAX_SIZE_MB;
+    
     if (file instanceof File) {
+
+      if (file.size > MAX_SIZE_BYTES) {
+        this.snackBarService.showError(`Plik jest za duży, maksymalny rozmiar to ${MAX_SIZE_MB / 1024}MB.`);
+        return;
+      }
+
       if (type === 'hover') {
         this.selectedHoverFile = file;
       } else {

@@ -42,8 +42,6 @@ export class AdminPanelFandomsListComponent {
   
   fandoms = new MatTableDataSource<Fandom>([]);
 
-  errorForm!: string;
-
   displayedColumns: string[] = [
     'imageUrl', 'name', 'action'
   ];
@@ -98,8 +96,6 @@ export class AdminPanelFandomsListComponent {
     this.editDialogVisible = false;
     this.editFandom = null;
 
-    this.errorForm = '';
-
     this.adminPanelService.closeDialog();
   }
 
@@ -114,13 +110,15 @@ export class AdminPanelFandomsListComponent {
         formData.append('imageFile', this.selectedFile);
       }
 
+      this.editFandom.name = this.editFandom.name.trim();
+
       const requiredFields = [
         this.editFandom.imageUrl,
         this.editFandom.name,
       ];
       
       if (requiredFields.some(field => !field)) {
-        this.errorForm = "Zdjęcie oraz nazwa nie mogą być puste!";
+        this.snackBarService.showError('Zdjęcie oraz nazwa nie mogą być puste!');
         return;
       }
 

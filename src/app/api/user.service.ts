@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rxjs';
-import { User } from './user.model';
+import { map } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
+
+import { User } from './user.model';
 import { API_URL } from './api-url';
 
 @Injectable({
@@ -45,8 +47,9 @@ export class UserService {
     }).pipe(
       tap((user: any) => {
         if (user) {
-          this.loggedInUser.next(user);
-          localStorage.setItem('loggedInUser', JSON.stringify(user));
+          const userWithToken = { ...user, token: user.token };
+          this.loggedInUser.next(userWithToken);
+          localStorage.setItem('loggedInUser', JSON.stringify(userWithToken));
         }
       }),
       catchError((error) => {
@@ -61,6 +64,12 @@ export class UserService {
     const registerData = { username, email, passwd };
   
     return this.http.post(`${this.API_URL}/register`, registerData).pipe(
+      map((response: any) => {
+        if (response.error) {
+          throw new Error(response.error);
+        }
+        return response; 
+      }),
       tap((user: any) => {
         if (user) {
           this.loggedInUser.next(user); 
@@ -68,11 +77,11 @@ export class UserService {
         }
       }),
       catchError((error) => {
-        console.error('Register error:', error);
         return throwError(() => new Error(error.message || 'Registration failed'));
       })
     );
   }
+  
 
   //Uplad Avatar
   uploadAvatar(userId: number, avatar: File | null): Observable<User> {
@@ -117,9 +126,14 @@ export class UserService {
       })
     );
   }
+
+  //Get user stats about figurines
+  getUserStats(userId: number): Observable<{ [key: string]: number }> {
+    return this.http.get<{ [key: string]: number }>(`${this.API_URL}/${userId}/stats`);
+  }
   
   logout(): void {
-    this.loggedInUser.next(null); 
+    //this.loggedInUser.next(null);
     localStorage.removeItem('loggedInUser');
   }
 
@@ -127,8 +141,12 @@ export class UserService {
     return this.loggedInUser.asObservable(); 
   }
 
+  // isAuthenticated(): boolean {
+  //   return this.loggedInUser !== null;
+  // }
+
   isAuthenticated(): boolean {
-    return this.loggedInUser !== null;
+    return !!this.getToken();
   }
 
   getCurrentUser(): any {
@@ -137,8 +155,17 @@ export class UserService {
 
   private loadUserFromStorage(): void {
     const storedUser = localStorage.getItem('loggedInUser');
-    if (storedUser) {
-      this.loggedInUser.next(JSON.parse(storedUser)); 
+    
+    if (storedUser && storedUser !== 'undefined') {
+      try {
+        const user = JSON.parse(storedUser);
+        this.loggedInUser.next(user);
+      } catch (e) {
+        console.error('Error parsing user data from localStorage', e);
+        this.loggedInUser.next(null);
+      }
+    } else {
+      this.loggedInUser.next(null);
     }
   }
 
@@ -168,5 +195,61 @@ export class UserService {
 
     return false;
   }
+
+  /* TOKEN */
+  getToken(): string | null {
+    const userWithToken = localStorage.getItem('loggedInUser');
+    if (userWithToken) {
+      const parsedUser = JSON.parse(userWithToken);
+      return parsedUser.token || null;
+    }
+    return null;
+  }
+
+  decodeToken(): any {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error('Błąd dekodowania tokena:', error);
+      return null;
+    }
+  }
+
+  getUserId(): number | null {
+    const decodedToken = this.decodeToken();
+    return decodedToken ? decodedToken.id : null;
+  }
+
+  getUsername(): string | null {
+    const decodedToken = this.decodeToken();
+    return decodedToken ? decodedToken.sub : null;
+  }
+
+  getEmail(): string | null {
+    const decodedToken = this.decodeToken();
+    return decodedToken ? decodedToken.email : null;
+  }
+
+  getPermission(): string {
+    const decodedToken = this.decodeToken();
+    return decodedToken && decodedToken.roles ? decodedToken.roles : '';
+  }
+
+  // hasRole(role: string): boolean {
+  //   return this.getRoles().includes(role);
+  // }
 }
 

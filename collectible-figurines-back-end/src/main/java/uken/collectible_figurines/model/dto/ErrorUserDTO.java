@@ -1,4 +1,4 @@
-package uken.collectible_figurines.dto;
+package uken.collectible_figurines.model.dto;
 
 public class ErrorUserDTO {
   private String error;

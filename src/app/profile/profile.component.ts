@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 import { UserService } from '../api/user.service';
 import { User } from '../api/user.model';
@@ -17,7 +18,8 @@ import { FigureListService } from '../api/figure-list.service';
     CommonModule,
     MatListModule,
     MatCardModule,
-    RouterModule 
+    RouterModule,
+    MatIconModule 
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -26,6 +28,7 @@ export class ProfileComponent {
   apiUrl = API_URL.BASE_URL;
 
   user!: User;
+  stats = { liked: 0, wanted: 0, owned: 0 };
 
   activeItem: string = 'liked';
   figurineLists: { [key: string]: Figure[] } = {};
@@ -39,6 +42,16 @@ export class ProfileComponent {
     this.userService.getCurrentUser().subscribe((user: User) => {
       this.user = user;
     });
+
+    this.userService.getUserStats(this.user.id).subscribe(
+      stats => {
+        this.stats = {
+          liked: stats["LIKED"] || 0,
+          wanted: stats["WANTED"] || 0,
+          owned: stats["OWNED"] || 0
+        };
+      });
+
     this.loadUserFigurineLists();
   }
 

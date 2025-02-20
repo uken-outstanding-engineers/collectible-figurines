@@ -7,15 +7,15 @@
         <div class="stats">
             <div class="stat">
                 <span class="stat-label">Polubione:</span>
-                <span class="stat-value">10</span>
+                <span class="stat-value">{{ stats.liked }}</span>
             </div>
             <div class="stat">
                 <span class="stat-label">Chciane:</span>
-                <span class="stat-value">5</span>
+                <span class="stat-value">{{ stats.wanted }}</span>
             </div>
             <div class="stat">
                 <span class="stat-label">Posiadane:</span>
-                <span class="stat-value">8</span>
+                <span class="stat-value">{{ stats.owned }}</span>
             </div>
         </div>
     </div>
@@ -46,6 +46,9 @@
                             class="figure-image" 
                             loading="lazy">
                     </div>
+                    <!-- <button mat-icon-button class="delete-icon">
+                        <mat-icon>delete</mat-icon>
+                    </button> -->
                     <mat-card-content class="figurine-content">
                         <p class="figure-series">{{ figurine.series }}</p>
                         <p class="figure-name">{{ figurine.name }}</p>

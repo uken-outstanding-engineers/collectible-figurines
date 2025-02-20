@@ -70,8 +70,19 @@ export class NavbarComponent {
   ngOnInit(): void {
     this.userService.getLoggedInUser().subscribe(user => {
       this.isLoggedIn = !!user; 
-      this.currentUser = user; 
+      
+      console.log(user);
     });
+
+    this.currentUser = {
+      id: this.userService.getUserId() || 0,
+      email: '',
+      username: this.userService.getUsername() || '',
+      password: '',
+      permission: this.userService.getPermission() || '',
+      lastLogin: '',
+      avatarUrl: null
+    };
 
     const savedLanguage = localStorage.getItem('language') || 'pl';
     this.currentLanguage = savedLanguage;

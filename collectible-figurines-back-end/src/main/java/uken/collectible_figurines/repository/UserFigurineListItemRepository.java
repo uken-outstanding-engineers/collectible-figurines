@@ -17,5 +17,13 @@ public interface UserFigurineListItemRepository extends JpaRepository<UserFiguri
 
   @Query("SELECT COUNT(u) FROM UserFigurineListItem u WHERE u.figurine.id = :figurineId AND u.list.type = :listType")
   long countByTypeForFigurine(@Param("figurineId") Long figurineId, @Param("listType") String listType);
+
+  @Query("SELECT uf.type, COUNT(ufi) "
+    + "FROM UserFigurineListItem ufi "
+    + "JOIN ufi.list uf "
+    + "WHERE uf.user.id = :userId "
+    + "GROUP BY uf.type")
+  List<Object[]> getUserFigurineStatsByType(Long userId);
+
 }
 

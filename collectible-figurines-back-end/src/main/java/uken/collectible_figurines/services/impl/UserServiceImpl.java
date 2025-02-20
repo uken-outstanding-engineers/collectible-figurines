@@ -1,16 +1,14 @@
 package uken.collectible_figurines.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import uken.collectible_figurines.dto.ErrorUserDTO;
-import uken.collectible_figurines.dto.UserDTO;
-import uken.collectible_figurines.dto.UserUpdateAccountDTO;
-import uken.collectible_figurines.model.Figurine;
+import uken.collectible_figurines.model.dto.UserDTO;
+import uken.collectible_figurines.model.dto.UserUpdateAccountDTO;
 import uken.collectible_figurines.model.User;
+import uken.collectible_figurines.repository.UserFigurineListItemRepository;
 import uken.collectible_figurines.repository.UserRepository;
 import uken.collectible_figurines.services.UserService;
 
@@ -19,7 +17,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -31,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final BCryptPasswordEncoder passwordEncoder;
+  private final UserFigurineListItemRepository userFigurineListItemRepository;
 
   private UserDTO convertToDTO(User user) {
     return new UserDTO(
@@ -163,6 +161,21 @@ public class UserServiceImpl implements UserService {
 
     User updatedUser = userRepository.save(user);
     return convertToDTO(updatedUser);
+  }
+
+  public Map<String, Long> getUserFigurineStats(Long userId) {
+    List<Object[]> result = userFigurineListItemRepository.getUserFigurineStatsByType(userId);
+
+    Map<String, Long> stats = new HashMap<>();
+
+    for (Object[] row : result) {
+      String type = (String) row[0];
+      Long count = (Long) row[1];
+
+      stats.put(type, count);
+    }
+
+    return stats;
   }
 
 }

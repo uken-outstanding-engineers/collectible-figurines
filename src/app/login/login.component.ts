@@ -40,7 +40,7 @@ export class LoginComponent {
       return;
     }
 
-    this.userService.login(this.username, this.password).subscribe(user => {
+    this.userService.login(this.username.trim(), this.password.trim()).subscribe(user => {
       if (user) {
         this.router.navigate(['/figures-showcase']);
       } else {

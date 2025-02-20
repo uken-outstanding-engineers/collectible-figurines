@@ -26,14 +26,6 @@ public class FigurineController {
     return figurineService.getAllFigurines();
   }
 
-//  @PostMapping("/add")
-//  public Figurine addFigurine(@RequestBody Figurine figurine) {
-//    if (figurine.getId() != null) {
-//      figurine.setId(null);
-//    }
-//    return figurineService.saveFigurine(figurine);
-//  }
-
   @PostMapping("/add")
   public Figurine addFigurine(@RequestPart("figurine") Figurine figurine,
                               @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,

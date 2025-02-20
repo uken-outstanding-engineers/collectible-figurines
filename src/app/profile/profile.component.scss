@@ -170,6 +170,27 @@
     white-space: nowrap;
 }
 
+.delete-icon {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: #555; 
+    border-radius: 50%;
+    width: 42px; 
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+    cursor: pointer;
+    overflow: hidden;
+    border: none;
+}
+
+.delete-icon mat-icon {
+    color: white;
+    font-size: 24px;
+}
 
 .no-figures {
     text-align: center;

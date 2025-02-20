@@ -1,4 +1,4 @@
-package uken.collectible_figurines.dto;
+package uken.collectible_figurines.model.dto;
 
 import uken.collectible_figurines.model.User;
 

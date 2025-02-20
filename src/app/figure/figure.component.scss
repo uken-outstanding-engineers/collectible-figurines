@@ -62,6 +62,9 @@
     overflow: hidden;
     word-break: break-word;
     max-width: 100%;
+
+    min-height: 100%; 
+    position: relative; 
 }
 
 h2 {
@@ -82,11 +85,24 @@ li {
     margin-bottom: 8px;
 }
 
+/* Liked, Wanted, Owned */
+
+// .card-actions {
+//     margin-top: auto;
+//     display: flex;
+//     gap: 8px;
+//     align-items: center;
+// }
+
 .card-actions {
     display: flex;
     gap: 8px;
     align-items: center;
-    bottom: 0;
+    justify-content: flex-start;
+    padding-top: 10px;
+    position: absolute; 
+    bottom: 20px; 
+    left: 40px; 
 }
 
 .action-button-container {
@@ -96,8 +112,8 @@ li {
     background-color: #696969;
     border-radius: 50px;
     padding: 0 16px 0 0;
-    //width: 100px;
     transition: background-color 0.3s ease;
+    cursor: pointer;
 
     &.active {
         background-color: #ff4081;
@@ -135,9 +151,7 @@ li {
     flex: 1;
     text-align: left;
     border-radius: 30px;
-    //background-color: #fff;
     padding: 0 40px 20px 40px;
-    //border: 2px solid #e1e3e4;
     overflow: hidden;
     word-break: break-word;
     width: 90%;
@@ -174,6 +188,7 @@ li {
     color: #2a2a2a;
 }
   
+/* Recommended */
 .recommended-figurines {
     margin: 40px auto;
     padding: 20px;
@@ -385,6 +400,12 @@ li {
         font-size: 18px;
     }
 
+    .card-actions {
+        position: relative; 
+        left: 0;
+        top: 0;
+    }
+
     .stat-info {
         width: 95%;
     }
@@ -424,7 +445,7 @@ li {
     }
 
     .action-button-container {
-        transform: scale(0.75) translateX(0); /* Przesunięcie w poziomie na 0 */
+        transform: scale(0.75) translateX(0);
         transform-origin: top left;
     }
       

@@ -65,22 +65,28 @@ export class RegisterComponent {
       this.registerForm.markAllAsTouched();
       return;
     }
-
+  
     const { username, email, password } = this.registerForm.value;
-
-    this.userService.register(username, email, password).subscribe(user =>{
-      console.log(user);
-      if (user && user.id) { 
-        this.router.navigate(['/figures-showcase']);
-      } else {
-        if (user.error === 'USER_EXIST') {
+  
+    this.userService.register(username.trim(), email.trim(), password).subscribe(
+      (user: any) => {
+        if (user.error) {
+          this.snackBarService.showError('Wystąpił nieznany błąd. Spróbuj ponownie.');
+        } else {
+          this.router.navigate(['/figures-showcase']);
+        }
+      },
+      (error) => {
+        console.log(error.message);
+        if (error.message === 'USER_EXIST') {
           this.snackBarService.showError('Nazwa użytkownika jest już zajęta.');
-        } else if (user.error === 'EMAIL_EXIST') {
+        } else if (error.message === 'EMAIL_EXIST') {
           this.snackBarService.showError('Podany e-mail jest już używany.');
         } else {
-          this.snackBarService.showError('Wystąpił nieznany błąd. Spróbuj ponownie.');
+          this.snackBarService.showError('Wystąpił błąd. Spróbuj ponownie.');
         }
       }
-    });
+    );
   }
+  
 }
