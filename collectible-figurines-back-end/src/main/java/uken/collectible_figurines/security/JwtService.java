@@ -23,7 +23,7 @@ public class JwtService {
     return Jwts.builder()
       .setSubject(username)
       .setIssuedAt(new Date())
-      .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Token wygasa po 10 godzinach
+      .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 1000 * 30
       .addClaims(Map.of(
         "id", userId,
         "email", email,
@@ -36,6 +36,10 @@ public class JwtService {
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
+  }
+
+  public String extractPermission(String token) {
+    return extractClaim(token, claims -> (String) claims.get("permission"));
   }
 
   public boolean isTokenValid(String token, String username) {

@@ -11,6 +11,7 @@ import { AdminPanelFigurinesListComponent } from './admin-panel-figurines-list/a
 import { AdminPanelUsersComponent } from './admin-panel-users-list/admin-panel-users-list.component';
 import { AuthAdminGuard } from './authorization/authAdmin.guard';
 import { AuthLoginGuard } from './authorization/authLogin.guard';
+import { AuthLogoutGuard } from './authorization/authLogout.guard';
 import { AdminPanelVariantsListComponent } from './admin-panel-variants-list/admin-panel-variants-list.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsAccountComponent } from './settings-account/settings-account.component';
@@ -26,8 +27,8 @@ export const routes: Routes = [
     { path: 'figures-showcase', component: FiguresShowcaseComponent },
     { path: 'figure/:id', component: FigureComponent },
     { path: 'login', component: LoginComponent, canActivate: [AuthLoginGuard] },
-    { path: 'register', component: RegisterComponent, canActivate: [AuthLoginGuard] },
-    { path: 'reset-password', component: ResetPasswordComponent },
+    { path: 'register', component: RegisterComponent, canActivate: [AuthLoginGuard] }, //
+    { path: 'reset-password', component: ResetPasswordComponent, canActivate: [AuthLoginGuard] },
     { path: 'fandoms', component: FandomsComponent },
     {
       path: 'admin',
@@ -45,6 +46,7 @@ export const routes: Routes = [
     {
       path: 'settings',
       component: SettingsComponent,
+      canActivate: [AuthLogoutGuard],
       children: [
         { path: "profile", component: SettingsProfileComponent},
         { path: 'notifications', component: SettingsNotificationsComponent },
@@ -52,14 +54,7 @@ export const routes: Routes = [
         { path: '', redirectTo: 'profile', pathMatch: 'full' },
       ],
     },
-    { path: 'figurine-lists', component: UserFigurineListsComponent },
-    { path: 'profile', component: ProfileComponent },
+    { path: 'figurine-lists', component: UserFigurineListsComponent, canActivate: [AuthLogoutGuard] },
+    { path: 'profile', component: ProfileComponent, canActivate: [AuthLogoutGuard] },
     { path: '**', redirectTo: '/figures-showcase' },
   ];
-  
-
-// @NgModule({
-//     imports: [RouterModule.forRoot(routes)],
-//     exports: [RouterModule],
-// })
-// export class AppRoutingModule {}

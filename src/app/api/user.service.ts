@@ -85,8 +85,9 @@ export class UserService {
       }),
       tap((user: any) => {
         if (user) {
-          this.loggedInUser.next(user); 
-          localStorage.setItem('loggedInUser', JSON.stringify(user));
+          const userWithToken = { ...user, token: user.token };
+          localStorage.setItem('loggedInUser', JSON.stringify(userWithToken));
+          this.addDataToUser();
         }
       }),
       catchError((error) => {
@@ -144,7 +145,6 @@ export class UserService {
       })
     );
   }
-  
 
   //Get user stats about figurines
   getUserStats(userId: number): Observable<{ [key: string]: number }> {
@@ -187,27 +187,16 @@ export class UserService {
     return this.loggedInUser;
   }
 
-  // private loadUserFromStorage(): void {
-  //   const storedUser = localStorage.getItem('loggedInUser');
-
-  //   if (storedUser) {
-  //     try {
-  //       const user = JSON.parse(storedUser);
-  //       this.loggedInUser.next(user);
-  //     } catch (e) {
-  //       console.error('Błąd parsowania danych użytkownika:', e);
-  //       this.loggedInUser.next(null);
-  //     }
-  //   }
-  // }
-
   hasAccess(): boolean {
     return this.getPermission() === 'ADMIN';
   }
   
   hasLogin(): boolean {
-    //return !!this.getUser();
-    return false;
+    return !!this.getUser();
+  }
+
+  hasLogout(): boolean {
+    return !this.getUser();
   }
   
   /* TOKEN */
@@ -220,7 +209,6 @@ export class UserService {
     return null;
   }
   
-
   decodeToken(): any {
     const token = this.getToken();
     if (!token) {

@@ -58,7 +58,12 @@ public class UserController {
 
     if (newUser != null) {
       userService.updateLastLogin(newUser);
-      return new UserDTO(newUser.getId(), newUser.getUsername(), newUser.getEmail(), newUser.getPermission(), newUser.getLastLogin(), newUser.getAvatarUrl());
+
+      String token = jwtService.generateToken(newUser.getId(), newUser.getUsername(),
+        newUser.getEmail(), newUser.getPermission(),
+        newUser.getAvatarUrl());
+
+      return new TokenResponse(token);
     }
 
     return new ErrorUserDTO("ERROR");

@@ -60,7 +60,20 @@ public class WebSecurityConfig {
         "/swagger-ui/**",
         "/v3/api-docs/**",
         "/swagger-ui.html"
-      ).permitAll() //.requestMatchers("/api/admin/**").hasRole("ADMIN")
+      ).permitAll()
+      .requestMatchers(
+        "/api/users/all",
+        "/api/users/total",
+        "/api/users/active",
+        "/api/figurines/all",
+        "/api/figurines/add",
+        "/api/figurines/edit/**",
+        "/api/figurines/delete/**",
+        "/api/fandoms/all",
+        "/api/fandoms/add",
+        "/api/fandoms/edit/**",
+        "/api/fandoms/delete/**"
+      ).hasAuthority("ADMIN")
       .anyRequest().authenticated()
     )
     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
