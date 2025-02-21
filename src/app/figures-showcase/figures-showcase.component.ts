@@ -178,6 +178,7 @@ export class FiguresShowcaseComponent implements OnInit {
     this.figureService.getFigures().subscribe(data => {
       this.figures = data;
       this.filterFigures();
+      this.loadFiguresProperties(['isLiked', 'isWanted', 'isOwned'], ['liked', 'wanted', 'owned']);
     });
 
     this.TREE_DATA = this.TREE_DATA; 
@@ -194,8 +195,6 @@ export class FiguresShowcaseComponent implements OnInit {
         });
       }
     });
-
-    this.loadFiguresProperties(['isLiked', 'isWanted', 'isOwned'], ['liked', 'wanted', 'owned']);
   }
 
   loadTreeData(license: string): void {

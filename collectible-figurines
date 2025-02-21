@@ -256,8 +256,8 @@ COPY public.fandoms (id, name, image_url) FROM stdin;
 --
 
 COPY public.figurines (id, name, series, image_url, hover_image_url, chase, glow_in_dark, flocked, exclusive, fandom_id, number) FROM stdin;
-16	hello	world	/api/images/figurines-images/9a34f26c-0ba8-45c1-bce4-5cdcb6e1d31f_000000001a.jpg	/api/images/figurines-images/3e800118-17f0-4494-a8fc-036e2bd66ba9_000000001b.jpg	t	t	f	t	1	685
 11	GROOT IN ONESIE	I AM GROOT	/api/images/figurines-images/8a9e2510-4558-4b8c-844c-d9df01ce70b4_000000011a.jpg	/api/images/figurines-images/dff2e3a7-adf8-4ac4-a32b-bc5afd6db55b_000000011b.jpg	\N	\N	\N	\N	\N	1192
+59	CARAXES	HOUSE OF THE DRAGON	/api/images/figurines-images/0f7c4863-9b30-4830-bf88-9a2beb1aa27c_Funko-POP-Caraxes-Dragon-Exclusive---House-of-the-Dragon-10.jpg	/api/images/figurines-images/937bdc18-f75a-4f63-840a-3466afbf866e_caraxes2.jpg	f	f	f	t	4	10
 10	PROXY	STAR WARS	/api/images/figurines-images/16bcf9ab-0057-414b-87d0-569863f237ad_000000010a.jpg	/api/images/figurines-images/176b6d20-3aaf-4ff9-819a-0f87870c76bd_000000010b.jpg	\N	t	\N	t	1	551
 7	ATTACK ON TITAN	EREN YEAGER	/api/images/figurines-images/0f0d56d7-0163-4fb5-83ca-20269b04006e_000000007a.jpg	/api/images/figurines-images/efeb374f-4b6a-4270-96c3-d1f5aed420af_000000007b.jpg	\N	\N	\N	\N	\N	1321
 6	WEDNESDAY ADDAMS	WEDNESDAY	/api/images/figurines-images/da6648f2-479b-4516-96e3-3309721cd0e5_000000006a.jpg	/api/images/figurines-images/d29001c0-bc75-4930-8bde-7cdded31c103_000000006b.jpg	\N	\N	\N	\N	\N	1309
@@ -268,7 +268,6 @@ COPY public.figurines (id, name, series, image_url, hover_image_url, chase, glow
 2	THRAWN'S NIGHT TROOPER	STAR WARS	/api/images/figurines-images/2377bd1d-e1a9-4051-a760-40f8ef8b9573_000000001a.jpg	/api/images/figurines-images/a594c34b-3f7e-4efb-bbbc-594cf728fd83_000000001b.jpg	\N	\N	\N	\N	1	685
 9	NARUTO (SIX PATH SAGE)	NARUTO SHIPPUDEN	/api/images/figurines-images/dd4c6681-f5cd-4245-b0ba-ddfde8ed665f_000000009a.jpg	/api/images/figurines-images/fc3ec6ab-3951-4c82-a2ea-5e9d4a2d895d_000000009b.jpg	\N	t	\N	\N	\N	932
 8	SHREK	SHREK	/api/images/figurines-images/c73153dc-e5e6-4e28-a774-2c7268177710_000000008a.jpg	/api/images/figurines-images/251e872f-2d8e-4e32-9dc8-0a5d8b767f00_000000008b.jpg	\N	\N	\N	\N	\N	1594
-59	CARAXES	HOUSE OF THE DRAGON	/api/images/figurines-images/24cab06c-8cd2-4334-ae97-66675fb3672a_caraxes.jpg	/api/images/figurines-images/937bdc18-f75a-4f63-840a-3466afbf866e_caraxes2.jpg	f	f	f	t	4	10
 \.
 
 
@@ -277,24 +276,15 @@ COPY public.figurines (id, name, series, image_url, hover_image_url, chase, glow
 --
 
 COPY public.user_figurine_list_items (id, list_id, figurine_id, date) FROM stdin;
-3	1	8	2025-02-06
 4	5	3	2025-02-06
 5	3	3	2025-02-06
 6	6	10	2025-02-06
-7	2	1	2025-02-06
-1	1	4	2025-02-04
-17	2	5	2025-02-06
-18	2	6	2025-02-06
-19	1	6	2025-02-06
-23	1	2	2025-02-06
-25	1	3	2025-02-07
-26	1	16	2025-02-07
+187	18	59	2025-02-21
+188	1	6	2025-02-21
+189	2	5	2025-02-21
+139	3	59	2025-02-19
 31	7	2	2025-02-10
-39	2	11	2025-02-14
-40	1	11	2025-02-14
-47	2	59	2025-02-14
-49	1	59	2025-02-14
-51	18	16	2025-02-14
+181	18	1	2025-02-20
 \.
 
 
@@ -311,16 +301,25 @@ COPY public.user_figurine_lists (id, user_id, name, type) FROM stdin;
 6	3	Wanted\n	WANTED
 9	5	Liked	LIKED
 10	5	Wanted	WANTED
-7	4	Liked	LIKED
-8	4	Wanted	WANTED
 11	6	Liked	LIKED
 12	6	Wanted	WANTED
 13	6	Owned	OWNED
 14	5	Owned	OWNED
-15	4	Owned	OWNED
 16	3	Owned	OWNED
 17	2	Owned	OWNED
 18	1	Owned	OWNED
+19	8	Liked	LIKED
+20	8	Wanted	WANTED
+21	8	Owned	OWNED
+37	16	Liked	LIKED
+38	16	Wanted	WANTED
+39	16	Owned	OWNED
+40	17	Liked	LIKED
+41	17	Wanted	WANTED
+42	17	Owned	OWNED
+43	18	Liked	LIKED
+44	18	Wanted	WANTED
+45	18	Owned	OWNED
 \.
 
 
@@ -329,11 +328,16 @@ COPY public.user_figurine_lists (id, user_id, name, type) FROM stdin;
 --
 
 COPY public.users (id, email, username, passwd, permission, last_login, avatar_url) FROM stdin;
-4	1234@123	1234	$2a$10$t4QsFTXkv61iZ.Sn1U.27uh/knVPViNwSbkxzlgAvEyNfA7dAnu3i	USER	2025-01-12 01:20:14.098474+01	\N
+18	test222@222	test222@222	$2a$10$4cAw2s9fMfXpuoC2GegVOefc3tY8nhLRnUEltJVEOWckJbDomltzK	USER	2025-02-21 02:25:05.891554+01	\N
+2	user1@figurines.pl	user1	$2a$10$IuB/tjGS74DgjEsjHELiNeXhfqKh4my9uhkJxVAQeHrZ8TVEiMRuq	USER	2025-02-20 19:07:29.899802+01	/api/images/avatars-images/6219be83-e418-4110-996d-2afd55cd06f8_000000009c.jpg
 6	uwu@gmail.com	Nadia	$2a$10$6xVBhmqMgBt5kY4jpOIZw.f8QVmPFmepI9mJyK1qi85FPIQxWWN/S	USER	2025-02-11 16:54:55.96833+01	\N
-2	user1@figurines.pl	user1	$2a$10$IuB/tjGS74DgjEsjHELiNeXhfqKh4my9uhkJxVAQeHrZ8TVEiMRuq	USER	2025-02-14 16:49:41.877292+01	/api/images/avatars-images/6219be83-e418-4110-996d-2afd55cd06f8_000000009c.jpg
-3	user2@figurines.pl	user2	$2a$10$xT3JQ8Ng09fI4owzMuFmdeyvgZOliXHaMXAlI489MdR3SbYbKKulm	USER	2025-02-14 16:54:08.926422+01	\N
-1	admin@figurines.pl	admin	$2a$10$0O1wUGgyW.uMbr3KWVmZ1eiGCbRbQEdhQRBw1I5gc4muDgehdu1Ui	ADMIN	2025-02-14 19:47:41.632082+01	/api/images/avatars-images/d1bb4227-f1b9-441c-951a-1d4cfffe1ba7_lis.png
+1	admin123@figurines.pl	admin	$2a$10$0O1wUGgyW.uMbr3KWVmZ1eiGCbRbQEdhQRBw1I5gc4muDgehdu1Ui	ADMIN	2025-02-21 02:50:08.423091+01	/api/images/avatars-images/eb11a7b5-f24c-427f-8e48-bb0e3a9b85c4_000000005c.jpg
+14	test@test	test@test	$2a$10$d4Yi5cpRs71JK6PNH7anDuwSMgFNVmB0UD5f6CTVWAVs03cjPJUgK	USER	2025-02-21 02:12:58.005555+01	\N
+3	user2@figurines.pl	user2	$2a$10$xT3JQ8Ng09fI4owzMuFmdeyvgZOliXHaMXAlI489MdR3SbYbKKulm	USER	2025-02-15 00:14:32.534437+01	\N
+15	test2@test	test2@test	$2a$10$ckFQN9tLM26/qGHUcxMDsOdNQ7rn/Q6hoicLkCVOdHAWKxGvl76Ti	USER	2025-02-21 02:13:49.158657+01	\N
+16	adin2@3123	adin2	$2a$10$qDqT0IWJ1.UrOy1qFstjOOE3yonRkT5SbsCroLjkAIRSviFLaSdu2	USER	2025-02-21 02:17:52.601648+01	\N
+8	kzyhu@kzyhu.com	kzyhu	$2a$10$4nNCgJ6YPoYdRWZR9wpbsOtD.3RIairCQc04xtd3QDdLSuXWGMxU6	ADMIN	2025-02-16 16:53:41.554997+01	\N
+17	test@test2	test@test2	$2a$10$0.iIpR590ZtDRkYjMT9NA.87p8aRkfJp2N.Ybc67l/6UAKh024gBK	USER	2025-02-21 02:19:43.938969+01	\N
 5	hunterodim@lusterko.com	Hunter O Dim	$2a$10$06lgojoka.ZJsKvzF8EDxucC7qyp4MhPpwVGqWExg/X/993KAFMAe	USER	2025-02-11 22:14:39.007068+01	\N
 \.
 
@@ -342,35 +346,35 @@ COPY public.users (id, email, username, passwd, permission, last_login, avatar_u
 -- Name: seq_id_fandoms; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_id_fandoms', 16, true);
+SELECT pg_catalog.setval('public.seq_id_fandoms', 19, true);
 
 
 --
 -- Name: seq_id_figurines; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_id_figurines', 61, true);
+SELECT pg_catalog.setval('public.seq_id_figurines', 86, true);
 
 
 --
 -- Name: seq_id_user_figurine_list_items; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_id_user_figurine_list_items', 51, true);
+SELECT pg_catalog.setval('public.seq_id_user_figurine_list_items', 189, true);
 
 
 --
 -- Name: seq_id_user_figurine_lists; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_id_user_figurine_lists', 18, true);
+SELECT pg_catalog.setval('public.seq_id_user_figurine_lists', 45, true);
 
 
 --
 -- Name: seq_id_users; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_id_users', 7, true);
+SELECT pg_catalog.setval('public.seq_id_users', 18, true);
 
 
 --

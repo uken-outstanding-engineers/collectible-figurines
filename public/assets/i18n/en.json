@@ -42,10 +42,6 @@
         "rememberedPassword": "Remembered your password?",
         "backToLogin": "Back to login"
     },
-    "search-result": {
-        "serachResult": "SEARCH RESULTS",
-        "notFound": "No figurines found."
-    },
     "admin_panel": {
         "dashboard": "Dashboard",
         "management": "Management"
@@ -56,16 +52,28 @@
         "notifications": "Notifications",
         "account": "Account",
 
-        "account_settings_page": {
-            "select_photo": "Select photo",
-            "change": "Change",
-            "delete_account": "Delete account",
-            "cancel": "Cancel",
-            "save": "Save"
+        "profile_settings_page": {
+            "profile": "Your Profile",
+            "showYourself": "See how others will view you on the site.",
+            "yourAvatar": "Your avatar:",
+            "selectPhoto": "Select photo...",
+            "deletePhoto": "Delete photo",
+            "photoDescription": "Set your avatar.",
+            "username": "Username:",
+            "usernameDescription": "Username change is only possible once every 30 days."
         },
         "notifications_page": {
             "notifications": "Notifications"
-        }
+        },
+        "account_settings_page": {
+            "account": "Account",
+            "accountDescription": "Update your account information.",
+            "email": "E-mail",
+            "currentPassword": "Current password",
+            "newPassword": "New password",
+            "confirmNewPassword": "Confirm new password"
+        },
+        "saveProfile": "Save profile"
     }
 }
   

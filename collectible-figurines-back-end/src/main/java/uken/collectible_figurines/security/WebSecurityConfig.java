@@ -28,7 +28,7 @@ public class WebSecurityConfig {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(Arrays.asList(
       "http://localhost:4200",
-      "https://wojtasm.pl"
+      "https://collectiblefigurines.pl"
     ));
     configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE", "OPTIONS"));
 

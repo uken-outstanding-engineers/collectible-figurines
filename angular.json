@@ -52,8 +52,6 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/collectible-figurines/",
-              "deployUrl": "/collectible-figurines/",
               "fileReplacements": [
                 {
                   "replace": "src/app/api/api-url.ts",

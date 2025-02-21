@@ -6,6 +6,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormsModule, NgForm, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { User } from '../api/user.model';
 import { UserService } from '../api/user.service';
@@ -22,6 +23,7 @@ import { SnackbarService } from '../services/snackbar.service';
     FormsModule,
     MatDialogModule,
     ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './settings-account.component.html',
   styleUrl: '../settings/settings-panel.component.scss'
@@ -95,6 +97,7 @@ export class SettingsAccountComponent {
 
   saveProfile(): void {
     this.formSubmitted = true;
+
     if (this.profileForm.invalid) {
       return;
     }
@@ -114,6 +117,8 @@ export class SettingsAccountComponent {
 
         this.snackBarService.showSuccess('Konto zostało zaktualizowane!');
         
+        //this.profileForm.reset();
+
         this.profileForm.get('currentPassword')?.reset();
         this.profileForm.get('newPassword')?.reset();
         this.profileForm.get('confirmPassword')?.reset();

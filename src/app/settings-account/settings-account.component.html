@@ -1,16 +1,16 @@
 <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
     <div class="profile-container">
-      <h2 class="profile-title">Konto</h2>
-      <p class="avatar-description">Zaktualizuj dane dotyczące konta.</p>
+      <h2 class="profile-title">{{ 'settings.account_settings_page.account' | translate }}</h2>
+      <p class="avatar-description">{{ 'settings.account_settings_page.accountDescription' | translate }}</p>
   
       <p class="separator"></p>
   
       <!-- Email -->
       <div class="input-group">
-        <label class="title" for="email">E-mail:</label>
+        <label class="title" for="email">{{ 'settings.account_settings_page.email' | translate }}:</label>
         <div class="input-wrapper">
           <mat-icon class="ac">mail</mat-icon>
-          <input type="email" id="email" formControlName="email" placeholder="E-mail">
+          <input type="email" id="email" formControlName="email" placeholder="{{ 'settings.account_settings_page.accountDescription' | translate }}">
         </div>
         <mat-error *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
           Wprowadź poprawny adres email
@@ -19,22 +19,23 @@
   
       <!-- Aktualne hasło -->
       <div class="input-group">
-        <label class="title" for="current-password">Aktualne hasło:</label>
+        <label class="title" for="current-password">{{ 'settings.account_settings_page.currentPassword' | translate }}:</label>
         <div class="input-wrapper">
           <mat-icon class="ac">lock</mat-icon>
-          <input type="password" id="current-password" formControlName="currentPassword" placeholder="Aktualne hasło">
+          <input type="password" id="current-password" formControlName="currentPassword" placeholder="{{ 'settings.account_settings_page.currentPassword' | translate }}">
         </div>
-        <mat-error *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
-            Hasło jest wymagane
+        <mat-error *ngIf="profileForm.get('currentPassword')?.hasError('required') && (formSubmitted || profileForm.get('currentPassword')?.touched)">
+          Hasło jest wymagane
         </mat-error>
+        
       </div>
   
       <!-- Nowe hasło -->
       <div class="input-group">
-        <label class="title" for="new-password">Nowe hasło:</label>
+        <label class="title" for="new-password">{{ 'settings.account_settings_page.newPassword' | translate }}:</label>
         <div class="input-wrapper">
           <mat-icon class="ac">lock</mat-icon>
-          <input type="password" id="new-password" formControlName="newPassword" placeholder="Nowe hasło">
+          <input type="password" id="new-password" formControlName="newPassword" placeholder="{{ 'settings.account_settings_page.newPassword' | translate }}">
         </div>
         <mat-error *ngIf="profileForm.get('newPassword')?.hasError('minlength') && profileForm.get('newPassword')?.touched">
             Hasło musi mieć minimum 8 znaków
@@ -46,10 +47,10 @@
   
       <!-- Powtórz nowe hasło -->
       <div class="input-group">
-        <label class="title" for="confirm-password">Powtórz nowe hasło:</label>
+        <label class="title" for="confirm-password">{{ 'settings.account_settings_page.confirmNewPassword' | translate }}:</label>
         <div class="input-wrapper">
           <mat-icon class="ac">lock</mat-icon>
-          <input type="password" id="confirm-password" formControlName="confirmPassword" placeholder="Powtórz nowe hasło">
+          <input type="password" id="confirm-password" formControlName="confirmPassword" placeholder="{{ 'settings.account_settings_page.confirmNewPassword' | translate }}">
         </div>
         <mat-error *ngIf="profileForm.get('confirmPassword')?.hasError('minlength') && profileForm.get('confirmPassword')?.touched">
             Hasło musi mieć minimum 8 znaków
@@ -63,8 +64,8 @@
       </div>
       
       <div class="footer-buttons-container">
-        <button mat-button class="save-button footer-button" type="submit" [disabled]="profileForm.invalid">Zapisz profil</button>
-        <button mat-button class="delete-account-button footer-button" type="button" (click)="deleteAccount()">Usuń konto</button>
+        <button mat-button class="save-button footer-button" type="submit">{{ 'settings.saveProfile' | translate }}</button> <!-- [disabled]="profileForm.invalid" -->
+        <!-- <button mat-button class="delete-account-button footer-button" type="button" (click)="deleteAccount()">Usuń konto</button> -->
       </div>  
     </div>
 </form>

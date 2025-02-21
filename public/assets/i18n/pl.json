@@ -42,10 +42,6 @@
         "rememberedPassword": "Pamiętasz hasło?",
         "backToLogin": "Wróc do logownia"
     },
-    "search-result": {
-        "serachResult": "WYNIKI WYSZUKIWANIA",
-        "notFound": "Nie znaleziono figurek."
-    },
     "admin_panel": {
         "dashboard": "Panel Główny",
         "management": "Zarządzanie"
@@ -55,17 +51,28 @@
         "profile": "Profil",
         "notifications": "Powiadomienia",
         "account": "Konto",
-
-        "account_settings_page": {
-            "select_photo": "Wybierz zdjęcie",
-            "change": "Zmień",
-            "delete_account": "Usuń Konto",
-            "cancel": "Anuluj",
-            "save": "Zapisz"
+        "profile_settings_page": {
+            "profile": "Twój Profil",
+            "showYourself": "Pokaż, jak będą cię widzieć inni na stronie.",
+            "yourAvatar": "Twój avatar:",
+            "selectPhoto": "Prześlij zdjęcie...",
+            "deletePhoto": "Usuń zdjęcie",
+            "photoDescription": "Ustaw swój avatar.",
+            "username": "Nazwa użytkownika:",
+            "usernameDescription": "Zmiana nazwy użytkownika jest możliwa tylko raz na 30 dni."
         },
         "notifications_page": {
             "notifications": "Powiadomienia"
-        }
+        },
+        "account_settings_page": {
+            "account": "Konto",
+            "accountDescription": "Zaktualizuj dane dotyczące konta.",
+            "email": "E-mail",
+            "currentPassword": "Aktualne hasło",
+            "newPassword": "Nowe hasło",
+            "confirmNewPassword": "Powtórz nowe hasło"
+        },
+        "saveProfile": "Zapisz profil"
     }
 }
   

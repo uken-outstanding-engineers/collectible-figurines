@@ -65,11 +65,6 @@ export class FigureComponent {
         this.userId = user.id;
       }
     });
-
-    this.loadFigurePropertiesForSingle(1, ['isLiked', 'isWanted', 'isOwned'], ['liked', 'wanted', 'owned']);
-    // loadFiguresPropertyFigurine(this.userId, this.figureListService, this.figures, 'isLiked', 'liked');
-    // loadFiguresPropertyFigurine(this.userId, this.figureListService, this.figures, 'isWanted', 'wanted');
-    // loadFiguresPropertyFigurine(this.userId, this.figureListService, this.figures, 'isOwned', 'owned');
   }
 
   loadFigureDetails(id: number): void {
@@ -79,6 +74,7 @@ export class FigureComponent {
         this.currentImageUrl = this.apiUrl + figure.imageUrl;
 
         this.loadStatistics();
+        this.loadFigurePropertiesForSingle(1, ['isLiked', 'isWanted', 'isOwned'], ['liked', 'wanted', 'owned']);
       } else {
         console.error('Figure not found');
       }
@@ -118,10 +114,8 @@ export class FigureComponent {
         const listKey = listKeys[index];
         if (lists[listKey]) {
           const figureIds = lists[listKey].map(figurine => figurine.id).filter(id => id !== null) as number[];
-  
-          const figure = this.figure;
-          if (figure && figure.id !== null) {
-            figure[property] = figureIds.includes(figure.id);
+          if (this.figure && this.figure.id !== null) {
+            this.figure[property] = figureIds.includes(this.figure.id);
           }
         }
       });

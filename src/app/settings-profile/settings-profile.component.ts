@@ -83,7 +83,15 @@ export class SettingsProfileComponent {
 
   onAvatarSelected(event: any): void {
     const file = event.target.files[0];
+    const MAX_SIZE_MB = 1024;
+    const MAX_SIZE_BYTES = MAX_SIZE_MB * MAX_SIZE_MB;
+
     if (file) {
+      if (file.size > MAX_SIZE_BYTES) {
+        this.snackBarService.showError(`Plik jest za duży, maksymalny rozmiar to ${MAX_SIZE_MB / 1024}MB.`);
+        return;
+      }
+
       this.selectedFile = file;
 
       const reader = new FileReader();
