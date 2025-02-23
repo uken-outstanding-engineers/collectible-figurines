@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateService } from '@ngx-translate/core';
 
 import { Figure } from '../api/figure.model';
 import { FigureService } from '../api/figure.service';
@@ -11,6 +12,8 @@ import { FigureListService } from '../api/figure-list.service';
 import { API_URL } from '../api/api-url';
 import { UserService } from '../api/user.service';
 import { toggleListActiveFigurine } from '../services/figurine-status.service';
+import { TranslationService } from '../services/translation.service';
+
 
 @Component({
   selector: 'app-figure',
@@ -27,7 +30,8 @@ import { toggleListActiveFigurine } from '../services/figurine-status.service';
 })
 export class FigureComponent {
   apiUrl = API_URL.BASE_URL;
-  
+  translatedTexts: { [key: string]: string } = {};
+
   userId: number | null = null;
 
   figure: Figure | undefined;
@@ -40,12 +44,12 @@ export class FigureComponent {
     Owned: 0
   };
 
-
   constructor(
     private route: ActivatedRoute,
     private figureService: FigureService,
     private userService: UserService,
     private figureListService: FigureListService,
+    private translationService: TranslationService,
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +60,7 @@ export class FigureComponent {
     });
 
     this.figureService.getFigures().subscribe((figures) => {
-      this.recommendedFigures = figures.slice(0, 12); //ulepszyć
+      this.recommendedFigures = figures.slice(0, 12); //upgrade
       this.calculateFiguresPerPage();
     });
 
@@ -64,6 +68,10 @@ export class FigureComponent {
       if (user) {
         this.userId = user.id;
       }
+    });
+
+    this.translationService.translations$.subscribe(translations => {
+      this.translatedTexts = translations['figurine']|| {};
     });
   }
 

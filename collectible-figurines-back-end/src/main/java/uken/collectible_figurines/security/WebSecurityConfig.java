@@ -56,10 +56,10 @@ public class WebSecurityConfig {
         "/api/figurines/all",
         "api/fandoms/all",
         "api/figurines/count/**",
-        "api/images/**",
-        "/swagger-ui/**",
-        "/v3/api-docs/**",
-        "/swagger-ui.html"
+        "api/images/**"
+//        "/swagger-ui/**",
+//        "/v3/api-docs/**",
+//        "/swagger-ui.html"
       ).permitAll()
       .requestMatchers(
         "/api/users/all",

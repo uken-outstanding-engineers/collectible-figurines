@@ -4,6 +4,18 @@
         "variants": "VARIANTS",
         "license": "LICENSE"
     },
+    "figurine": {
+        "name": "Name",
+        "series": "Series",
+        "liked": "Liked",
+        "wanted": "Wanted",
+        "owned": "Owned",
+        "statistics": "Statistics",
+        "statisticsLiked": "Liked",
+        "statisticsWanted": "Wanted",
+        "statisticsOwned": "Owned",
+        "recommendedFigures": "Recommended Figurines"
+    },
     "navbar": {
         "collectible_figures": "Collectible Figurines",
         "search_placeholder": "Search...",
@@ -44,14 +56,80 @@
     },
     "admin_panel": {
         "dashboard": "Dashboard",
-        "management": "Management"
+        "management": "Management",
+        "adminPanel": "Admin Panel",
+        "admin_menu": {
+            "collectibleFigurines": "Collectible Figurines",
+            "figurinesList": "Figurines list",
+            "fandomsList": "Fandoms list",
+            "users": "Users",
+            "usersList": "Users list"
+        },
+        "dashboard_page": {
+            "totalFigurines": "Total Figurines",
+            "totalUsers": "Total Users",
+            "activeUsers": "Active Users",
+            "lastMonth": "Last Month",
+            "goToFigurines": "Go to Figurines",
+            "goToFadndoms": "Go to Fandoms",
+            "goToUsers": "Go to Users"
+        },
+        "figurines_list_page": {
+            "title": "List of Collectible Figurines",
+            "description": "Browsing and managing the database of collectible figurines",
+            "image": "Image",
+            "name": "Name",
+            "series": "Series",
+            "variants": "Variants",
+            "action": "Action",
+            "number": "Number",
+            "fandom": "Fandom", 
+            "addButton": "Add Figurine",
+            "editButton": "Edit",
+            "deleteButton": "Delete",
+            "deleteConfirmation": "Are you sure you want to delete",
+            "addFigurine": "Add Figurine",
+            "editFigurine": "Edit Figurine",
+            "clickOrDragDropImage": "Click or drag and drop the image into the box",
+            "clickOrDragDropHoverImage": "Click or drag and drop the image without the box",
+            "selectFandom": "Check, if series = fandom (fandom ≠ none).",
+            "noneFandomLabel": "None Fandom",
+            "selectVariants": "Select Variants",
+            "cancelButton": "Cancel",
+            "saveButton": "Save",
+            "yesButton": "Yes",
+            "noButton": "No",
+            "confirm": "Confirm",
+            "search": "Search..."
+        },
+        "fandoms_list_page": {
+            "title": "List of Fandoms of Collectible Figurines",
+            "description": "Browsing and managing the database of collectible figurines fandoms",
+            "image": "Image",
+            "name": "Name",
+            "action": "Action",
+            "addButton": "Add Fandom",
+            "editButton": "Edit",
+            "deleteButton": "Delete",
+            "cancelButton": "Cancel",
+            "saveButton": "Save",
+            "yesButton": "Yes",
+            "noButton": "No",
+            "confirm": "Confirm",
+            "search": "Search..."
+        }
+    },
+    "profile_page": {
+        "liked": "Liked",
+        "wanted": "Wanted",
+        "owned": "Owned",
+        "favourites": "Favourites"
     },
     "settings": {
         "settings": "Settings",
         "profile": "Profile",
         "notifications": "Notifications",
         "account": "Account",
-
         "profile_settings_page": {
             "profile": "Your Profile",
             "showYourself": "See how others will view you on the site.",
@@ -60,7 +138,10 @@
             "deletePhoto": "Delete photo",
             "photoDescription": "Set your avatar.",
             "username": "Username:",
-            "usernameDescription": "Username change is only possible once every 30 days."
+            "usernameDescription": "Username change is only possible once every 30 days.",
+            "nothingChanged": "Nothing has been changed.",
+            "updatedProfile": "The profile has been updated.",
+            "maximumSizeFile": "The file is too large, the maximum size is"
         },
         "notifications_page": {
             "notifications": "Notifications"
@@ -71,7 +152,15 @@
             "email": "E-mail",
             "currentPassword": "Current password",
             "newPassword": "New password",
-            "confirmNewPassword": "Confirm new password"
+            "confirmNewPassword": "Confirm new password",
+            "validEmail": "Enter a valid email address.",
+            "validPassword": "Password is required.",
+            "validPasswordMinLenght": "Password must be at least 8 characters long.",
+            "validPasswordBoth": "Both password fields are required.", 
+            "validConfirmPassword": "The passwords do not match.",
+            "wrongPassword": "Wrong password.",
+            "unexpectedError": "Unexpected error.",
+            "updatedAccount": "The account has been updated."
         },
         "saveProfile": "Save profile"
     }

@@ -9,15 +9,15 @@
         <h2 class="username">{{ user?.username }}</h2>
         <div class="stats">
             <div class="stat">
-                <span class="stat-label">Polubione:</span>
+                <span class="stat-label">{{ translatedTexts["liked"] }}:</span>
                 <span class="stat-value">{{ stats.liked }}</span>
             </div>
             <div class="stat">
-                <span class="stat-label">Szukane:</span>
+                <span class="stat-label">{{ translatedTexts["wanted"] }}:</span>
                 <span class="stat-value">{{ stats.wanted }}</span>
             </div>
             <div class="stat">
-                <span class="stat-label">Posiadane:</span>
+                <span class="stat-label">{{ translatedTexts["owned"] }}:</span>
                 <span class="stat-value">{{ stats.owned }}</span>
             </div>
         </div>
@@ -26,13 +26,13 @@
 
 <div class="buttons-box">
     <button class="btn" id="favorite" (click)="setActive('liked')" [class.active]="activeItem === 'liked'">
-      Ulubione
+        {{ translatedTexts["favourites"] }}
     </button>
     <button class="btn" id="wanted" (click)="setActive('wanted')" [class.active]="activeItem === 'wanted'">
-      Szukane
+        {{ translatedTexts["wanted"] }}
     </button>
     <button class="btn" id="owned" (click)="setActive('owned')" [class.active]="activeItem === 'owned'">
-      Posiadane
+        {{ translatedTexts["owned"] }}
     </button>
 </div>
   

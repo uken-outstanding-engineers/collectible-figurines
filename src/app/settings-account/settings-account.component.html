@@ -13,7 +13,7 @@
           <input type="email" id="email" formControlName="email" placeholder="{{ 'settings.account_settings_page.accountDescription' | translate }}">
         </div>
         <mat-error *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
-          Wprowadź poprawny adres email
+          {{ translatedTexts["validEmail"] }}
         </mat-error>         
       </div>
   
@@ -25,7 +25,7 @@
           <input type="password" id="current-password" formControlName="currentPassword" placeholder="{{ 'settings.account_settings_page.currentPassword' | translate }}">
         </div>
         <mat-error *ngIf="profileForm.get('currentPassword')?.hasError('required') && (formSubmitted || profileForm.get('currentPassword')?.touched)">
-          Hasło jest wymagane
+          {{ translatedTexts["validPassword"] }}
         </mat-error>
         
       </div>
@@ -38,10 +38,10 @@
           <input type="password" id="new-password" formControlName="newPassword" placeholder="{{ 'settings.account_settings_page.newPassword' | translate }}">
         </div>
         <mat-error *ngIf="profileForm.get('newPassword')?.hasError('minlength') && profileForm.get('newPassword')?.touched">
-            Hasło musi mieć minimum 8 znaków
+          {{ translatedTexts["validPasswordMinLenght"] }}
         </mat-error>
         <mat-error *ngIf="profileForm.get('newPassword')?.hasError('requiredIfOtherExists')">
-            Oba pola hasła muszą być wypełnione
+          {{ translatedTexts["validPasswordBoth"] }}
         </mat-error>
       </div>
   
@@ -53,13 +53,13 @@
           <input type="password" id="confirm-password" formControlName="confirmPassword" placeholder="{{ 'settings.account_settings_page.confirmNewPassword' | translate }}">
         </div>
         <mat-error *ngIf="profileForm.get('confirmPassword')?.hasError('minlength') && profileForm.get('confirmPassword')?.touched">
-            Hasło musi mieć minimum 8 znaków
+          {{ translatedTexts["validPasswordMinLenght"] }}
         </mat-error>
         <mat-error *ngIf="profileForm.get('confirmPassword')?.hasError('mismatch')">
-          Hasła nie są identyczne
+          {{ translatedTexts["validPasswordBoth"] }}
         </mat-error>
         <mat-error *ngIf="profileForm.get('confirmPassword')?.hasError('requiredIfOtherExists')">
-            Oba pola hasła muszą być wypełnione
+          {{ translatedTexts["validConfirmPassword"] }}
         </mat-error>
       </div>
       

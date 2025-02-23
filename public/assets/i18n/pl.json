@@ -4,6 +4,18 @@
         "variants": "WARIANTY",
         "license": "LICENCJA"
     },
+    "figurine": {
+        "name": "Nazwa",
+        "series": "Seria",
+        "liked": "Lubię",
+        "wanted": "Szukam",
+        "owned": "Posiadam",
+        "statistics": "Statystyki",
+        "statisticsLiked": "Polubione",
+        "statisticsWanted": "Chciane",
+        "statisticsOwned": "Posiadane",
+        "recommendedFigures": "Polecane Figurki"
+    },
     "navbar": {
         "collectible_figures": "Figurki Kolekcjonerskie",
         "search_placeholder": "Szukaj...",
@@ -44,7 +56,58 @@
     },
     "admin_panel": {
         "dashboard": "Panel Główny",
-        "management": "Zarządzanie"
+        "management": "Zarządzanie",
+        "adminPanel": "Panel Administratora",
+        "admin_menu": {
+            "collectibleFigurines": "Figurki Kolekcjonerskie",
+            "figurinesList": "Lista Figurek",
+            "fandomsList": "Lista Fandomów",
+            "users": "Użytkownicy",
+            "usersList": "Lista użytkowników"
+        },
+        "dashboard_page": {
+            "totalFigurines": "Liczba Figurek",
+            "totalUsers": "Liczba Użytkowników",
+            "activeUsers": "Aktywni Użytkownicy",
+            "lastMonth": "Ostatni Miesiąc",
+            "goToFigurines": "Lista Figurek",
+            "goToFadndoms": "Lista Fandomów",
+            "goToUsers": "Lista Użytkowników"
+        },
+        "figurines_list_page": {
+            "title": "Lista Figurek Kolekcjonerskich",
+            "description": "Przeglądanie i zarządzanie bazą figurek kolekcjonerskich",
+            "image": "Zdjęcie",
+            "name": "Nazwa",
+            "series": "Seria",
+            "variants": "Warianty",
+            "action": "Operacja",
+            "number": "Numer",
+            "fandom": "Fandom", 
+            "addButton": "Dodaj Figurkę",
+            "editButton": "Edytuj",
+            "deleteButton": "Usuń",
+            "deleteConfirmation": "Czy na pewno chcesz usunąć",
+            "addFigurine": "Dodaj Figurkę",
+            "editFigurine": "Edytuj Figurkę",
+            "clickOrDragDropImage": "Kliknij lub przeciągnij i upuść zdjęcie w pudełku",
+            "clickOrDragDropHoverImage": "Kliknij lub przeciągnij i upuść zdjęcie bez pudłka",
+            "selectFandom": "Zaznacz, jeśli seria = fandom (fandom ≠ none).",
+            "noneFandomLabel": "Brak Fandomu",
+            "selectVariants": "Wybierz warianty",
+            "cancelButton": "Anuluj",
+            "saveButton": "Zapisz",
+            "yesButton": "Tak",
+            "noButton": "Nie",
+            "confirm": "Potwiedź",
+            "search": "Szukaj..."
+        }
+    },
+    "profile_page": {
+        "liked": "Polubione",
+        "wanted": "Szukane",
+        "owned": "Posiadane",
+        "favourites": "Ulubione"
     },
     "settings": {
         "settings": "Ustawienia",
@@ -59,7 +122,10 @@
             "deletePhoto": "Usuń zdjęcie",
             "photoDescription": "Ustaw swój avatar.",
             "username": "Nazwa użytkownika:",
-            "usernameDescription": "Zmiana nazwy użytkownika jest możliwa tylko raz na 30 dni."
+            "usernameDescription": "Zmiana nazwy użytkownika jest możliwa tylko raz na 30 dni.",
+            "nothingChanged": "Nic nie zostało zmienione.",
+            "updatedProfile": "Profil został zaktualizowany.",
+            "maximumSizeFile": "Plik jest za duży, maksymalny rozmiar to"
         },
         "notifications_page": {
             "notifications": "Powiadomienia"
@@ -70,7 +136,15 @@
             "email": "E-mail",
             "currentPassword": "Aktualne hasło",
             "newPassword": "Nowe hasło",
-            "confirmNewPassword": "Powtórz nowe hasło"
+            "confirmNewPassword": "Powtórz nowe hasło",
+            "validEmail": "Wprowadź poprawny adres email.",
+            "validPassword": "Hasło jest wymagane.",
+            "validPasswordMinLenght": "Hasło musi mieć minimum 8 znaków.",
+            "validPasswordBoth": "Oba pola hasła muszą być wypełnione.", 
+            "validConfirmPassword": "Oba pola hasła muszą być wypełnione.",
+            "wrongPassword": "Nieprawidłowe hasło.",
+            "unexpectedError": "Wystąpił nieoczekiwany błąd.",
+            "updatedAccount": "Konto zostało zaktualizowane"
         },
         "saveProfile": "Zapisz profil"
     }

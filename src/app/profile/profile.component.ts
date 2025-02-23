@@ -10,6 +10,7 @@ import { User } from '../api/user.model';
 import { API_URL } from '../api/api-url';
 import { Figure } from '../api/figure.model';
 import { FigureListService } from '../api/figure-list.service';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-profile',
@@ -26,6 +27,7 @@ import { FigureListService } from '../api/figure-list.service';
 })
 export class ProfileComponent {
   apiUrl = API_URL.BASE_URL;
+  translatedTexts: { [key: string]: string } = {};
 
   user: User | null = null;
   stats = { liked: 0, wanted: 0, owned: 0 };
@@ -35,15 +37,18 @@ export class ProfileComponent {
 
   constructor(
     private figureListService: FigureListService,
-    private userService: UserService
+    private userService: UserService,
+    private translationService: TranslationService,
   ) {}
 
   ngOnInit(): void {
-    // this.userService.getCurrentUser().subscribe((user: User) => {
-    //   this.user = user;
-    // });
+    this.userService.getLoggedInUser().subscribe(user => {
+      this.user = user;
+    });
 
-    this.user = this.userService.getUser();
+    this.translationService.translations$.subscribe(translations => {
+      this.translatedTexts = translations['profile_page'] || {};
+    });
     
     if(this.user) {
       this.userService.getUserStats(this.user.id).subscribe(

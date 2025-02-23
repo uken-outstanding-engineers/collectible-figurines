@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import { SnackbarService } from '../services/snackbar.service';
 import { API_URL } from '../api/api-url';
 import { User } from '../api/user.model';
 import { UserService } from '../api/user.service';
+import { TranslationService } from '../services/translation.service';
 
 
 @Component({
@@ -26,20 +27,26 @@ import { UserService } from '../api/user.service';
 })
 export class SettingsProfileComponent {
   apiUrl = API_URL.BASE_URL;
-  
+  translatedTexts: { [key: string]: string } = {};
+
   user: User | null = null;;
-  photoBefore: boolean = false;
+  deletedPhoto: boolean = false;
   isDisabledUsername: boolean = true;
 
   constructor(
     private userService: UserService,
-    private snackBarService: SnackbarService
+    private snackBarService: SnackbarService,
+    private translationService: TranslationService,
   ) {}
 
   ngOnInit(): void {
     this.userService.getCurrentUser().subscribe((user: User) => {
       this.user = user;
     });    
+
+    this.translationService.translations$.subscribe(translations => {
+      this.translatedTexts = translations?.['settings']?.['profile_settings_page'] || {};
+    });
   }
 
   saveProfile(): void {
@@ -56,28 +63,26 @@ export class SettingsProfileComponent {
   }
 
   saveAvatar(): void {
-    //console.log(!this.selectedFile);
-    // if (this.selectedFile != null && !this.photoBefore) {
-    //   this.snackBarService.showMessage('Nic nie zostało zmienione!');
-    //   return;
-    // } 
+    if(this.selectedFile == null && !this.deletedPhoto) {
+      this.snackBarService.showMessage(this.translatedTexts["nothingChanged"]);
+      return;
+    }
 
     if(!this.user) return;
 
     if (!this.selectedFile && this.user.avatarUrl === null) { 
       this.userService.uploadAvatar(this.user.id, null).subscribe(updatedUser => {
-        this.snackBarService.showSuccess('Dane zostały zaktualizowane!');
-        this.photoBefore = false;
+        this.snackBarService.showSuccess(this.translatedTexts["updatedProfile"]);
+        this.deletedPhoto = false;
       });
       return;
     }
 
     this.userService.uploadAvatar(this.user.id, this.selectedFile).subscribe(updatedUser => {
-      //this.user!.avatarUrl = updatedUser.avatarUrl;
       this.user!.avatarUrl = this.userService.getAvatarUrl();
       this.avatarPreview = null;
-      this.photoBefore = true;
-      this.snackBarService.showSuccess('Dane zostały zaktualizowane!');
+      this.snackBarService.showSuccess(this.translatedTexts["updatedProfile"]);
+      this.deletedPhoto = false;
     });
   }
 
@@ -88,7 +93,7 @@ export class SettingsProfileComponent {
 
     if (file) {
       if (file.size > MAX_SIZE_BYTES) {
-        this.snackBarService.showError(`Plik jest za duży, maksymalny rozmiar to ${MAX_SIZE_MB / 1024}MB.`);
+        this.snackBarService.showError(this.translatedTexts["updatedProfile"], ` ${MAX_SIZE_MB / 1024}MB.`);
         return;
       }
 
@@ -106,5 +111,6 @@ export class SettingsProfileComponent {
     this.selectedFile = null;
     this.avatarPreview = null;
     this.user!.avatarUrl = null;
+    this.deletedPhoto = true;
   }
 }

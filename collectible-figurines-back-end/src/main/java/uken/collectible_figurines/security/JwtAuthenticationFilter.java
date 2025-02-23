@@ -8,7 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.IOException;

@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { FigureService } from '../api/figure.service';
 import { UserService } from '../api/user.service';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-admin-panel-dashboard',
@@ -21,16 +22,27 @@ import { UserService } from '../api/user.service';
   styleUrl: './admin-panel-dashboard.component.scss'
 })
 export class AdminPanelDashboardComponent {
+  translatedTexts: { [key: string]: string } = {};
+
   totalFigurines = 0;  
   totalUsers = 0;       
   activeUsers = 0;  
 
-  constructor(private router: Router, private figureService: FigureService, private userService: UserService) {}
+  constructor(
+    private router: Router, 
+    private figureService: FigureService, 
+    private userService: UserService,
+    private translationService: TranslationService,
+  ) {}
 
   ngOnInit(): void {
     this.loadTotalFigurines();
     this.loadTotalUsers();
     this.loadActiveUsers();
+
+    this.translationService.translations$.subscribe(translations => {
+      this.translatedTexts = translations?.['admin_panel']?.['dashboard_page'] || {};
+    });
   }
 
   loadTotalFigurines(): void {

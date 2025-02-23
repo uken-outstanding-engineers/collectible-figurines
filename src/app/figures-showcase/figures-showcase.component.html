@@ -91,7 +91,7 @@
             [ngClass]="{'active': figure.isLiked}" 
             (click)="toggleListActive(figure, 'Liked')" 
             class="action-button" 
-            matTooltip="Liked"
+            [matTooltip]='translatedTexts["liked"]'
             matTooltipPosition="above"
           >
             <mat-icon>favorite</mat-icon>
@@ -100,7 +100,7 @@
             [ngClass]="{'active': figure.isWanted}" 
             (click)="toggleListActive(figure, 'Wanted')" 
             class="action-button" 
-            matTooltip="Wanted"
+            [matTooltip]='translatedTexts["wanted"]'
             matTooltipPosition="above"
           >
             <mat-icon>star_border</mat-icon>
@@ -109,7 +109,7 @@
             [ngClass]="{'active': figure.isOwned}" 
             (click)="toggleListActive(figure, 'Owned')" 
             class="action-button"
-            matTooltip="Owned"
+            [matTooltip]='translatedTexts["owned"]'
             matTooltipPosition="above"
            >
             <mat-icon class="material-symbols-outlined">package_2</mat-icon>

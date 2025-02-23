@@ -1,20 +1,20 @@
 <div class="figurines-list-container">
   <div class="header-container">
     <div class="description">
-      <h2>List of Collectible Figurines</h2>
-      <p>Browsing and managing the database of collectible figurines</p>
+      <h2>{{ translatedTexts["title"] }}</h2>
+      <p>{{ translatedTexts["description"] }}</p>
     </div>
   
     <button mat-raised-button color="primary" (click)="openAddDialog()" class="add-figurine-button">
       <mat-icon>add</mat-icon>
-      Add Figurine
+      {{ translatedTexts["addButton"] }}
     </button>
   </div>
   
   <div class="search-container">
     <mat-form-field class="search-field" appearance="outline">
       <mat-icon matPrefix>search</mat-icon>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Search..." />
+      <input matInput (keyup)="applyFilter($event)" [placeholder]="translatedTexts['search']" />
     </mat-form-field>
   </div>
   
@@ -22,7 +22,7 @@
   <table mat-table [dataSource]="figurines" class="mat-elevation-z8 full-width-table">
     <!-- Image Column -->
     <ng-container matColumnDef="imageUrl">
-      <th mat-header-cell *matHeaderCellDef>Image</th>
+      <th mat-header-cell *matHeaderCellDef>{{ translatedTexts["image"] }}</th>
       <td mat-cell *matCellDef="let figure">
         <!-- <img [src]="figure.imageUrl" alt="{{ figure.name }}" class="figurine-image"/> -->
         <img [src]="apiUrl + figure.imageUrl" alt="figurine image">
@@ -31,19 +31,19 @@
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <th mat-header-cell *matHeaderCellDef>{{ translatedTexts["name"] }}</th>
       <td mat-cell *matCellDef="let figure">{{ figure.name }}</td>
     </ng-container>
 
     <!-- Series Column -->
     <ng-container matColumnDef="series" >
-      <th mat-header-cell *matHeaderCellDef>Series</th>
+      <th mat-header-cell *matHeaderCellDef>{{ translatedTexts["series"] }}</th>
       <td mat-cell *matCellDef="let figure">{{ figure.series }}</td>
     </ng-container>
 
     <!-- Variants Column -->
     <ng-container matColumnDef="variants">
-      <th mat-header-cell *matHeaderCellDef>Variants</th>
+      <th mat-header-cell *matHeaderCellDef>{{ translatedTexts["variants"] }}</th>
       <td mat-cell *matCellDef="let figure">
         <ng-container *ngIf="getVariants(figure).length; else noVariants">
           <span *ngFor="let variant of getVariants(figure); let isLast = last">
@@ -56,7 +56,7 @@
 
     <!-- Action Column -->
     <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <th mat-header-cell *matHeaderCellDef>{{ translatedTexts["action"] }}</th>
       <td mat-cell *matCellDef="let figure">
         <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
           <mat-icon>more_vert</mat-icon>
@@ -64,11 +64,11 @@
         <mat-menu #menu="matMenu">
           <button mat-menu-item (click)="openEditDialog(figure)">
             <mat-icon>edit</mat-icon>
-            <span>Edit</span>
+            <span>{{ translatedTexts["editButton"] }}</span>
           </button>
           <button mat-menu-item (click)="openDeleteDialog(figure.id, figure.name)">
             <mat-icon>delete</mat-icon>
-            <span>Delete</span>
+            <span>{{ translatedTexts["deleteButton"] }}</span>
           </button>
         </mat-menu>
       </td>
@@ -93,14 +93,14 @@
   <div class="dialog-backdrop" (click)="closeDeleteDialog()"></div>
   <div class="dialog">
     <button class="close-btn" (click)="closeDeleteDialog()">×</button>
-    <h2>Confirm</h2>
+    <h2>{{ translatedTexts["confirm"] }}</h2>
     <div class="warning-message">
       <mat-icon class="warning-icon">warning</mat-icon>
-      <p>Are you sure you want to delete: <strong>{{ selectedName }}</strong>?</p>
+      <p>{{ translatedTexts["deleteConfirmation"] }}: <strong>{{ selectedName }}</strong>?</p>
     </div>
     <div class="button-group">
-      <button class="no" (click)="closeDeleteDialog()">No</button>
-      <button class="yes" (click)="confirmDelete()">Yes</button>
+      <button class="no" (click)="closeDeleteDialog()">{{ translatedTexts["noButton"] }}</button>
+      <button class="yes" (click)="confirmDelete()">{{ translatedTexts["yesButton"] }}</button>
     </div>
   </div>
 </div>
@@ -108,8 +108,8 @@
 <div class="dialog-edit-container" *ngIf="editDialogVisible">
   <div class="dialog-backdrop" (click)="closeEditDialog()"></div>
   <div class="dialog">
-    <h2 *ngIf="!editFigure?.id">Add Figurine</h2>
-    <h2 *ngIf="editFigure?.id">Edit Figurine</h2>
+    <h2 *ngIf="!editFigure?.id">{{ translatedTexts["addFigurine"] }}</h2>
+    <h2 *ngIf="editFigure?.id">{{ translatedTexts["editFigurine"] }}</h2>
     <form (ngSubmit)="saveChanges()" *ngIf="editFigure" #editForm="ngForm">
       
 
@@ -123,7 +123,7 @@
           [class.dragging]="isDraggingNormal"
         >
           <div *ngIf="!editFigure.imageUrl; else imagePreview">
-            <p>Kliknij lub przeciągnij i upuść zdjęcie w pudełku</p>
+            <p>{{ translatedTexts["clickOrDragDropImage"] }}</p>
           </div>
       
           <ng-template #imagePreview>
@@ -154,7 +154,7 @@
           [class.dragging]="isDraggingHover"
         >
           <div *ngIf="!editFigure.hoverImageUrl; else hoverImagePreview">
-            <p>Kliknij lub przeciągnij i upuść zdjęcie bez pudłka</p>
+            <p>{{ translatedTexts["clickOrDragDropHoverImage"] }}</p>
           </div>
       
           <ng-template #hoverImagePreview>
@@ -175,7 +175,7 @@
       </div>
       
       <div class="form-group">
-        <label for="name">Name:</label>
+        <label for="name">{{ translatedTexts["name"] }}:</label>
         <input 
           id="name"
           [(ngModel)]="editFigure.name"
@@ -186,7 +186,7 @@
       </div>
 
       <div class="form-group">
-        <label for="series">Series:</label>
+        <label for="series">{{ translatedTexts["series"] }}:</label>
         <input
           id="series"
           [(ngModel)]="editFigure.series"
@@ -201,12 +201,12 @@
         (change)="onCheckboxChange()"
         [ngModelOptions]="{standalone: true}"
         >
-          Zaznacz, jeśli series = fandom (fandom ≠ none).
+        {{ translatedTexts["selectFandom"] }}
         </mat-checkbox>         
       </div>
 
       <div class="form-group">
-        <label for="number">Number:</label>
+        <label for="number">{{ translatedTexts["number"] }}:</label>
         <input
           id="number"
           [(ngModel)]="editFigure.number"
@@ -219,12 +219,12 @@
       </div>
 
       <div class="form-group">
-        <label for="fandom">Fandom:</label>
+        <label for="fandom">{{ translatedTexts["fandom"] }}:</label>
         <mat-form-field appearance="fill" class="fandom-select-field">
-          <mat-label>None Fandom</mat-label>
+          <mat-label>{{ translatedTexts["noneFandomLabel"] }}</mat-label>
           <mat-select [(ngModel)]="editFigure['fandomId']" name="fandom">
             
-            <mat-option [value]="null">None Fandom</mat-option>
+            <mat-option [value]="null">{{ translatedTexts["noneFandomLabel"] }}</mat-option>
             
             <mat-option *ngFor="let fandom of fandoms" [value]="fandom.id">
               {{ fandom.name }}
@@ -236,7 +236,7 @@
       </div>
       
       <div class="variants-container">
-        <h3>Select Variants</h3>
+        <h3>{{ translatedTexts["selectVariants"] }}</h3>
         <div
           class="variant-option"
           *ngFor="let variant of variants"
@@ -252,8 +252,8 @@
         </div>
       </div>
       <div class="button-group">
-        <button type="button" class="no" (click)="closeEditDialog()">Cancel</button>
-        <button type="submit" class="yes">Save</button>
+        <button type="button" class="no" (click)="closeEditDialog()">{{ translatedTexts["cancelButton"] }}</button>
+        <button type="submit" class="yes">{{ translatedTexts["saveButton"] }}</button>
       </div>
     </form>
     <button class="close-btn" (click)="closeEditDialog()">×</button>

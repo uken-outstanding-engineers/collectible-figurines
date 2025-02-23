@@ -10,7 +10,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ChangeDetectorRef } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { Figure } from '../api/figure.model';
@@ -21,6 +20,8 @@ import { UserService } from '../api/user.service';
 import { Fandom } from '../api/fandom.model';
 import { API_URL } from '../api/api-url';
 import { toggleListActiveFigurine } from '../services/figurine-status.service';
+import { User } from '../api/user.model';
+import { TranslationService } from '../services/translation.service';
 
 interface FunkoNode {
   name: string;
@@ -57,6 +58,7 @@ interface FunkoFlatNode {
 })
 export class FiguresShowcaseComponent implements OnInit {
   apiUrl = API_URL.BASE_URL;
+  translatedTexts: { [key: string]: string } = {};
   
   constructor(
     private figureService: FigureService, 
@@ -65,12 +67,18 @@ export class FiguresShowcaseComponent implements OnInit {
     private userService: UserService,
     private route: ActivatedRoute,
     private translate: TranslateService,
-    private changeDetectorRef: ChangeDetectorRef
+    private translationService: TranslationService,
   ) {
     this.setTreeData();
 
+    this.translationService.translations$.subscribe(translations => {
+      this.translatedTexts = translations['figurine']|| {};
+    });
+
     this.translate.onLangChange.subscribe(() => {
-      this.setTreeData();
+      this.translate.getTranslation(this.translate.currentLang).subscribe(translations => {
+        this.setTreeData();
+      });
     });
   }
 
@@ -160,14 +168,9 @@ export class FiguresShowcaseComponent implements OnInit {
 
   ngOnInit(): void {
     // User
-    // this.userService.getLoggedInUser().subscribe(user => {
-    //   if (user) {
-    //     this.userId = user.id;
-    //     console.log(user);
-    //   }
-    // });
-
-    this.userId = this.userService.getUserId();
+    this.userService.getCurrentUser().subscribe((user: User) => {
+      this.userId = user.id;
+    });
 
     //Fandoms
     this.fandomService.getFandoms().subscribe(fandoms => {

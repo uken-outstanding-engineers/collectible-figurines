@@ -38,7 +38,7 @@
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>{{ sidenav.opened ? 'menu_open' : 'menu' }}</mat-icon>
       </button>
-      <span class="path">Admin Panel</span>
+      <span class="path">{{ 'admin_panel.adminPanel' | translate }}</span>
     </div>
   
     <router-outlet></router-outlet>

@@ -6,12 +6,13 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormsModule, NgForm, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { User } from '../api/user.model';
 import { UserService } from '../api/user.service';
 import { API_URL } from '../api/api-url';
 import { SnackbarService } from '../services/snackbar.service';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-settings-account',
@@ -30,6 +31,7 @@ import { SnackbarService } from '../services/snackbar.service';
 })
 export class SettingsAccountComponent {
   apiUrl = API_URL.BASE_URL;
+  translatedTexts: { [key: string]: string } = {};
 
   user: User | null = null;
 
@@ -40,7 +42,8 @@ export class SettingsAccountComponent {
     private fb: FormBuilder, 
     private userService: UserService,
     private snackBar: MatSnackBar,
-    private snackBarService: SnackbarService
+    private snackBarService: SnackbarService,
+    private translationService: TranslationService,
   ) {
     this.profileForm = this.fb.group(
       {
@@ -61,8 +64,11 @@ export class SettingsAccountComponent {
       this.user = user;
       this.profileForm.patchValue({ email: user.email });
     });
-    //this.user = this.userService.getUser();
-    //this.profileForm.patchValue({ email: this.userService.getEmail() });
+
+    this.translationService.translations$.subscribe(translations => {
+      this.translatedTexts = translations?.['settings']?.['account_settings_page'] || {};
+    });
+
   }
 
   passwordsMatch(form: FormGroup) {
@@ -107,30 +113,30 @@ export class SettingsAccountComponent {
       this.userService.updateUserAccount(this.user.id, formData).subscribe(response => {
         if (response?.error) {
           if (response.error === 'WRONG_PASSWORD') {
-            this.snackBarService.showError('Nieprawidłowe hasło.');
+            this.snackBarService.showError(this.translatedTexts["wrongPassword"]);
           }
           else {
-            this.snackBarService.showError('Wystąpił nieoczekiwany błąd!');
+            this.snackBarService.showError(this.translatedTexts["unexpectedError"]);
           }
           return;
         }
 
-        this.snackBarService.showSuccess('Konto zostało zaktualizowane!');
-        
-        //this.profileForm.reset();
+        this.snackBarService.showSuccess(this.translatedTexts["updatedAccount"]);    
 
         this.profileForm.get('currentPassword')?.reset();
         this.profileForm.get('newPassword')?.reset();
         this.profileForm.get('confirmPassword')?.reset();
+
+        this.formSubmitted = false;
       });
     }
   }
 
-  deleteAccount() {
-    if (confirm("Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć!")) {
-      console.log("Konto usunięte");
-    }
-  }
+  // deleteAccount() {
+  //   if (confirm("Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć!")) {
+  //     console.log("Konto usunięte");
+  //   }
+  // }
   
 }
 

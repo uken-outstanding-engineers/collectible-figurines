@@ -21,6 +21,8 @@ import { Fandom } from '../api/fandom.model';
 import { API_URL } from '../api/api-url';
 import { AdminPanelService } from '../services/admin-panel.service';
 import { SnackbarService } from '../services/snackbar.service';
+import { TranslationService } from '../services/translation.service';
+import { transition } from '@angular/animations';
 
 @Component({
   selector: 'app-admin-panel-figurines-list',
@@ -46,6 +48,7 @@ import { SnackbarService } from '../services/snackbar.service';
 export class AdminPanelFigurinesListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   apiUrl = API_URL.BASE_URL;
+  translatedTexts: { [key: string]: string } = {};
 
   figurines = new MatTableDataSource<Figure>([]);
   fandoms: Fandom[] = []; 
@@ -62,9 +65,9 @@ export class AdminPanelFigurinesListComponent {
   constructor(
     private figureService: FigureService, 
     private fandomService: FandomService,
-    private fb: FormBuilder,
     private adminPanelService: AdminPanelService,
-    private snackBarService: SnackbarService
+    private snackBarService: SnackbarService,
+    private translationService: TranslationService,
   ) {
     //Figurines
     this.subscription = this.figureService.getFigures().subscribe((data: Figure[]) => {
@@ -74,6 +77,11 @@ export class AdminPanelFigurinesListComponent {
     //Fandoms
     this.fandomService.getFandoms().subscribe(fandoms => {
       this.fandoms = fandoms; 
+    });
+
+    this.translationService.translations$.subscribe(translations => {
+      this.translatedTexts = translations?.['admin_panel']?.['figurines_list_page'] || {};
+      console.log(this.translatedTexts);
     });
   }
 

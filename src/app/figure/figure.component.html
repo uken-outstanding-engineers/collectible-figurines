@@ -22,10 +22,10 @@
     </div>
     
     <div class="figure-info">
-        <h2>Name: {{ figure.name }} 
+        <h2>{{ translatedTexts["name"] }}: {{ figure.name }} 
             <span *ngIf="figure.number">#{{ figure.number }}</span>  
             <br>
-            Series: {{ figure.series }}
+            {{ translatedTexts["series"] }}: {{ figure.series }}
         </h2>
         <ul>
             <li *ngIf="figure.chase">Chase Edition</li>
@@ -40,7 +40,7 @@
             <button mat-mini-fab class="action-button">
                 <mat-icon>favorite</mat-icon>
             </button>
-            <span class="action-label">Liked</span>
+            <span class="action-label">{{ translatedTexts["liked"] }}</span>
           </div>
 
           <div class="action-button-container" 
@@ -49,7 +49,7 @@
             <button mat-mini-fab class="action-button">
                 <mat-icon>star_border</mat-icon>
             </button>
-            <span class="action-label">Wanted</span>
+            <span class="action-label">{{ translatedTexts["wanted"] }}</span>
           </div>
 
           <div class="action-button-container" 
@@ -58,33 +58,33 @@
             <button mat-mini-fab class="action-button">
               <mat-icon class="material-symbols-outlined">package_2</mat-icon>
             </button>
-            <span class="action-label">Owned</span>
+            <span class="action-label">{{ translatedTexts["owned"] }}</span>
           </div>
         </mat-card-actions> 
     </div>
 </div>
 
 <div class="stat-info">
-  <h1>Statystyki</h1>
+  <h1>{{ translatedTexts["statistics"] }}</h1>
   <div class="stat-item">
-    <span class="stat-title">Liked:</span>
+    <span class="stat-title">{{ translatedTexts["statisticsLiked"] }}:</span>
     <span class="stat-value">{{ this.statsCounts['Liked'] }}</span> 
   </div>
   
   <div class="stat-item">
-    <span class="stat-title">Wanted:</span>
+    <span class="stat-title">{{ translatedTexts["statisticsWanted"] }}:</span>
     <span class="stat-value">{{ this.statsCounts['Wanted'] }}</span> 
   </div>
 
   <div class="stat-item">
-    <span class="stat-title">Owned:</span>
+    <span class="stat-title">{{ translatedTexts["statisticsOwned"] }}:</span>
     <span class="stat-value">{{ this.statsCounts['Owned'] }}</span> 
   </div>
 </div>
 
 <div class="recommended-figurines">
     <div class="header-container">
-        <h3>Polecane Figurki</h3>
+        <h3>{{ translatedTexts["recommendedFigures"] }}</h3>
       
         <div class="controls">
           <button class="arrow left-arrow" (click)="scrollLeft()">
