@@ -33,7 +33,11 @@
         "newUser": "Nowy użytkownik?",
         "createAccount": "Utwórz swoje konto",
         "lostPassword": "Zapomniałeś hasła?",
-        "recoverPassword": "Odzyskaj hasło"
+        "recoverPassword": "Odzyskaj hasło",
+        "snackBarMessages": {
+            "emptyFieldsError": "Wszystkie pola muszą być wypełnione.",
+            "invalidCredentialsError": "Nieprawidłowa nazwa użytkownika lub hasło."
+        }
     },
     "register": {
         "register": "ZAREJESTRUJ SIĘ",
@@ -44,7 +48,12 @@
         "confirmPassword": "Potwierdź hasło",
         "registerButton": "ZAREJESTRUJ ",
         "alreadyAccount": "Masz już konto?",
-        "loginHere": "Zaloguj się"
+        "loginHere": "Zaloguj się",
+        "snackBarMessages": {
+            "unknownError": "Wystąpił nieznany błąd. Spróbuj ponownie.",
+            "usernameTaken": "Nazwa użytkownika jest już zajęta.",
+            "emailInUse": "Podany e-mail jest już używany."
+        }
     },
     "reset-password": {
         "recover": "ODZYSKIWANIE HASŁA",
@@ -100,7 +109,52 @@
             "yesButton": "Tak",
             "noButton": "Nie",
             "confirm": "Potwiedź",
-            "search": "Szukaj..."
+            "search": "Szukaj...",
+            "snackBarMessages": {
+                "emptyFieldsError": "Zdjęcia, nazwa oraz seria nie mogą być puste.",
+                "figurineUpdatedSuccess": "Figurka została zaktualizowana.",
+                "figurineAddedSuccess": "Figurka została dodana.",
+                "figurineDeletedSuccess": "Figurka została usunięta.",
+                "unexpectedError": "Oj, coś poszło nie tak.",
+                "fileTooLarge": "Plik jest za duży, maksymalny rozmiar to"
+            }
+        },
+        "fandoms_list_page": {
+            "title": "Lista Fandomów Figurek Kolekcjonerskich",
+            "description": "Przeglądanie i zarządzanie bazą fandomów figurek kolekcjonerskich",
+            "image": "Zdjęcie",
+            "name": "Nazwa",
+            "action": "Operacja",
+            "addButton": "Dodaj Fandom",
+            "editButton": "Edytuj",
+            "deleteButton": "Usuń",
+            "deleteConfirmation": "Czy na pewno chcesz usunąć",
+            "addFandom": "Dodaj Fandom",
+            "editFandom": "Edytuj Fandom",
+            "clickOrDragDropImage": "Kliknij lub przeciągnij i upuść",
+            "cancelButton": "Anuluj",
+            "saveButton": "Zapisz",
+            "yesButton": "Tak",
+            "noButton": "Nie",
+            "confirm": "Potwiedź",
+            "search": "Szukaj...",
+            "snackBarMessages": {
+                "emptyFieldsError": "Zdjęcie oraz nazwa nie mogą być puste.",
+                "fandomUpdatedSuccess": "Fandom został zaktualizowany.",
+                "fandomAddedSuccess": "Fandom został dodany.",
+                "fandomDeletedSuccess": "Fandom został usunięty.",
+                "unexpectedError": "Oj, coś poszło nie tak.",
+                "fileTooLarge": "Plik jest za duży, maksymalny rozmiar to"
+            }
+        },
+        "users_list_page": { 
+            "title": "Lista użytkowników",
+            "description": "Przeglądanie bazy użytkowników",
+            "search": "Szukaj...",
+            "avatar": "Avatar",
+            "username": "Nazwa",
+            "permission": "Uprawnienia",
+            "lastLogin": "Logowanie"
         }
     },
     "profile_page": {

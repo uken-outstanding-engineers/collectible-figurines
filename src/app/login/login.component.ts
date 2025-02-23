@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 
 import { UserService } from '../api/user.service';
 import { SnackbarService } from '../services/snackbar.service';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-login',
@@ -19,24 +20,31 @@ import { SnackbarService } from '../services/snackbar.service';
     MatButtonModule,
     MatFormFieldModule,
     TranslateModule,
-    FormsModule  
+    FormsModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+  translatedTexts: Record<string, any> = {};
+
   username: string = '';
   password: string = '';
   
   constructor(
     private userService: UserService,
     private router: Router,
-    private snackBarService: SnackbarService
-  ) {}
+    private snackBarService: SnackbarService,
+    private translationService: TranslationService,
+  ) {
+    this.translationService.translations$.subscribe(translations => {
+      this.translatedTexts = translations?.['login'] || {};
+    });
+  }
 
   login(): void { 
     if (this.username.trim() === "" || this.password.trim() === "") {
-      this.snackBarService.showError('Wszystkie pola muszą być wypełnione.');
+      this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["emptyFieldsError"]);
       return;
     }
 
@@ -44,7 +52,7 @@ export class LoginComponent {
       if (user) {
         this.router.navigate(['/figures-showcase']);
       } else {
-        this.snackBarService.showError('Nieprawidłowy nazwa użytkonika lub hasło.');
+        this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["invalidCredentialsError"]);
       }
     });
   }

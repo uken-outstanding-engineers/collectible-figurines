@@ -1,7 +1,6 @@
 package uken.collectible_figurines.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.type.ListType;
 import org.springframework.stereotype.Service;
 import uken.collectible_figurines.model.Figurine;
 import uken.collectible_figurines.model.User;

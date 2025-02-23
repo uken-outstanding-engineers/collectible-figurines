@@ -1,0 +1,17 @@
+Tam gdzie jest back-end!
+
+./gradlew clean build - buildowanie springa
+
+scp build/libs/collectible-figurines-0.0.1-collectible-figurines.jar root@83.168.71.168:/root/ - wysyłanie na serwer
+
+
+Tam gdzie jest font-end!
+
+ng build - buildowanie angulara 
+
+
+Baza danych!
+
+C:\>cd "Program Files\PostgreSQL\16\bin"
+
+pg_dump -U postgres app_collectible_figurines > C:\Users\Admin\collectible-figurines\collectible-figurines

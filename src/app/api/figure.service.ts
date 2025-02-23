@@ -45,6 +45,11 @@ export class FigureService {
     return this.http.get<number>(`${this.API_URL}/count/${figurineId}/${listType}`);
   }
 
+  // Download the recommend figure list
+  getRecommendFigurines(id: number): Observable<Figure[]> {
+    return this.http.get<Figure[]>(`${this.API_URL}/recommend/${id}`);
+  }
+
   getSearchResults(): Observable<Figure[]> {
     return this.searchResults.asObservable();
   }

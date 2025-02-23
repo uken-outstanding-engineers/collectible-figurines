@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { User } from '../api/user.model';
 import { UserService } from '../api/user.service';
 import { API_URL } from '../api/api-url';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-admin-panel-users',
@@ -36,26 +37,30 @@ import { API_URL } from '../api/api-url';
 export class AdminPanelUsersComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   apiUrl = API_URL.BASE_URL;
-  
+  translatedTexts: Record<string, any> = {};
+
   users = new MatTableDataSource<User>([]);
 
-  // displayedColumns: string[] = [
-  //   'username', 'permission', 'action',
-  // ];
   displayedColumns: string[] = [
     'avatarUrl', 'username', 'permission', 'lastLogin'
   ];
 
   private subscription: Subscription;
 
-  constructor(private userService: UserService) {
+  constructor(
+    private userService: UserService,
+    private translationService: TranslationService,
+  ) {
     this.subscription = this.userService.getUsers().subscribe((data: User[]) => {
       this.users.data = data.map(user => ({
         ...user,
-        lastLogin: new Date(user.lastLogin).toISOString().split('T')[0] // Obcina godzinę
+        lastLogin: new Date(user.lastLogin).toISOString().split('T')[0]
       }));
     });
     
+    this.translationService.translations$.subscribe(translations => {
+      this.translatedTexts = translations?.['admin_panel']?.['users_list_page'] || {};
+    });
   }
 
   ngAfterViewInit() {

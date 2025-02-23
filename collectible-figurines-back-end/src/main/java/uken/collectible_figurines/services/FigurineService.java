@@ -1,6 +1,5 @@
 package uken.collectible_figurines.services;
 
-
 import org.springframework.web.multipart.MultipartFile;
 import uken.collectible_figurines.model.Figurine;
 

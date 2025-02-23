@@ -31,7 +31,6 @@ export class UserService {
   private API_URL = `${API_URL.BASE_URL}/api/users`;
 
   private loggedInUser = new BehaviorSubject<User | null>(null);
-  //public currentUser$ = this.loggedInUser.asObservable();
 
   constructor(private http: HttpClient) {
     //this.loadUserFromStorage();

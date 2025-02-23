@@ -169,7 +169,9 @@ export class FiguresShowcaseComponent implements OnInit {
   ngOnInit(): void {
     // User
     this.userService.getCurrentUser().subscribe((user: User) => {
-      this.userId = user.id;
+      if (user) {
+        this.userId = user.id;
+      }
     });
 
     //Fandoms

@@ -48,7 +48,7 @@ import { transition } from '@angular/animations';
 export class AdminPanelFigurinesListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   apiUrl = API_URL.BASE_URL;
-  translatedTexts: { [key: string]: string } = {};
+  translatedTexts: Record<string, any> = {};
 
   figurines = new MatTableDataSource<Figure>([]);
   fandoms: Fandom[] = []; 
@@ -81,7 +81,6 @@ export class AdminPanelFigurinesListComponent {
 
     this.translationService.translations$.subscribe(translations => {
       this.translatedTexts = translations?.['admin_panel']?.['figurines_list_page'] || {};
-      console.log(this.translatedTexts);
     });
   }
 
@@ -151,11 +150,6 @@ export class AdminPanelFigurinesListComponent {
     [key: string]: any 
   }): void {
     this.editFigure = { ...figure };
-
-    // this.fandomValue = this.getFandomName(this.editFigure.fandomId);  // Pobierz nazwę fandomu
-
-    // // Ustaw checkbox na zaznaczony, jeśli fandomId istnieje
-    // this.isSeriesFandomSame = !!this.editFigure.fandomId;
     
     this.variants.forEach((variant) => {
       if (this.editFigure![variant.key] === undefined) {
@@ -205,7 +199,7 @@ export class AdminPanelFigurinesListComponent {
       ];
       
       if (requiredFields.some(field => !field)) {
-        this.snackBarService.showError('Zdjęcia, nazwa oraz seria nie mogą być puste!');
+        this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["emptyFieldsError"]);
         return;
       }
       
@@ -216,11 +210,11 @@ export class AdminPanelFigurinesListComponent {
             const index = this.figurines.data.findIndex(f => f.id === updatedFigure.id);
             this.figurines.data[index] = updatedFigure;
             this.figurines._updateChangeSubscription();
-            this.snackBarService.showSuccess('Figurka została zaktualizowana!');
+            this.snackBarService.showSuccess(this.translatedTexts["snackBarMessages"]["figurineUpdatedSuccess"]);
             this.closeEditDialog();
           },
           error => {
-            this.snackBarService.showError('Oj, coś poszło nie tak!');
+            this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["unexpectedError"]);
           }
       );
       } else {
@@ -230,10 +224,10 @@ export class AdminPanelFigurinesListComponent {
             this.figurines.data.unshift(newFigure);
             this.figurines._updateChangeSubscription();
             this.closeEditDialog();
-            this.snackBarService.showSuccess('Figurka została dodana!');
+            this.snackBarService.showSuccess(this.translatedTexts["snackBarMessages"]["figurineAddedSuccess"]);
           },
           error => {
-            this.snackBarService.showError('Oj, coś poszło nie tak!');
+            this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["unexpectedError"]);
           }
         );
       }
@@ -280,10 +274,10 @@ export class AdminPanelFigurinesListComponent {
             this.figurines._updateChangeSubscription();
           }
   
-          this.snackBarService.showSuccess('Figurka została usunięta!');
+          this.snackBarService.showSuccess(this.translatedTexts["snackBarMessages"]["figurineDeletedSuccess"]);
         },
         (error) => {
-          this.snackBarService.showError('Oj, coś poszło nie tak!');
+          this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["unexpectedError"]);
         }
       );
     }
@@ -343,7 +337,7 @@ export class AdminPanelFigurinesListComponent {
     if (file instanceof File) {
 
       if (file.size > MAX_SIZE_BYTES) {
-        this.snackBarService.showError(`Plik jest za duży, maksymalny rozmiar to ${MAX_SIZE_MB / 1024}MB.`);
+        this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["fileTooLarge"], `${MAX_SIZE_MB / 1024}MB.`);
         return;
       }
 

@@ -56,14 +56,14 @@ export class FigureComponent {
     this.route.params.subscribe(params => {
       const id = Number(params['id']);
       this.loadFigureDetails(id);
+      this.loadtRecommendFigurines(id);
       window.scrollTo(0, 0);
     });
 
-    this.figureService.getFigures().subscribe((figures) => {
-      this.recommendedFigures = figures.slice(0, 12); //upgrade
-      this.calculateFiguresPerPage();
-    });
+    console.log(this.figure);
 
+
+0 
     this.userService.getLoggedInUser().subscribe(user => {
       if (user) {
         this.userId = user.id;
@@ -86,6 +86,13 @@ export class FigureComponent {
       } else {
         console.error('Figure not found');
       }
+    });
+  }
+
+  loadtRecommendFigurines (id: number): void {
+    this.figureService.getRecommendFigurines(id).subscribe((figures) => {
+      this.recommendedFigures = figures.slice(0, 12);
+      this.calculateFiguresPerPage();
     });
   }
 

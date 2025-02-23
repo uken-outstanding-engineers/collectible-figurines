@@ -54,9 +54,10 @@ public class WebSecurityConfig {
         "/api/users/login",
         "/api/users/register",
         "/api/figurines/all",
-        "api/fandoms/all",
-        "api/figurines/count/**",
-        "api/images/**"
+        "/api/figurines/recommend/**",
+        "/api/fandoms/all",
+        "/api/figurines/count/**",
+        "/api/images/**"
 //        "/swagger-ui/**",
 //        "/v3/api-docs/**",
 //        "/swagger-ui.html"

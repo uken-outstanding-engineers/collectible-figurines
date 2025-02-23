@@ -17,6 +17,7 @@ import { FandomService } from '../api/fandom.service';
 import { API_URL } from '../api/api-url';
 import { AdminPanelService } from '../services/admin-panel.service';
 import { SnackbarService } from '../services/snackbar.service';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-admin-panel-fandoms-list',
@@ -39,6 +40,7 @@ import { SnackbarService } from '../services/snackbar.service';
 export class AdminPanelFandomsListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   apiUrl = API_URL.BASE_URL;
+  translatedTexts: Record<string, any> = {};
   
   fandoms = new MatTableDataSource<Fandom>([]);
 
@@ -51,10 +53,16 @@ export class AdminPanelFandomsListComponent {
   constructor(
     private fandomService: FandomService,
     private adminPanelService: AdminPanelService,
-    private snackBarService: SnackbarService
+    private snackBarService: SnackbarService,
+    private translationService: TranslationService,
   ) {
     this.subscription = this.fandomService.getFandoms().subscribe((data: Fandom[]) => {
       this.fandoms.data = data;
+    });
+
+    this.translationService.translations$.subscribe(translations => {
+      this.translatedTexts = translations?.['admin_panel']?.['fandoms_list_page'] || {};
+      console.log(this.translatedTexts);
     });
   }
 
@@ -118,7 +126,7 @@ export class AdminPanelFandomsListComponent {
       ];
       
       if (requiredFields.some(field => !field)) {
-        this.snackBarService.showError('Zdjęcie oraz nazwa nie mogą być puste!');
+        this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["emptyFieldsError"]);
         return;
       }
 
@@ -130,10 +138,10 @@ export class AdminPanelFandomsListComponent {
             this.fandoms.data[index] = updatedFandom;
             this.fandoms._updateChangeSubscription(); 
             this.closeEditDialog();
-            this.snackBarService.showSuccess('Fandom został zaktualizowany!');
+            this.snackBarService.showSuccess(this.translatedTexts["snackBarMessages"]["fandomUpdatedSuccess"]);
           },
           error => {
-            this.snackBarService.showError('Oj, coś poszło nie tak!');
+            this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["unexpectedError"]);
           }
         );
       } else {
@@ -143,10 +151,10 @@ export class AdminPanelFandomsListComponent {
             this.fandoms.data.unshift(newFandom);
             this.fandoms._updateChangeSubscription();
             this.closeEditDialog();
-            this.snackBarService.showSuccess('Fandom został dodany!');
+            this.snackBarService.showSuccess(this.translatedTexts["snackBarMessages"]["fandomAddedSuccess"]);
           },
           error => {
-            this.snackBarService.showError('Oj, coś poszło nie tak!');
+            this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["unexpectedError"]);
           }
         );
       }
@@ -184,10 +192,10 @@ export class AdminPanelFandomsListComponent {
             this.fandoms._updateChangeSubscription();
           }
 
-          this.snackBarService.showSuccess('Fandom został usunięty!');
+          this.snackBarService.showSuccess(this.translatedTexts["snackBarMessages"]["fandomDeletedSuccess"]);
         },
         (error) => {
-          this.snackBarService.showError('Oj, coś poszło nie tak!');
+          this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["unexpectedError"]);
         }
       );
     }
@@ -225,8 +233,16 @@ export class AdminPanelFandomsListComponent {
   }
   
   private readImage(file: File): void {
+    const MAX_SIZE_MB = 1024;
+    const MAX_SIZE_BYTES = MAX_SIZE_MB * MAX_SIZE_MB;
+
     if (file instanceof File) {
       this.selectedFile = file; 
+
+      if (file.size > MAX_SIZE_BYTES) {
+        this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["fileTooLarge"], `${MAX_SIZE_MB / 1024}MB.`);
+        return;
+      }
   
       const reader = new FileReader();
       reader.onload = (e: any) => {

@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../api/user.service';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../services/snackbar.service';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-register',
@@ -27,6 +28,8 @@ import { SnackbarService } from '../services/snackbar.service';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
+  translatedTexts: Record<string, any> = {};
+
   registerForm: FormGroup;
 
   constructor(
@@ -34,7 +37,8 @@ export class RegisterComponent {
     private userService: UserService,
     private dialog: MatDialog,
     private router: Router,
-    private snackBarService: SnackbarService
+    private snackBarService: SnackbarService,
+    private translationService: TranslationService
   ) {
     this.registerForm = this.fb.group(
       {
@@ -45,6 +49,10 @@ export class RegisterComponent {
       }, 
       { validator: this.passwordsMatch}
     );
+
+    this.translationService.translations$.subscribe(translations => {
+      this.translatedTexts = translations?.['register'] || {};
+    });
   }
 
   passwordsMatch(form: FormGroup) {
@@ -71,7 +79,7 @@ export class RegisterComponent {
     this.userService.register(username.trim(), email.trim(), password).subscribe(
       (user: any) => {
         if (user.error) {
-          this.snackBarService.showError('Wystąpił nieznany błąd. Spróbuj ponownie.');
+          this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["unknownError"]);
         } else {
           this.router.navigate(['/figures-showcase']);
         }
@@ -79,11 +87,11 @@ export class RegisterComponent {
       (error) => {
         console.log(error.message);
         if (error.message === 'USER_EXIST') {
-          this.snackBarService.showError('Nazwa użytkownika jest już zajęta.');
+          this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["usernameTaken"]);
         } else if (error.message === 'EMAIL_EXIST') {
-          this.snackBarService.showError('Podany e-mail jest już używany.');
+          this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["emailInUse"]);
         } else {
-          this.snackBarService.showError('Wystąpił błąd. Spróbuj ponownie.');
+          this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["unknownError"]);
         }
       }
     );

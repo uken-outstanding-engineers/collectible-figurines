@@ -2,10 +2,10 @@ package uken.collectible_figurines.controllers;
 
 import org.springframework.web.bind.annotation.*;
 
-
 import org.springframework.web.multipart.MultipartFile;
 import uken.collectible_figurines.model.Figurine;
 import uken.collectible_figurines.services.FigurineService;
+import uken.collectible_figurines.services.RecommendationService;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,9 +16,11 @@ import java.util.List;
 @RequestMapping("/api/figurines")
 public class FigurineController {
   private final FigurineService figurineService;
+  private final RecommendationService recommendationService;
 
-  public FigurineController(FigurineService figurineService) {
+  public FigurineController(FigurineService figurineService, RecommendationService recommendationService) {
     this.figurineService = figurineService;
+    this.recommendationService = recommendationService;
   }
 
   @GetMapping("/all")
@@ -114,5 +116,9 @@ public class FigurineController {
     return figurineService.countByTypeForFigurine(figurineId, listType.toUpperCase());
   }
 
+  @GetMapping("/recommend/{id}")
+  public List<Figurine> recommendFigurines(@PathVariable Long id) {
+    return recommendationService.recommendFigurines(id);
+  }
 
 }

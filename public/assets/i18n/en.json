@@ -33,7 +33,11 @@
         "newUser": "New user?",
         "createAccount": "Create your account",
         "lostPassword": "Lost password?",
-        "recoverPassword": "Recover password"
+        "recoverPassword": "Recover password",
+        "snackBarMessages": {
+            "emptyFieldsError": "All fields must be filled.",
+            "invalidCredentialsError": "Wrong username or password."
+        }
     },
     "register": {
         "register": "CREATE ACCOUNT",
@@ -44,7 +48,12 @@
         "confirmPassword": "Confirm password",
         "registerButton": "CREATE ACCOUNT",
         "alreadyAccount": "Already have an account?",
-        "loginHere": "Login here"
+        "loginHere": "Login here",
+        "snackBarMessages": {
+            "unknownError": "An unknown error occurred. Please try again.",
+            "usernameTaken": "Username is already taken.",
+            "emailInUse": "Email is already in use."
+        }
     },
     "reset-password": {
         "recover": "RECOVER PASSWORD",
@@ -100,7 +109,15 @@
             "yesButton": "Yes",
             "noButton": "No",
             "confirm": "Confirm",
-            "search": "Search..."
+            "search": "Search...",
+            "snackBarMessages": {
+                "emptyFieldsError": "Image, name, and series can't be empty.",
+                "figurineUpdatedSuccess": "Figurine has been updated.",
+                "figurineAddedSuccess": "Figurine has been added.",
+                "figurineDeletedSuccess": "Figurine has been deleted.",
+                "unexpectedError": "Oops, something went wrong.",
+                "fileTooLarge": "The file is too large, the maximum size is"
+            }
         },
         "fandoms_list_page": {
             "title": "List of Fandoms of Collectible Figurines",
@@ -111,12 +128,33 @@
             "addButton": "Add Fandom",
             "editButton": "Edit",
             "deleteButton": "Delete",
+            "deleteConfirmation": "Are you sure you want to delete",
+            "addFandom": "Add Fandom",
+            "editFandom": "Edit Fandom",
+            "clickOrDragDropImage": "Click or drag and drop",
             "cancelButton": "Cancel",
             "saveButton": "Save",
             "yesButton": "Yes",
             "noButton": "No",
             "confirm": "Confirm",
-            "search": "Search..."
+            "search": "Search...",
+            "snackBarMessages": {
+                "emptyFieldsError": "Image and name can't be empty.",
+                "fandomUpdatedSuccess": "Fandom has been updated.",
+                "fandomAddedSuccess": "Fandom has been added.",
+                "fandomDeletedSuccess": "Fandom has been deleted.",
+                "unexpectedError": "Oops, something went wrong.",
+                "fileTooLarge": "The file is too large, the maximum size is"
+            }
+        },
+        "users_list_page": { 
+            "title": "List of Users",
+            "description": "Browsing the database of users",
+            "search": "Search...",
+            "avatar": "Avatar",
+            "username": "Username",
+            "permission": "Permission",
+            "lastLogin": "Last Login"
         }
     },
     "profile_page": {
