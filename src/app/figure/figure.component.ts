@@ -59,11 +59,7 @@ export class FigureComponent {
       this.loadtRecommendFigurines(id);
       window.scrollTo(0, 0);
     });
-
-    console.log(this.figure);
-
-
-0 
+ 
     this.userService.getLoggedInUser().subscribe(user => {
       if (user) {
         this.userId = user.id;

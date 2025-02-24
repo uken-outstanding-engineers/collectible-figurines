@@ -171,12 +171,16 @@ export class AdminPanelFigurinesListComponent {
     this.editDialogVisible = false;
     this.editFigure = null;
 
+    this.isSeriesFandomSame = false;
+
     this.adminPanelService.closeDialog();
   }
 
   saveChanges(): void {
     if (this.editFigure) {
       const formData = new FormData();
+      this.editFigure.name = this.editFigure.name.trim().toUpperCase();
+      this.editFigure.series = this.editFigure.series.trim().toUpperCase();
   
       formData.append('figurine', new Blob([JSON.stringify(this.editFigure)], { type: 'application/json' }));
   
@@ -187,9 +191,6 @@ export class AdminPanelFigurinesListComponent {
       if (this.selectedHoverFile) {
         formData.append('hoverImageFile', this.selectedHoverFile);
       }
-
-      this.editFigure.name = this.editFigure.name.trim();
-      this.editFigure.series = this.editFigure.series.trim();
 
       const requiredFields = [
         this.editFigure.imageUrl,
@@ -237,8 +238,10 @@ export class AdminPanelFigurinesListComponent {
   onCheckboxChange() {
     if (this.editFigure) {
       if (this.isSeriesFandomSame) {
-        const fandomId = this.editFigure["fandomId"] - 1;
-        this.editFigure['series'] = this.fandoms[fandomId].name.toUpperCase();
+        const fandomId = this.editFigure["fandomId"];
+        const fandom = this.fandoms.find(f => f.id === fandomId);
+        if(fandom)
+          this.editFigure['series'] = fandom.name.toUpperCase();
       } 
     }
   }
