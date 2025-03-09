@@ -11,8 +11,15 @@
   
   <mat-form-field class="login-input" appearance="fill">
     <mat-label>{{ 'login.password' | translate }}</mat-label>
-    <input matInput [(ngModel)]="password" type="password" required>
+    <input matInput 
+           [type]="hidePassword ? 'password' : 'text'" 
+           [(ngModel)]="password" 
+           required>
+    <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+      <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
   </mat-form-field>
+  
   
   <button mat-raised-button color="primary" class="login-button" (click)="login()">{{ 'login.logInButton' | translate }}</button>
   

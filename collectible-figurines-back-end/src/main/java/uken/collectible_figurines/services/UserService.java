@@ -12,6 +12,8 @@ import java.util.Map;
 public interface UserService {
   User findByUsername(String username);
   User findByEmail(String email);
+  User findByUsernameIgnoreCase(String username);
+  User findByEmailIgnoreCase(String email);
   List<UserDTO> getAllUsers();
   boolean checkPassword(String rawPassword, String encodedPassword);
   User register(User user);

@@ -240,7 +240,7 @@ export class AdminPanelFandomsListComponent {
       this.selectedFile = file; 
 
       if (file.size > MAX_SIZE_BYTES) {
-        this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["fileTooLarge"], `${MAX_SIZE_MB / 1024}MB.`);
+        this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["fileTooLarge"] + ` ${MAX_SIZE_MB / 1024}MB.`);
         return;
       }
   

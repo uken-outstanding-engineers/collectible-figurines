@@ -41,6 +41,12 @@
       <td mat-cell *matCellDef="let figure">{{ figure.series }}</td>
     </ng-container>
 
+      <!-- Number Column -->
+      <ng-container matColumnDef="number" >
+        <th mat-header-cell *matHeaderCellDef>{{ translatedTexts["number"] }}</th>
+        <td mat-cell *matCellDef="let figure">{{ figure.number }}</td>number
+      </ng-container>
+
     <!-- Variants Column -->
     <ng-container matColumnDef="variants">
       <th mat-header-cell *matHeaderCellDef>{{ translatedTexts["variants"] }}</th>

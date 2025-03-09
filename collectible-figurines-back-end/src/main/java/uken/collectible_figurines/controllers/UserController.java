@@ -33,7 +33,7 @@ public class UserController {
 
   @PostMapping("/login")
   public TokenResponse loginUser(@RequestParam String username, @RequestParam String passwd) {
-    User user = userService.findByUsername(username.trim().toLowerCase());
+    User user = userService.findByUsernameIgnoreCase(username);
 
     if(user != null && userService.checkPassword(passwd, user.getPasswd())) {
       userService.updateLastLogin(user);
@@ -46,11 +46,11 @@ public class UserController {
 
   @PostMapping("/register")
   public Object registerUser(@RequestBody User user) {
-    if (userService.findByUsername(user.getUsername().toLowerCase()) != null) {
+    if (userService.findByUsernameIgnoreCase(user.getUsername()) != null) {
       return new ErrorUserDTO("USER_EXIST");
     }
 
-    if (userService.findByEmail(user.getEmail().toLowerCase()) != null) {
+    if (userService.findByEmailIgnoreCase(user.getEmail()) != null) {
       return new ErrorUserDTO("EMAIL_EXIST");
     }
 

@@ -57,7 +57,7 @@ export class AdminPanelFigurinesListComponent {
   fandomValue: string = '';  
 
   displayedColumns: string[] = [
-    'imageUrl', 'name', 'series', 'variants', 'action',
+    'imageUrl', 'name', 'series', 'number', 'variants', 'action',
   ];
 
   private subscription: Subscription;
@@ -340,7 +340,7 @@ export class AdminPanelFigurinesListComponent {
     if (file instanceof File) {
 
       if (file.size > MAX_SIZE_BYTES) {
-        this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["fileTooLarge"], `${MAX_SIZE_MB / 1024}MB.`);
+        this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["fileTooLarge"] + ` ${MAX_SIZE_MB / 1024}MB.`);
         return;
       }
 

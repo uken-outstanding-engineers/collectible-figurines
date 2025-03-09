@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 import { UserService } from '../api/user.service';
 import { Router } from '@angular/router';
@@ -22,13 +23,17 @@ import { TranslationService } from '../services/translation.service';
     MatButtonModule,
     MatFormFieldModule,
     TranslateModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIconModule
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
   translatedTexts: Record<string, any> = {};
+
+  hidePassword: boolean = true;
+  hideConfirmPassword: boolean = true;
 
   registerForm: FormGroup;
 
@@ -96,5 +101,12 @@ export class RegisterComponent {
       }
     );
   }
-  
+
+  togglePasswordVisibility(field: string): void {
+    if (field === 'password') {
+      this.hidePassword = !this.hidePassword;
+    } else if (field === 'confirmPassword') {
+      this.hideConfirmPassword = !this.hideConfirmPassword;
+    }
+  }
 }

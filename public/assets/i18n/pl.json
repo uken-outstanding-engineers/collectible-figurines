@@ -27,7 +27,7 @@
     "login": {
         "login": "ZALOGUJ SIĘ",
         "enter-data": "Wprowadź nazwę użytkownika i hasło:",
-        "username": "Nazwa użytkownik",
+        "username": "Nazwa użytkownika",
         "password": "Hasło",
         "logInButton": "ZALOGUJ",
         "newUser": "Nowy użytkownik?",
@@ -42,7 +42,7 @@
     "register": {
         "register": "ZAREJESTRUJ SIĘ",
         "enter-data": "Wprowadź swoje dane:",
-        "username": "Nazwa użytkownik",
+        "username": "Nazwa użytkownika",
         "email": "Email",
         "password": "Hasło",
         "confirmPassword": "Potwierdź hasło",

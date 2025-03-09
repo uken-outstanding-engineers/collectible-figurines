@@ -48,6 +48,15 @@ public class UserServiceImpl implements UserService {
   }
   public User findByEmail(String email) { return userRepository.findByEmail(email);}
 
+  public User findByUsernameIgnoreCase(String username) {
+    Optional<User> userOptional = userRepository.findByUsernameIgnoreCase(username);
+    return userOptional.orElse(null);
+  }
+  public User findByEmailIgnoreCase(String email) {
+    Optional<User> userOptional = userRepository.findByEmailIgnoreCase(email);
+    return userOptional.orElse(null);
+  }
+
   public List<UserDTO> getAllUsers() {
     List<User> users = userRepository.findAll(Sort.by(Sort.Direction.DESC, "lastLogin"));
     return users.stream()

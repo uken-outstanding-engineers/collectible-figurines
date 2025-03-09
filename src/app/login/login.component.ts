@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms'; 
+import { MatIconModule } from '@angular/material/icon';
 
 import { UserService } from '../api/user.service';
 import { SnackbarService } from '../services/snackbar.service';
@@ -21,6 +22,7 @@ import { TranslationService } from '../services/translation.service';
     MatFormFieldModule,
     TranslateModule,
     FormsModule,
+    MatIconModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -30,6 +32,8 @@ export class LoginComponent {
 
   username: string = '';
   password: string = '';
+
+  hidePassword: boolean = true;
   
   constructor(
     private userService: UserService,
@@ -44,6 +48,7 @@ export class LoginComponent {
 
   login(): void { 
     if (this.username.trim() === "" || this.password.trim() === "") {
+      console.log(this.username);
       this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["emptyFieldsError"]);
       return;
     }
@@ -55,5 +60,9 @@ export class LoginComponent {
         this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["invalidCredentialsError"]);
       }
     });
+  }
+
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
   }
 }

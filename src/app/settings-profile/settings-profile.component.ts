@@ -93,7 +93,7 @@ export class SettingsProfileComponent {
 
     if (file) {
       if (file.size > MAX_SIZE_BYTES) {
-        this.snackBarService.showError(this.translatedTexts["updatedProfile"], ` ${MAX_SIZE_MB / 1024}MB.`);
+        this.snackBarService.showError(this.translatedTexts["maximumSizeFile"] + ` ${MAX_SIZE_MB / 1024}MB.`);
         return;
       }
 

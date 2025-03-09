@@ -157,7 +157,7 @@ export class FiguresShowcaseComponent implements OnInit {
 
   /* Pagination variables */
   currentPage = 0;
-  pageSize = 8;
+  pageSize = 20;
   totalPages = 1;
   pages: number[] = [];
 
