@@ -15,6 +15,7 @@ public interface UserService {
   User findByUsernameIgnoreCase(String username);
   User findByEmailIgnoreCase(String email);
   List<UserDTO> getAllUsers();
+  User findByHashedShareIdOrThrow(String shareId);
   boolean checkPassword(String rawPassword, String encodedPassword);
   User register(User user);
   void updateLastLogin(User user);

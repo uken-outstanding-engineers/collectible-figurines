@@ -4,7 +4,9 @@ import { map } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { User } from './user.model';
+import { PublicUser } from './user-public.model'
 import { API_URL } from './api-url';
+
 
 interface TokenResponse {
   token: string;
@@ -34,6 +36,22 @@ export class UserService {
 
   constructor(private http: HttpClient) {
     //this.loadUserFromStorage();
+  }
+
+  //Generates a user ID
+  generateHashedShareId(userId: number): string {
+    return userId.toString(36);
+  }
+
+  // Odtwarza identyfikator użytkownika
+  getUserIdFromShareId(shareId: string): number | null {
+    const id = parseInt(shareId, 36);
+    return isNaN(id) ? null : id;
+  }
+
+  // Retrieves public user data
+  getUserByShareId(shareId: string): Observable<PublicUser> {
+    return this.http.get<PublicUser>(`${this.API_URL}/public/${shareId}`);
   }
 
   // Download the users list
@@ -246,7 +264,6 @@ export class UserService {
       avatarUrl: decodedToken.avatarUrl || '', 
     };
   }
-  
   
   getUserId(): number | null {
     const decodedToken = this.decodeToken();

@@ -47,6 +47,7 @@ export class NavbarComponent {
 
   isLoggedIn: boolean = false;
   currentUser: User | null = null;
+  shareId: string | null = null;
 
   private lastSearchTerm: string = '';
   private searchSubject = new Subject<string>();
@@ -71,6 +72,12 @@ export class NavbarComponent {
     this.userService.getLoggedInUser().subscribe(user => {
       this.isLoggedIn = !!user;
       this.currentUser = user;
+      
+      if (user) {
+        this.shareId = this.userService.generateHashedShareId(user.id);
+      } else {
+        this.shareId = null;
+      }
     });
     
   

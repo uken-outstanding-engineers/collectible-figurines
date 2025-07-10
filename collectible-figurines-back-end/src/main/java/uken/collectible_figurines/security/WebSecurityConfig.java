@@ -53,14 +53,17 @@ public class WebSecurityConfig {
       .requestMatchers(
         "/api/users/login",
         "/api/users/register",
+        "/api/users/public/*",
+        "/api/users/*/stats",
+        "/api/figurine-lists/figurines/*",
         "/api/figurines/all",
         "/api/figurines/recommend/**",
         "/api/fandoms/all",
         "/api/figurines/count/**",
-        "/api/images/**"
-//        "/swagger-ui/**",
-//        "/v3/api-docs/**",
-//        "/swagger-ui.html"
+        "/api/images/**",
+        "/swagger-ui/**",
+        "/v3/api-docs/**",
+        "/swagger-ui.html"
       ).permitAll()
       .requestMatchers(
         "/api/users/all",
@@ -81,5 +84,4 @@ public class WebSecurityConfig {
     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     return httpSecurity.build();
   }
-
 }

@@ -2,9 +2,11 @@ package uken.collectible_figurines.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import uken.collectible_figurines.model.dto.UserDTO;
 import uken.collectible_figurines.model.dto.UserUpdateAccountDTO;
 import uken.collectible_figurines.model.User;
@@ -70,6 +72,25 @@ public class UserServiceImpl implements UserService {
       ))
       .collect(Collectors.toList());
   }
+
+  public User findByHashedShareIdOrThrow(String shareId) {
+    try {
+      Long userId = Long.parseLong(shareId, 36);
+      return userRepository.findById(userId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    } catch (NumberFormatException e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid share ID format");
+    }
+  }
+
+//  public String generateHashedShareId(Long userId) {
+//    int hash = 0;
+//    String str = userId.toString();
+//    for (int i = 0; i < str.length(); i++) {
+//      hash = ((hash << 5) - hash) + str.charAt(i);
+//    }
+//    return Integer.toUnsignedString(Math.abs(hash), 36);
+//  }
 
   public boolean checkPassword(String rawPassword, String encodedPassword) {
 

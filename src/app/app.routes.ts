@@ -55,6 +55,6 @@ export const routes: Routes = [
       ],
     },
     { path: 'figurine-lists', component: UserFigurineListsComponent, canActivate: [AuthLogoutGuard] },
-    { path: 'profile', component: ProfileComponent, canActivate: [AuthLogoutGuard] },
+    { path: 'profile/:shareId', component: ProfileComponent},
     { path: '**', redirectTo: '/figures-showcase' },
   ];

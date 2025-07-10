@@ -72,7 +72,7 @@
             </button>
     
             <!-- Figurine Lists -->
-            <button mat-menu-item routerLink="/profile">
+            <button mat-menu-item [routerLink]="['/profile', shareId]">
                 <mat-icon>person</mat-icon>
                 <span>{{ 'navbar.profile' | translate }}</span>
             </button>

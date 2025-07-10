@@ -7,10 +7,13 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { UserService } from '../api/user.service';
 import { User } from '../api/user.model';
+import { PublicUser } from '../api/user-public.model'
 import { API_URL } from '../api/api-url';
 import { Figure } from '../api/figure.model';
 import { FigureListService } from '../api/figure-list.service';
 import { TranslationService } from '../services/translation.service';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-profile',
@@ -29,40 +32,87 @@ export class ProfileComponent {
   apiUrl = API_URL.BASE_URL;
   translatedTexts: { [key: string]: string } = {};
 
-  user: User | null = null;
+  user: PublicUser  | null = null;
   stats = { liked: 0, wanted: 0, owned: 0 };
 
   activeItem: string = 'liked';
   figurineLists: { [key: string]: Figure[] } = {};
 
   constructor(
+    private route: ActivatedRoute,
     private figureListService: FigureListService,
     private userService: UserService,
     private translationService: TranslationService,
+    private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.userService.getLoggedInUser().subscribe(user => {
-      this.user = user;
-    });
+  // ngOnInit(): void {
+  //   this.userService.getLoggedInUser().subscribe(user => {
+  //     this.user = user;
+  //   });
 
+  //   this.translationService.translations$.subscribe(translations => {
+  //     this.translatedTexts = translations['profile_page'] || {};
+  //   });
+    
+  //   if(this.user) {
+  //     this.userService.getUserStats(this.user.id).subscribe(
+  //       stats => {
+  //         this.stats = {
+  //           liked: stats["LIKED"] || 0,
+  //           wanted: stats["WANTED"] || 0,
+  //           owned: stats["OWNED"] || 0
+  //         };
+  //       }
+  //     );
+  //   }
+
+  //   this.loadUserFigurineLists();
+  // }
+
+  ngOnInit(): void {
     this.translationService.translations$.subscribe(translations => {
       this.translatedTexts = translations['profile_page'] || {};
     });
-    
-    if(this.user) {
-      this.userService.getUserStats(this.user.id).subscribe(
-        stats => {
+
+    const shareId = this.route.snapshot.paramMap.get('shareId');
+    if (!shareId) return;
+
+    this.userService.getUserByShareId(shareId).subscribe({
+      next: user => {
+        if (!user || !user.id) {
+          console.warn('Użytkownik nie istnieje lub brak ID');
+          return;
+        }
+
+        this.user = user;
+
+        this.userService.getUserStats(user.id).subscribe(stats => {
           this.stats = {
             liked: stats["LIKED"] || 0,
             wanted: stats["WANTED"] || 0,
             owned: stats["OWNED"] || 0
           };
+        });
+
+        this.loadUserFigurineLists();
+      },
+      error: err => {
+        if (err.status === 404) {
+          this.router.navigate(['/404']);
+        } else {
+          console.error('Inny błąd', err);
         }
-      );
-    }
-    this.loadUserFigurineLists();
+      }
+    });
   }
+
+  getShareableLink(): string {
+    if (!this.user) return '';
+    const shareId = this.userService.generateHashedShareId(this.user.id);
+    return `${window.location.origin}/profile/${shareId}`;
+  }
+
 
   setActive(item: string) {
     this.activeItem = item;

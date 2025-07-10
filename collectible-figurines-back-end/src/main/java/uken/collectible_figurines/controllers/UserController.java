@@ -1,16 +1,16 @@
 package uken.collectible_figurines.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import uken.collectible_figurines.model.dto.ErrorUserDTO;
-import uken.collectible_figurines.model.dto.TokenResponse;
-import uken.collectible_figurines.model.dto.UserUpdateAccountDTO;
+import org.springframework.web.server.ResponseStatusException;
+import uken.collectible_figurines.model.dto.*;
 import uken.collectible_figurines.model.User;
 import uken.collectible_figurines.response.ApiResponse;
 import uken.collectible_figurines.security.JwtService;
 import uken.collectible_figurines.services.UserService;
-import uken.collectible_figurines.model.dto.UserDTO;
+
 import java.util.Map;
 import java.io.IOException;
 import java.util.List;
@@ -30,6 +30,12 @@ public class UserController {
 
   @GetMapping("/all")
   public List<UserDTO> getAllUsers() { return userService.getAllUsers(); }
+
+  @GetMapping("public/{shareId}")
+  public PublicUserDTO getUserByShareId(@PathVariable String shareId) {
+    User user = userService.findByHashedShareIdOrThrow(shareId);
+    return new PublicUserDTO(user.getId(), user.getUsername(), user.getAvatarUrl());
+  }
 
   @PostMapping("/login")
   public TokenResponse loginUser(@RequestParam String username, @RequestParam String passwd) {
