@@ -22,6 +22,14 @@
             </div>
         </div>
     </div>
+    <div class="add-friend-container" *ngIf="isLoggedIn && loggedInUserId !== user?.id">
+        <button class="add-friend-button" *ngIf="!isFriendRequestSent" (click)="addFriend()">
+            Dodaj znajomego
+        </button>
+        <button class="cancel-friend-button" *ngIf="isFriendRequestSent" (click)="cancelFriendRequest()"> <!--  -->
+            Anuluj zaproszenie
+        </button>
+    </div>
 </div>
 
 <div class="buttons-box">

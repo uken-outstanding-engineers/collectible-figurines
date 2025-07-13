@@ -4,6 +4,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router'; 
 
 import { UserService } from '../api/user.service';
 import { User } from '../api/user.model';
@@ -12,8 +14,8 @@ import { API_URL } from '../api/api-url';
 import { Figure } from '../api/figure.model';
 import { FigureListService } from '../api/figure-list.service';
 import { TranslationService } from '../services/translation.service';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router'; 
+import { NotificationService } from '../api/notification.service'
+
 
 @Component({
   selector: 'app-profile',
@@ -38,37 +40,19 @@ export class ProfileComponent {
   activeItem: string = 'liked';
   figurineLists: { [key: string]: Figure[] } = {};
 
+  loggedInUserId: number | null = null;
+  isLoggedIn: boolean = false;
+
+  isFriendRequestSent: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private figureListService: FigureListService,
     private userService: UserService,
     private translationService: TranslationService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
-
-  // ngOnInit(): void {
-  //   this.userService.getLoggedInUser().subscribe(user => {
-  //     this.user = user;
-  //   });
-
-  //   this.translationService.translations$.subscribe(translations => {
-  //     this.translatedTexts = translations['profile_page'] || {};
-  //   });
-    
-  //   if(this.user) {
-  //     this.userService.getUserStats(this.user.id).subscribe(
-  //       stats => {
-  //         this.stats = {
-  //           liked: stats["LIKED"] || 0,
-  //           wanted: stats["WANTED"] || 0,
-  //           owned: stats["OWNED"] || 0
-  //         };
-  //       }
-  //     );
-  //   }
-
-  //   this.loadUserFigurineLists();
-  // }
 
   ngOnInit(): void {
     this.translationService.translations$.subscribe(translations => {
@@ -77,6 +61,10 @@ export class ProfileComponent {
 
     const shareId = this.route.snapshot.paramMap.get('shareId');
     if (!shareId) return;
+
+    const currentUser = this.userService.getCurrentUserValue();
+    this.loggedInUserId = currentUser?.id ?? null;
+    this.isLoggedIn = !!currentUser;
 
     this.userService.getUserByShareId(shareId).subscribe({
       next: user => {
@@ -96,6 +84,7 @@ export class ProfileComponent {
         });
 
         this.loadUserFigurineLists();
+        this.checkFriendRequestStatus();
       },
       error: err => {
         if (err.status === 404) {
@@ -107,12 +96,54 @@ export class ProfileComponent {
     });
   }
 
-  getShareableLink(): string {
-    if (!this.user) return '';
-    const shareId = this.userService.generateHashedShareId(this.user.id);
-    return `${window.location.origin}/profile/${shareId}`;
+  // getShareableLink(): string {
+  //   if (!this.user) return '';
+  //   const shareId = this.userService.generateHashedShareId(this.user.id);
+  //   return `${window.location.origin}/profile/${shareId}`;
+  // }
+
+  addFriend(): void {
+    if (this.user?.id) {
+      const payload = {
+        senderId: this.loggedInUserId,
+        recipientId: this.user.id,
+      };
+
+      this.notificationService.sendFriendRequest(payload).subscribe({
+        next: (res) => {
+          this.checkFriendRequestStatus();
+        },
+        error: (err) => console.error('Błąd:', err),
+      });
+    }
   }
 
+  checkFriendRequestStatus(): void {
+    if (this.user && this.loggedInUserId) {
+      this.notificationService
+        .isFriendRequestSent(this.loggedInUserId, this.user.id)
+        .subscribe((sent: boolean) => {
+          this.isFriendRequestSent = sent;
+        });
+    }
+  }
+
+  cancelFriendRequest(): void {
+    if (this.user?.id) {
+      const payload = {
+        senderId: this.loggedInUserId!,
+        recipientId: this.user.id
+      };
+
+      this.notificationService.cancelFriendRequest(payload).subscribe({
+        next: res => {
+          console.log('Anulowano zaproszenie:', res);
+          this.checkFriendRequestStatus();
+        },
+        error: err => console.error('Błąd przy anulowaniu:', err)
+      });
+    }
+  }
 
   setActive(item: string) {
     this.activeItem = item;

@@ -204,6 +204,10 @@ export class UserService {
     return this.loggedInUser;
   }
 
+  getCurrentUserValue(): User | null {
+    return this.loggedInUser.getValue();
+  }
+
   hasAccess(): boolean {
     return this.getPermission() === 'ADMIN';
   }
