@@ -21,6 +21,7 @@ import { UserFigurineListsComponent } from './user-figurine-lists/user-figurine-
 import { AdminPanelFandomsListComponent } from './admin-panel-fandoms-list/admin-panel-fandoms-list.component';
 import { SettingsProfileComponent } from './settings-profile/settings-profile.component';
 import { ProfileComponent } from './profile/profile.component';
+import { NotificationComponent } from './notification/notification.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/figures-showcase', pathMatch: 'full' }, 
@@ -56,5 +57,6 @@ export const routes: Routes = [
     },
     { path: 'figurine-lists', component: UserFigurineListsComponent, canActivate: [AuthLogoutGuard] },
     { path: 'profile/:shareId', component: ProfileComponent},
+    { path: 'notification', component: NotificationComponent, canActivate: [AuthLogoutGuard]},
     { path: '**', redirectTo: '/figures-showcase' },
   ];

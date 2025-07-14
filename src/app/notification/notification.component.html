@@ -1,0 +1,26 @@
+<div class="notifications-container" *ngIf="notifications.length > 0; else noNotifications">
+  <div *ngFor="let notification of notifications" class="notification-card" [class.seen]="notification.seen">
+    <div class="notification-avatar">
+      <a [routerLink]="['/profile', notification.sender.id]"><img [src]="apiUrl + notification.sender.avatarUrl" alt="avatar" /></a>
+    </div>
+    <div class="notification-content">
+      <p>
+        <a [routerLink]="['/profile', notification.sender.id]"><strong>{{ notification.sender.username }}</strong></a> 
+        wysłał Ci zaproszenie do znajomych
+      </p>
+      <span class="notification-date">{{ notification.date | date:'yyyy-MM-dd HH:mm' }}</span>
+    </div>
+    <div class="notification-actions">
+      <button class="confirm-button" (click)="acceptFriendRequest(notification)">
+        Potwierdź
+      </button>
+      <button class="cancel-button" (click)="rejectFriendRequest(notification)">
+        Anuluj
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #noNotifications>
+  <p class="empty-message">Brak powiadomień</p>
+</ng-template>

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { API_URL } from './api-url';
+import { Notification } from './notification.model';
 
 interface FriendRequestPayload {
   senderId: number | null;
@@ -32,5 +33,9 @@ export class NotificationService {
         body: payload,
         responseType: 'text'
     });
+  }
+
+  getNotificationsForUser(recipientId: number): Observable<Notification[]> {
+    return this.http.get<Notification[]>(`${this.API_URL}/user/${recipientId}`);
   }
 }

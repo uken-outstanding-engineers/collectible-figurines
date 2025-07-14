@@ -1,0 +1,33 @@
+package uken.collectible_figurines.controllers;
+
+import org.springframework.web.bind.annotation.*;
+import uken.collectible_figurines.model.Friendship;
+import uken.collectible_figurines.model.User;
+import uken.collectible_figurines.repository.FriendshipRepository;
+import uken.collectible_figurines.repository.UserRepository;
+import uken.collectible_figurines.services.FriendshipService;
+
+import java.util.Map;
+
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RestController
+@RequestMapping("/api/friendships")
+public class FriendshipController {
+  private final FriendshipService friendshipService;
+
+  public FriendshipController(FriendshipService friendshipService) {
+    this.friendshipService = friendshipService;
+  }
+//  @PostMapping("/add")
+//  public String addFriend(@RequestParam Long userId1, @RequestParam Long userId2) {
+//    return friendshipService.addFriend(userId1, userId2);
+//  }
+
+  @PostMapping("/add")
+  public String addFriend(@RequestBody Map<String, Long> payload) {
+    Long userId1 = payload.get("userId1");
+    Long userId2 = payload.get("userId2");
+    return friendshipService.addFriend(userId1, userId2);
+  }
+
+}
