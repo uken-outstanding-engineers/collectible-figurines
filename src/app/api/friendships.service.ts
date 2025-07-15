@@ -16,4 +16,12 @@ export class FriendshipsService {
     return this.http.post(`${this.API_URL}/add`, payload, { responseType: 'text' });
   }
 
+  removeFriend(payload: { userId1: number; userId2: number }): Observable<any> {
+    return this.http.post(`${this.API_URL}/remove`, payload, { responseType: 'text' });
+  }
+
+  checkFriendship(userId1: number, userId2: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.API_URL}/check/${userId1}/${userId2}`);
+  }
+
 }

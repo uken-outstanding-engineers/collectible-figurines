@@ -30,4 +30,16 @@ public class FriendshipController {
     return friendshipService.addFriend(userId1, userId2);
   }
 
+  @PostMapping("/remove")
+  public String removeFriend(@RequestBody Map<String, Long> request) {
+    Long userId1 = request.get("userId1");
+    Long userId2 = request.get("userId2");
+    return friendshipService.removeFriend(userId1, userId2);
+  }
+
+  @GetMapping("/check/{userId1}/{userId2}")
+  public boolean checkFriendship(@PathVariable Long userId1, @PathVariable Long userId2) {
+    return friendshipService.areFriends(userId1, userId2);
+  }
+
 }

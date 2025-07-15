@@ -23,11 +23,16 @@
         </div>
     </div>
     <div class="add-friend-container" *ngIf="isLoggedIn && loggedInUserId !== user?.id">
-        <button class="add-friend-button" *ngIf="!isFriendRequestSent" (click)="addFriend()">
-            Dodaj znajomego
-        </button>
-        <button class="cancel-friend-button" *ngIf="isFriendRequestSent" (click)="cancelFriendRequest()"> <!--  -->
-            Anuluj zaproszenie
+        <div *ngIf="!isFriend">
+            <button class="add-friend-button" *ngIf="!isFriendRequestSent" (click)="addFriend()">
+                Dodaj znajomego
+            </button>
+            <button class="cancel-friend-button" *ngIf="isFriendRequestSent" (click)="cancelFriendRequest()"> <!--  -->
+                Anuluj zaproszenie
+            </button>
+        </div>
+        <button class="remove-friend-button" *ngIf="isFriend" (click)="removeFriend()">
+            Usuń znajomego
         </button>
     </div>
 </div>

@@ -15,7 +15,7 @@ import { Figure } from '../api/figure.model';
 import { FigureListService } from '../api/figure-list.service';
 import { TranslationService } from '../services/translation.service';
 import { NotificationService } from '../api/notification.service'
-
+import { FriendshipsService } from '../api/friendships.service';
 
 @Component({
   selector: 'app-profile',
@@ -44,6 +44,7 @@ export class ProfileComponent {
   isLoggedIn: boolean = false;
 
   isFriendRequestSent: boolean = false;
+  isFriend = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,7 +52,8 @@ export class ProfileComponent {
     private userService: UserService,
     private translationService: TranslationService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private friendshipService: FriendshipsService
   ) {}
 
   ngOnInit(): void {
@@ -74,6 +76,11 @@ export class ProfileComponent {
         }
 
         this.user = user;
+        if (this.loggedInUserId !== null && this.user?.id !== undefined) {
+          this.friendshipService.checkFriendship(this.loggedInUserId, this.user.id).subscribe(result => {
+            this.isFriend = result;
+          });
+        }
 
         this.userService.getUserStats(user.id).subscribe(stats => {
           this.stats = {
@@ -118,6 +125,24 @@ export class ProfileComponent {
     }
   }
 
+  removeFriend(): void {
+    if (this.user?.id) {
+      const payload = {
+        userId1: this.loggedInUserId as number,
+        userId2: this.user.id
+      };
+    
+      this.friendshipService.removeFriend(payload).subscribe({
+        next: response => {
+          this.isFriend = false;
+        },
+        error: err => {
+          console.error('Błąd przy usuwaniu znajomego:', err);
+        }
+      });
+    }
+  }
+
   checkFriendRequestStatus(): void {
     if (this.user && this.loggedInUserId) {
       this.notificationService
@@ -137,7 +162,6 @@ export class ProfileComponent {
 
       this.notificationService.cancelFriendRequest(payload).subscribe({
         next: res => {
-          console.log('Anulowano zaproszenie:', res);
           this.checkFriendRequestStatus();
         },
         error: err => console.error('Błąd przy anulowaniu:', err)

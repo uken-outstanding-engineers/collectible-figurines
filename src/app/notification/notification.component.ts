@@ -43,7 +43,6 @@ export class NotificationComponent {
     this.notificationService.getNotificationsForUser(userId).subscribe({
       next: (data) => {
         this.notifications = data;
-        console.log(this.notifications);
       },
       error: (err) => {
         console.error('Błąd podczas pobierania powiadomień:', err);
@@ -57,9 +56,6 @@ export class NotificationComponent {
       userId2: notification.sender.id
     };
 
-    console.log('loggedInUserId:', this.loggedInUserId);
-    console.log('notification sender:', notification.sender.id);
-
     if (!this.loggedInUserId) {
       console.error('Brak zalogowanego użytkownika');
       return;
@@ -71,8 +67,6 @@ export class NotificationComponent {
 
     this.friendshipsService.acceptFriendRequest(payload).subscribe({
       next: (data) => {
-        console.log(data);
-        // Możesz też usunąć powiadomienie z listy:
         this.notifications = this.notifications.filter(n => n.id !== notification.id);
       },
       error: err => {
@@ -83,8 +77,6 @@ export class NotificationComponent {
 
 
   rejectFriendRequest(notification: Notification): void {
-    console.log('Odrzucono zaproszenie od:', notification.sender.username);
-
     if (this.loggedInUserId && notification.sender?.id) {
       const payload = {
         senderId: notification.sender.id,
