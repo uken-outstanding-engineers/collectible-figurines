@@ -1,5 +1,7 @@
 package uken.collectible_figurines.model.dto;
 
+import uken.collectible_figurines.model.User;
+
 public class PublicUserDTO {
   private Long id;
   private String username;
@@ -10,6 +12,15 @@ public class PublicUserDTO {
     this.username = username;
     this.avatarUrl = avatarUrl;
   }
+
+  public PublicUserDTO(User user) {
+    if (user != null) {
+      this.id = user.getId();
+      this.username = user.getUsername();
+      this.avatarUrl = user.getAvatarUrl();
+    }
+  }
+
   public Long getId() {
     return id;
   }

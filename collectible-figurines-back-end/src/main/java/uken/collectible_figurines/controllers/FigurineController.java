@@ -1,15 +1,20 @@
 package uken.collectible_figurines.controllers;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
 import uken.collectible_figurines.model.Figurine;
+import uken.collectible_figurines.repository.FigurineRepository;
+import uken.collectible_figurines.services.ActivityLogsService;
 import uken.collectible_figurines.services.FigurineService;
 import uken.collectible_figurines.services.RecommendationService;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -17,10 +22,17 @@ import java.util.List;
 public class FigurineController {
   private final FigurineService figurineService;
   private final RecommendationService recommendationService;
-
-  public FigurineController(FigurineService figurineService, RecommendationService recommendationService) {
+  private final ActivityLogsService activityLogsService;
+  private final FigurineRepository figurineRepository;
+  public FigurineController(FigurineService figurineService,
+                            RecommendationService recommendationService,
+                            ActivityLogsService activityLogsService,
+                            FigurineRepository figurineRepository)
+  {
     this.figurineService = figurineService;
     this.recommendationService = recommendationService;
+    this.activityLogsService = activityLogsService;
+    this.figurineRepository = figurineRepository;
   }
 
   @GetMapping("/all")
@@ -31,8 +43,14 @@ public class FigurineController {
   @PostMapping("/add")
   public Figurine addFigurine(@RequestPart("figurine") Figurine figurine,
                               @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
-                              @RequestPart(value = "hoverImageFile", required = false) MultipartFile hoverImageFile) throws IOException {
-    return figurineService.saveFigurine(figurine, imageFile, hoverImageFile);
+                              @RequestPart(value = "hoverImageFile", required = false) MultipartFile hoverImageFile,
+                              @RequestParam("userId") Long userId) throws IOException {
+
+    Figurine savedFigurine = figurineService.saveFigurine(figurine, imageFile, hoverImageFile);
+
+    activityLogsService.logAction(userId, "ADD_FIGURINE", savedFigurine.getName());
+
+    return savedFigurine;
   }
 
 
@@ -40,7 +58,8 @@ public class FigurineController {
   public Figurine updateFigurine(@PathVariable Long id,
                                  @RequestPart("figurine") Figurine updatedFigurine,
                                  @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
-                                 @RequestPart(value = "hoverImageFile", required = false) MultipartFile hoverImageFile) throws IOException {
+                                 @RequestPart(value = "hoverImageFile", required = false) MultipartFile hoverImageFile,
+                                 @RequestParam("userId") Long userId) throws IOException {
     Figurine existingFigurine = figurineService.getFigurineById(id);
 
     existingFigurine.setName(updatedFigurine.getName());
@@ -89,13 +108,28 @@ public class FigurineController {
       }
     }
 
-    return figurineService.saveFigurine(existingFigurine, imageFile, hoverImageFile);
+    Figurine savedFigurine = figurineService.saveFigurine(existingFigurine, imageFile, hoverImageFile);
+
+    activityLogsService.logAction(userId, "EDIT_FIGURINE", savedFigurine.getName());
+
+    return savedFigurine;
   }
 
-  @DeleteMapping("/delete/{id}")
-  public void deleteFigurine(@PathVariable Long id) {
-    figurineService.deleteFigurineById(id);
+  @DeleteMapping("/delete/{id}/{userId}")
+  public void deleteFigurine(@PathVariable Long id, @PathVariable Long userId) {
+    Optional<Figurine> figurineOpt = figurineRepository.findById(id);
+
+    if (figurineOpt.isPresent()) {
+      Figurine figurine = figurineOpt.get();
+
+      activityLogsService.logAction(userId, "DELETE_FIGURINE", figurine.getName());
+
+      figurineService.deleteFigurineById(id);
+    } else {
+      throw new RuntimeException("Figurine doesn't exist!");
+    }
   }
+
 
   @GetMapping("/total")
   public int getTotalFigurines() {

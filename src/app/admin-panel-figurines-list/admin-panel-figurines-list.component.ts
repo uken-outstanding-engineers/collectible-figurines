@@ -23,6 +23,7 @@ import { AdminPanelService } from '../services/admin-panel.service';
 import { SnackbarService } from '../services/snackbar.service';
 import { TranslationService } from '../services/translation.service';
 import { transition } from '@angular/animations';
+import { UserService } from '../api/user.service';
 
 @Component({
   selector: 'app-admin-panel-figurines-list',
@@ -68,6 +69,7 @@ export class AdminPanelFigurinesListComponent {
     private adminPanelService: AdminPanelService,
     private snackBarService: SnackbarService,
     private translationService: TranslationService,
+    private userService: UserService,
   ) {
     //Figurines
     this.subscription = this.figureService.getFigures().subscribe((data: Figure[]) => {
@@ -203,6 +205,11 @@ export class AdminPanelFigurinesListComponent {
         this.snackBarService.showError(this.translatedTexts["snackBarMessages"]["emptyFieldsError"]);
         return;
       }
+
+      const currentUser = this.userService.getCurrentUserValue();
+      if (currentUser && currentUser.id) {
+        formData.append('userId', currentUser.id.toString());
+      }
       
       if (this.editFigure.id !== null) {
         // Edit figurine
@@ -264,11 +271,18 @@ export class AdminPanelFigurinesListComponent {
      this.selectedName = null;
      this.adminPanelService.closeDialog();
    }
+
+      //  const currentUser = this.userService.getCurrentUserValue();
+      // if (currentUser && currentUser.id) {
+      //   formData.append('userId', currentUser.id.toString());
+      // }
  
    confirmDelete(): void {
     const id: number | null = this.selectedId;
+    const currentUser = this.userService.getCurrentUserValue();
+
     if (id !== null) {
-      this.figureService.deleteFigure(id).subscribe(
+      this.figureService.deleteFigure(id, currentUser?.id).subscribe(
         () => {
           const index = this.figurines.data.findIndex(figure => figure.id === id);
 
@@ -286,8 +300,7 @@ export class AdminPanelFigurinesListComponent {
     }
     this.closeDeleteDialog();
   }
-  
-  
+   
   /* Drag and Drop */
   isDraggingNormal: boolean = false;
   isDraggingHover: boolean = false;

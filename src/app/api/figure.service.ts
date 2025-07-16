@@ -26,8 +26,8 @@ export class FigureService {
   }
   
   // Delete figurine
-  deleteFigure(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.API_URL}/delete/${id}`);
+  deleteFigure(id: number, userid: number | undefined): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/delete/${id}/${userid}`);
   }
 
   // Edit figurine

@@ -76,7 +76,8 @@ public class WebSecurityConfig {
         "/api/fandoms/all",
         "/api/fandoms/add",
         "/api/fandoms/edit/**",
-        "/api/fandoms/delete/**"
+        "/api/fandoms/delete/**",
+        "/api/activity-logs/all"
       ).hasAuthority("ADMIN")
       .anyRequest().authenticated()
     )

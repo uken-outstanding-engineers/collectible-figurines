@@ -132,9 +132,15 @@ export class AdminPanelComponent {
           ],
           icon: 'groups',
         },
+        {
+          name: "Aktywność",
+          children: [
+            { name: "Lista logów", route: '/admin/logs' }, 
+          ],
+          icon: 'insights',
+        },
       ];
 
-      // Przypisanie danych do dataSource
       this.dataSource.data = treeData;
     });
   }

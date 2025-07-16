@@ -22,6 +22,7 @@ import { AdminPanelFandomsListComponent } from './admin-panel-fandoms-list/admin
 import { SettingsProfileComponent } from './settings-profile/settings-profile.component';
 import { ProfileComponent } from './profile/profile.component';
 import { NotificationComponent } from './notification/notification.component';
+import { AdminPanelLogListComponent } from './admin-panel-log-list/admin-panel-log-list.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/figures-showcase', pathMatch: 'full' }, 
@@ -41,6 +42,7 @@ export const routes: Routes = [
         { path: 'variants', component: AdminPanelVariantsListComponent },
         { path: 'fandoms', component: AdminPanelFandomsListComponent},
         { path: 'users', component: AdminPanelUsersComponent },
+        { path: 'logs', component: AdminPanelLogListComponent },
         { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       ],
     },

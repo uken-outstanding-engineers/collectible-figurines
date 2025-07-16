@@ -44,6 +44,7 @@ export class AdminPanelUsersComponent {
   displayedColumns: string[] = [
     'avatarUrl', 'username', 'permission', 'lastLogin'
   ];
+  
 
   private subscription: Subscription;
 
