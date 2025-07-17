@@ -18,6 +18,7 @@ import { API_URL } from '../api/api-url';
 import { AdminPanelService } from '../services/admin-panel.service';
 import { SnackbarService } from '../services/snackbar.service';
 import { TranslationService } from '../services/translation.service';
+import { UserService } from '../api/user.service';
 
 @Component({
   selector: 'app-admin-panel-fandoms-list',
@@ -55,6 +56,7 @@ export class AdminPanelFandomsListComponent {
     private adminPanelService: AdminPanelService,
     private snackBarService: SnackbarService,
     private translationService: TranslationService,
+    private userService: UserService,
   ) {
     this.subscription = this.fandomService.getFandoms().subscribe((data: Fandom[]) => {
       this.fandoms.data = data;
@@ -130,6 +132,12 @@ export class AdminPanelFandomsListComponent {
         return;
       }
 
+      const currentUser = this.userService.getCurrentUserValue();
+      if (currentUser && currentUser.id) {
+        formData.append('userId', currentUser.id.toString());
+      }
+      
+
       if (this.editFandom.id != null) {
         // Edit fandom
         this.fandomService.editFandom(this.editFandom.id, formData).subscribe(
@@ -182,8 +190,10 @@ export class AdminPanelFandomsListComponent {
 
   confirmDelete(): void {
     const id: number | null = this.selectedId;
+    const currentUser = this.userService.getCurrentUserValue();
+
     if (id !== null) {
-      this.fandomService.deleteFandom(id).subscribe(
+      this.fandomService.deleteFandom(id, currentUser?.id).subscribe(
         () => {
           const index = this.fandoms.data.findIndex(fandoms => fandoms.id === id);
 

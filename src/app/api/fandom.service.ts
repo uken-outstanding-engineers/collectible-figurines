@@ -25,8 +25,8 @@ export class FandomService {
   }
 
   // Delete figurine
-  deleteFandom(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.API_URL}/delete/${id}`);
+  deleteFandom(id: number, userId: number | undefined): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/delete/${id}/${userId}`);
   }
 
   // Edit figurine

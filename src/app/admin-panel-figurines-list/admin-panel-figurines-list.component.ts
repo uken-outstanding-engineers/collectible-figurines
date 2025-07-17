@@ -271,11 +271,6 @@ export class AdminPanelFigurinesListComponent {
      this.selectedName = null;
      this.adminPanelService.closeDialog();
    }
-
-      //  const currentUser = this.userService.getCurrentUserValue();
-      // if (currentUser && currentUser.id) {
-      //   formData.append('userId', currentUser.id.toString());
-      // }
  
    confirmDelete(): void {
     const id: number | null = this.selectedId;

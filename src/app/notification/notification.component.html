@@ -1,7 +1,12 @@
 <div class="notifications-container" *ngIf="notifications.length > 0; else noNotifications">
   <div *ngFor="let notification of notifications" class="notification-card" [class.seen]="notification.seen">
     <div class="notification-avatar">
-      <a [routerLink]="['/profile', notification.sender.id]"><img [src]="apiUrl + notification.sender.avatarUrl" alt="avatar" /></a>
+      <a [routerLink]="['/profile', notification.sender.id]">
+        <img *ngIf="notification.sender.avatarUrl; else defaultAvatar" [src]="apiUrl + notification.sender.avatarUrl" alt="avatar" />
+        <ng-template #defaultAvatar>
+          <img src="avatar-images\default_avatar.jpg" alt="{{ notification.sender.username}}" class="figurine-image">
+        </ng-template>
+      </a>
     </div>
     <div class="notification-content">
       <p>

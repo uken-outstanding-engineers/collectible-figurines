@@ -42,7 +42,6 @@ export class AdminPanelLogListComponent implements OnInit {
     this.activityLogsService.getAllLogs().subscribe({
       next: (data) => {
         this.logs.data = data;
-        console.log(data);
       },
       error: (err) => {
         console.error('Błąd podczas pobierania logów:', err);
