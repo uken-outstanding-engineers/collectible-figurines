@@ -1,0 +1,60 @@
+<div class="chat-container">
+  <aside class="users-list">
+    <ul>
+      <li
+        *ngFor="let user of users"
+        (click)="selectUser(user)"
+        [class.selected]="selectedUser?.id === user.id"
+      >
+        <img
+          *ngIf="user.avatarUrl; else defaultAvatar"
+          [src]="apiUrl + user?.avatarUrl"
+          alt="{{ user.username }}"
+          class="avatar"
+        />
+        <ng-template #defaultAvatar>
+          <img src="avatar-images/default_avatar.jpg" alt="{{ user.username || 'Użytkownik' }}" class="avatar">
+        </ng-template>
+        <span>{{ user.username }}</span>
+      </li>
+    </ul>
+  </aside>
+
+  <section class="messages-panel" *ngIf="selectedUser; else noSelection">
+    <!-- <h3>Wiadomości z {{ selectedUser.username }}</h3> -->
+    <div class="messages-list">
+      <div
+        *ngFor="let msg of messages"
+        [ngClass]="{
+          'message': true,
+          'sent': msg.sender.id === loggedInUserId,
+          'received': msg.sender.id !== loggedInUserId
+        }"
+      >
+        <div class="message-content">{{ msg.content }}</div>
+        <div class="message-date">{{ msg.date | date:'yyyy-MM-dd HH:mm' }}</div>
+
+        
+      </div>
+      <div #bottom></div>
+    </div>
+
+    <form class="message-form" (submit)="sendMessage()" #messageForm="ngForm">
+        <input
+            type="text"
+            name="content"
+            [(ngModel)]="newMessageContent"
+            placeholder="Napisz wiadomość..."
+            required
+            class="message-input"
+        />
+        <button type="submit" [disabled]="!newMessageContent.trim()" class="send-button">
+            Wyślij
+        </button>
+    </form>
+  </section>
+
+  <ng-template #noSelection>
+    <div class="no-selection">Wybierz użytkownika z listy, aby zobaczyć wiadomości</div>
+  </ng-template>
+</div>

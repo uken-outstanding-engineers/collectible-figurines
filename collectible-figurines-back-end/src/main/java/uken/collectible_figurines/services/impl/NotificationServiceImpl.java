@@ -24,6 +24,13 @@ public class NotificationServiceImpl implements NotificationService {
   private final NotificationMapper notificationMapper;
   private final UserRepository userRepository;
 
+  public List<NotificationDTO> getNotificationsForUser(Long userId) {
+    List<Notification> notifications = notificationRepository.findAllByRecipientIdOrderByDateDesc(userId);
+    return notifications.stream()
+      .map(notificationMapper::mapToDto)
+      .collect(Collectors.toList());
+  }
+
   public String sendFriendRequest(Long senderId, Long recipientId) {
     User sender = userRepository.findById(senderId).orElse(null);
     User recipient = userRepository.findById(recipientId).orElse(null);
@@ -67,12 +74,4 @@ public class NotificationServiceImpl implements NotificationService {
       return "No such friend request found";
     }
   }
-
-  public List<NotificationDTO> getNotificationsForUser(Long userId) {
-    List<Notification> notifications = notificationRepository.findAllByRecipientIdOrderByDateDesc(userId);
-    return notifications.stream()
-      .map(notificationMapper::mapToDto)
-      .collect(Collectors.toList());
-  }
-
 }

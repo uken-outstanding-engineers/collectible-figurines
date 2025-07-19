@@ -21,7 +21,7 @@ public class Notification {
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "sender_id")
+  @JoinColumn(name = "sender_id", nullable = true)
   private User sender;
 
   @ManyToOne

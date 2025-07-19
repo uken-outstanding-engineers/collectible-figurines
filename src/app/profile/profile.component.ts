@@ -46,6 +46,9 @@ export class ProfileComponent {
   isFriendRequestSent: boolean = false;
   isFriend = false;
 
+  isTradeRequestSent: boolean = false;
+  isTrade = false
+
   constructor(
     private route: ActivatedRoute,
     private figureListService: FigureListService,
@@ -71,7 +74,7 @@ export class ProfileComponent {
     this.userService.getUserByShareId(shareId).subscribe({
       next: user => {
         if (!user || !user.id) {
-          console.warn('Użytkownik nie istnieje lub brak ID');
+          console.warn('User doesn\'t exist');
           return;
         }
 
@@ -97,7 +100,7 @@ export class ProfileComponent {
         if (err.status === 404) {
           this.router.navigate(['/404']);
         } else {
-          console.error('Inny błąd', err);
+          console.error('Error: ', err);
         }
       }
     });
@@ -120,7 +123,7 @@ export class ProfileComponent {
         next: (res) => {
           this.checkFriendRequestStatus();
         },
-        error: (err) => console.error('Błąd:', err),
+        error: (err) => console.error('Error:', err),
       });
     }
   }
@@ -137,7 +140,7 @@ export class ProfileComponent {
           this.isFriend = false;
         },
         error: err => {
-          console.error('Błąd przy usuwaniu znajomego:', err);
+          console.error('Error removing friend:', err);
         }
       });
     }
@@ -164,9 +167,17 @@ export class ProfileComponent {
         next: res => {
           this.checkFriendRequestStatus();
         },
-        error: err => console.error('Błąd przy anulowaniu:', err)
+        error: err => console.error('Error on cancellation:', err)
       });
     }
+  }
+
+  proposeTrade(): void {
+    console.log("Propzycja wymiany");
+  }
+
+  cancelTradeRequest(): void {
+    console.log("Anulowanie wymiany");
   }
 
   setActive(item: string) {

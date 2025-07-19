@@ -1,27 +1,75 @@
 <div class="notifications-container" *ngIf="notifications.length > 0; else noNotifications">
   <div *ngFor="let notification of notifications" class="notification-card" [class.seen]="notification.seen">
-    <div class="notification-avatar">
+
+    <div class="notification-avatar" *ngIf="notification.type !== 'SYSTEM' && notification.sender">
       <a [routerLink]="['/profile', notification.sender.id]">
-        <img *ngIf="notification.sender.avatarUrl; else defaultAvatar" [src]="apiUrl + notification.sender.avatarUrl" alt="avatar" />
+        <img *ngIf="notification.sender.avatarUrl; else defaultAvatar" 
+             [src]="apiUrl + notification.sender.avatarUrl" 
+             alt="avatar" />
         <ng-template #defaultAvatar>
-          <img src="avatar-images\default_avatar.jpg" alt="{{ notification.sender.username}}" class="figurine-image">
+          <img src="avatar-images/default_avatar.jpg" alt="{{ notification.sender.username || 'Użytkownik' }}" class="figurine-image">
         </ng-template>
       </a>
     </div>
-    <div class="notification-content">
-      <p>
-        <a [routerLink]="['/profile', notification.sender.id]"><strong>{{ notification.sender.username }}</strong></a> 
-        wysłał Ci zaproszenie do znajomych
-      </p>
-      <span class="notification-date">{{ notification.date | date:'yyyy-MM-dd HH:mm' }}</span>
-    </div>
-    <div class="notification-actions">
-      <button class="confirm-button" (click)="acceptFriendRequest(notification)">
-        Potwierdź
-      </button>
-      <button class="cancel-button" (click)="rejectFriendRequest(notification)">
-        Anuluj
-      </button>
+
+    <div class="notification-main">
+      <div class="notification-content">
+
+        <ng-container [ngSwitch]="notification.type">
+
+          <!-- FRIEND_REQUEST -->
+          <ng-container *ngSwitchCase="'FRIEND_REQUEST'">
+            <div class="notification-text">
+              <p>
+                <a [routerLink]="['/profile', notification.sender.id]"><strong>{{ notification.sender.username }}</strong></a>
+                wysłał Ci zaproszenie do znajomych.
+              </p>
+            </div>
+            <span class="notification-date">{{ notification.date | date:'yyyy-MM-dd HH:mm' }}</span>
+          </ng-container>
+
+          <!-- TRADE_REQUEST -->
+          <ng-container *ngSwitchCase="'TRADE_REQUEST'">
+            <div class="notification-text">
+              <p>
+                <a [routerLink]="['/profile', notification.sender.id]">
+                  <strong>{{ notification.sender.username }}</strong>
+                </a>
+                zaproponował Ci wymianę figurek.
+              </p>
+            </div>
+            <span class="notification-date">{{ notification.date | date:'yyyy-MM-dd HH:mm' }}</span>
+          </ng-container>
+
+          <!-- SYSTEM -->
+          <ng-container *ngSwitchCase="'SYSTEM'">
+            <div class="notification-text">
+              <p><strong>SYSTEM:</strong> Powiadomienie systemowe</p>
+            </div>
+            <span class="notification-date">{{ notification.date | date:'yyyy-MM-dd HH:mm' }}</span>
+          </ng-container>
+
+          <!-- DEFAULT -->
+          <ng-container *ngSwitchDefault>
+            <div class="notification-text">
+              <p>Nowe powiadomienie od <strong>{{ notification.sender.username || 'System' }}</strong>.</p>
+            </div>
+            <span class="notification-date">{{ notification.date | date:'yyyy-MM-dd HH:mm' }}</span>
+          </ng-container>
+
+        </ng-container>
+
+      </div>
+
+      <div class="notification-actions" *ngIf="notification.type === 'FRIEND_REQUEST'">
+        <button class="confirm-button" (click)="acceptFriendRequest(notification)">Potwierdź</button>
+        <button class="cancel-button" (click)="rejectFriendRequest(notification)">Anuluj</button>
+      </div>
+      <div class="notification-actions" *ngIf="notification.type === 'TRADE_REQUEST'">
+        <button class="confirm-button">Potwierdź</button>
+        <button class="cancel-button">Anuluj</button>
+      </div>
+      
     </div>
   </div>
 </div>

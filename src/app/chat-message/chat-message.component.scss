@@ -1,0 +1,171 @@
+$radius-message-box: 20px;
+
+.chat-container {
+  display: flex;
+  height: 75vh;
+  font-family: Arial, sans-serif;
+  margin: 50px;
+  border: 2px solid #dddddd;
+  border-radius: $radius-message-box;
+}
+
+.users-list {
+    width: 250px;
+    border-right: 1px solid #ddd;
+    padding: 1rem;
+    background-color: #f8f8f8;
+    overflow-y: auto;
+    text-align: center;
+    border-top-left-radius: $radius-message-box;
+    border-bottom-left-radius: $radius-message-box;
+
+    h3 {
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+
+            &:hover {
+                background-color: #e0e0e0;
+            }
+
+            &.selected {
+                background-color: #c7d4ff;
+            }
+
+            .avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 0.5rem;
+                object-fit: cover;
+
+                &.placeholder {
+                    background-color: #ccc;
+                }
+            }
+
+            span {
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.messages-panel {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    background-color: #f1f3f5;
+    border-radius: $radius-message-box;
+
+    h3 {
+        margin-bottom: 1rem;
+    }
+
+    .messages-list {
+        flex: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        border-radius: 20px;
+    }
+
+    .message {
+        max-width: 70%;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        word-wrap: break-word;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        font-size: 0.95rem;
+
+        &.sent {
+        align-self: flex-end;
+        background-color: #007bff;
+        color: white;
+        border-bottom-right-radius: 0;
+        }
+
+        &.received {
+        align-self: flex-start;
+        background-color: #e0e0e0;
+        color: black;
+        border-bottom-left-radius: 0;
+        }
+
+        .message-date {
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        opacity: 0.7;
+        align-self: flex-end;
+        }
+    }
+
+    .message-form {
+        display: flex;
+        padding-top: 1rem;
+        gap: 0.5rem;
+
+        .message-input {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .send-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+
+            &:hover {
+            background-color: #0056b3;
+            }
+
+            &:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            }
+        }
+    }
+
+}
+
+
+
+.no-selection ng-star-inserted {
+    border-radius: 20px;
+}
+
+.no-selection {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777;
+  font-size: 1.2rem;
+  background-color: #f1f3f5;
+  border-radius: $radius-message-box;
+}

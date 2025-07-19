@@ -35,6 +35,17 @@
             Usuń znajomego
         </button>
     </div>
+    <div class="trade-action-container" *ngIf="isLoggedIn && loggedInUserId !== user?.id">
+        <div *ngIf="!isTrade"> <!-- zakładam że `isFriend` = czy jesteśmy znajomymi, możesz zmienić na swoją logikę -->
+            <button class="propose-trade-button" *ngIf="!isTradeRequestSent" (click)="proposeTrade()">
+            Zaproponuj wymianę
+            </button>
+            <button class="cancel-trade-button" *ngIf="isTradeRequestSent" (click)="cancelTradeRequest()">
+            Anuluj wymianę
+            </button>
+        </div>
+    </div>
+
 </div>
 
 <div class="buttons-box">
