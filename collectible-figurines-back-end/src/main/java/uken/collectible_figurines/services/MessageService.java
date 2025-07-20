@@ -11,5 +11,5 @@ import java.util.Set;
 public interface MessageService {
   List<MessageDTO> getMessagesBetweenUsers(Long userId1, Long userId2);
   List<PublicUserDTO> getUsersInConversationWith(Long userId);
-  Message saveMessage(Message message);
+  Message saveMessage(MessageDTO dto);
 }

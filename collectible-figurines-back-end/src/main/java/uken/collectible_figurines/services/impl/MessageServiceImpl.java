@@ -11,6 +11,7 @@ import uken.collectible_figurines.repository.MessageRepository;
 import uken.collectible_figurines.repository.UserRepository;
 import uken.collectible_figurines.services.MessageService;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -52,8 +53,18 @@ public class MessageServiceImpl implements MessageService {
       .toList();
   }
 
+  public Message saveMessage(MessageDTO dto) {
+    Message message = messageMapper.toMessage(dto, userRepository);
 
-  public Message saveMessage(Message message) {
+    if (message.getSenderId() == null || message.getSenderId().getId() == null) {
+      throw new IllegalArgumentException("SenderId is null");
+    }
+    if (message.getRecipientId() == null || message.getRecipientId().getId() == null) {
+      throw new IllegalArgumentException("RecipientId is null");
+    }
+
+    message.setDate(LocalDateTime.now());
+
     return messageRepository.save(message);
   }
 

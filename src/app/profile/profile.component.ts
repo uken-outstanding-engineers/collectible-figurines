@@ -16,6 +16,7 @@ import { FigureListService } from '../api/figure-list.service';
 import { TranslationService } from '../services/translation.service';
 import { NotificationService } from '../api/notification.service'
 import { FriendshipsService } from '../api/friendships.service';
+import { ChatService } from '../api/chat-message.service';
 
 @Component({
   selector: 'app-profile',
@@ -56,7 +57,8 @@ export class ProfileComponent {
     private translationService: TranslationService,
     private router: Router,
     private notificationService: NotificationService,
-    private friendshipService: FriendshipsService
+    private friendshipService: FriendshipsService,
+    private chatService: ChatService,
   ) {}
 
   ngOnInit(): void {
@@ -170,6 +172,11 @@ export class ProfileComponent {
         error: err => console.error('Error on cancellation:', err)
       });
     }
+  }
+
+  openChatWith(user: PublicUser): void {
+    this.chatService.setSelectedUser(user);
+    this.router.navigate(['/message']);
   }
 
   proposeTrade(): void {

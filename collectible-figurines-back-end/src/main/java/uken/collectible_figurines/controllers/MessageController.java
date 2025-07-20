@@ -34,8 +34,7 @@ public class MessageController {
   }
 
   @PostMapping("/send")
-  public Message sendMessage(@RequestBody Message message) {
-    message.setDate(LocalDateTime.now());
+  public Message sendMessage(@RequestBody MessageDTO message) {
     return messageService.saveMessage(message);
   }
 

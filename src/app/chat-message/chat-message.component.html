@@ -1,5 +1,7 @@
 <div class="chat-container">
+  <!-- Panel użytkowników -->
   <aside class="users-list">
+    <div class="users-header">Wiadomości</div>
     <ul>
       <li
         *ngFor="let user of users"
@@ -20,8 +22,12 @@
     </ul>
   </aside>
 
+  <!-- Panel wiadomości -->
   <section class="messages-panel" *ngIf="selectedUser; else noSelection">
-    <!-- <h3>Wiadomości z {{ selectedUser.username }}</h3> -->
+    <div class="messages-header">
+      <a [routerLink]="['/profile', selectedUser.id]"><strong>{{ selectedUser.username }}</strong></a>
+    </div>
+
     <div class="messages-list">
       <div
         *ngFor="let msg of messages"
@@ -33,24 +39,22 @@
       >
         <div class="message-content">{{ msg.content }}</div>
         <div class="message-date">{{ msg.date | date:'yyyy-MM-dd HH:mm' }}</div>
-
-        
       </div>
       <div #bottom></div>
     </div>
 
     <form class="message-form" (submit)="sendMessage()" #messageForm="ngForm">
-        <input
-            type="text"
-            name="content"
-            [(ngModel)]="newMessageContent"
-            placeholder="Napisz wiadomość..."
-            required
-            class="message-input"
-        />
-        <button type="submit" [disabled]="!newMessageContent.trim()" class="send-button">
-            Wyślij
-        </button>
+      <input
+        type="text"
+        name="content"
+        [(ngModel)]="newMessageContent"
+        placeholder="Napisz wiadomość..."
+        required
+        class="message-input"
+      />
+      <button type="submit" [disabled]="!newMessageContent.trim()" class="send-button">
+        Wyślij
+      </button>
     </form>
   </section>
 

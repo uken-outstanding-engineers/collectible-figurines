@@ -31,17 +31,24 @@
                 Anuluj zaproszenie
             </button>
         </div>
-        <button class="remove-friend-button" *ngIf="isFriend" (click)="removeFriend()">
+        <!-- <button class="remove-friend-button" *ngIf="isFriend" (click)="removeFriend()">
             Usuń znajomego
-        </button>
+        </button> -->
     </div>
-    <div class="trade-action-container" *ngIf="isLoggedIn && loggedInUserId !== user?.id">
-        <div *ngIf="!isTrade"> <!-- zakładam że `isFriend` = czy jesteśmy znajomymi, możesz zmienić na swoją logikę -->
+    <!-- <div class="trade-action-container" *ngIf="isLoggedIn && loggedInUserId !== user?.id">
+        <div *ngIf="!isTrade">
             <button class="propose-trade-button" *ngIf="!isTradeRequestSent" (click)="proposeTrade()">
             Zaproponuj wymianę
             </button>
             <button class="cancel-trade-button" *ngIf="isTradeRequestSent" (click)="cancelTradeRequest()">
             Anuluj wymianę
+            </button>
+        </div>
+    </div> -->
+    <div class="trade-action-container" *ngIf="isLoggedIn && loggedInUserId !== user?.id">
+        <div *ngIf="isFriend">
+            <button class="propose-trade-button" *ngIf="!isTradeRequestSent" (click)="openChatWith(user!)">
+            Napisz wiadomość
             </button>
         </div>
     </div>

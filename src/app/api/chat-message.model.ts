@@ -1,7 +1,7 @@
 export interface PublicUser {
   id: number;
   username: string;
-  avatarUrl: string;
+  avatarUrl: string | null;
 }
 
 export interface ChatMessage {

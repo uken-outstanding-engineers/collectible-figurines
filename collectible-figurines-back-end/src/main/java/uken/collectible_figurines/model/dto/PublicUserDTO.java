@@ -7,6 +7,8 @@ public class PublicUserDTO {
   private String username;
   private String avatarUrl;
 
+  public PublicUserDTO() {}
+
   public PublicUserDTO(Long id, String username, String avatarUrl) {
     this.id = id;
     this.username = username;

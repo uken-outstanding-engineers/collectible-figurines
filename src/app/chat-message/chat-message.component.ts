@@ -8,13 +8,15 @@ import { ChatService } from '../api/chat-message.service';
 import { API_URL } from '../api/api-url';
 import { UserService } from '../api/user.service';
 import { interval, Subscription } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-chat-message',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   templateUrl: './chat-message.component.html',
   styleUrl: './chat-message.component.scss'
@@ -46,6 +48,12 @@ export class ChatMessageComponent {
     this.isLoggedIn = !!currentUser;
 
     this.loadUsers();
+
+    const passedUser = this.chatService.getSelectedUser();
+    if (passedUser) {
+      this.selectUser(passedUser);
+      this.chatService.clear();
+    }
 
     this.pollSubscription = interval(1000).subscribe(() => {
       if (this.selectedUser) {
@@ -107,7 +115,9 @@ export class ChatMessageComponent {
   }
 
   sendMessage(): void {
-    if (!this.selectedUser || !this.newMessageContent.trim() || this.loggedInUserId === null) return;
+    const recipient = this.selectedUser ?? this.chatService.getSelectedUser();
+
+  if (!recipient || !this.newMessageContent.trim() || this.loggedInUserId === null) return;
 
     const newMessage: ChatMessage = {
       sender: {
@@ -116,7 +126,7 @@ export class ChatMessageComponent {
         avatarUrl: ''
       },
       recipient: {
-        id: this.selectedUser.id,
+        id: recipient.id,
         username: '',
         avatarUrl: ''
       },
@@ -127,7 +137,7 @@ export class ChatMessageComponent {
     };
 
     this.chatService.sendMessage(newMessage).subscribe(sent => {
-      this.messages.push(sent);
+      this.messages.push(newMessage);
       this.newMessageContent = '';
       this.scrollToBottom();
 
