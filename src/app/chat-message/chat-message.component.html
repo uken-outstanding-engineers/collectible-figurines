@@ -1,5 +1,4 @@
 <div class="chat-container">
-  <!-- Panel użytkowników -->
   <aside class="users-list">
     <div class="users-header">Wiadomości</div>
     <ul>
@@ -22,12 +21,25 @@
     </ul>
   </aside>
 
-  <!-- Panel wiadomości -->
-  <section class="messages-panel" *ngIf="selectedUser; else noSelection">
-    <div class="messages-header">
-      <a [routerLink]="['/profile', selectedUser.id]"><strong>{{ selectedUser.username }}</strong></a>
+  <section *ngIf="selectedUser" class="messages-panel">
+
+    <div class="messages-header header-with-menu">
+      <div class="username-wrapper">
+        <a [routerLink]="['/profile', selectedUser.id]">
+          <strong>{{ selectedUser.username }}</strong>
+        </a>
+      </div>
+
+      <div class="menu-wrapper" #menuWrapper (click)="toggleMenu()" tabindex="0">
+        <span class="menu-dots">⋯</span>
+        <ul class="menu-dropdown" *ngIf="menuOpen">
+          <li (click)="openTradeBox()" *ngIf="!isTradeBoxOpen;" >Zaproponuj wymianę</li>
+          <li (click)="closeTradeBox()" *ngIf="isTradeBoxOpen;" >Wróc do wiadomości</li>
+        </ul>
+      </div>
     </div>
 
+    <ng-container *ngIf="!isTradeBoxOpen; else tradeView">
     <div class="messages-list">
       <div
         *ngFor="let msg of messages"
@@ -42,8 +54,59 @@
       </div>
       <div #bottom></div>
     </div>
+  </ng-container>
 
-    <form class="message-form" (submit)="sendMessage()" #messageForm="ngForm">
+  <ng-template #tradeView>
+    <div class="messages-list trade-box">
+      <h3>Propozycja wymiany</h3>
+
+      <div class="trade-section">
+        <label>Twoje figurki do wymiany:</label>
+        <select [(ngModel)]="selectedOfferFigureId">
+          <option [value]="null" disabled>Wybierz figurkę</option>
+          <option *ngFor="let fig of figures" [ngValue]="fig.id">{{ fig.name }}</option>
+        </select>
+        <button (click)="addOfferFigure()">Dodaj</button>
+        <div class="figures-list">
+          <span *ngFor="let fig of offerFigures" (click)="removeOfferFigure(fig)" class="figure-chip">
+            {{ fig.name }} ✕
+          </span>
+        </div>
+      </div>
+
+      <div class="trade-section">
+        <label>Figurki do odbioru:</label>
+        <select [(ngModel)]="selectedRequestFigureId">
+          <option [value]="null" disabled>Wybierz figurkę</option>
+          <option *ngFor="let fig of figures" [ngValue]="fig.id">{{ fig.name }}</option>
+        </select>
+        <button (click)="addRequestFigure()">Dodaj</button>
+        <div class="figures-list">
+          <span *ngFor="let fig of requestFigures" (click)="removeRequestFigure(fig)" class="figure-chip">
+            {{ fig.name }} ✕
+          </span>
+        </div>
+      </div>
+
+      <div class="trade-preview">
+        <h4>Podgląd propozycji:</h4>
+        <div class="preview-section">
+          <strong>Twoje figurki:</strong>
+          <ul><li *ngFor="let fig of offerFigures">{{ fig.name }}</li></ul>
+        </div>
+        <div class="preview-section">
+          <strong>Figurki do odbioru:</strong>
+          <ul><li *ngFor="let fig of requestFigures">{{ fig.name }}</li></ul>
+        </div>
+      </div>
+
+      <button class="send-trade-btn" (click)="confirmTrade()">Wyślij propozycję</button>
+      <button class="cancel-trade-btn" (click)="closeTradeBox()">Anuluj</button>
+    </div>
+  </ng-template>
+
+
+    <form *ngIf="!isTradeBoxOpen;" class="message-form" (submit)="sendMessage()" #messageForm="ngForm">
       <input
         type="text"
         name="content"

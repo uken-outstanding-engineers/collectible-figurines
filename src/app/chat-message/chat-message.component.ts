@@ -1,14 +1,16 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; //
+import { FormsModule } from '@angular/forms';
+import { interval, Subscription } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 import { PublicUser } from '../api/user-public.model';
 import { ChatMessage } from '../api/chat-message.model';
 import { ChatService } from '../api/chat-message.service';
 import { API_URL } from '../api/api-url';
 import { UserService } from '../api/user.service';
-import { interval, Subscription } from 'rxjs';
-import { RouterModule } from '@angular/router';
+import { FigureService } from '../api/figure.service';
+import { Figure } from '../api/figure.model';
 
 @Component({
   selector: 'app-chat-message',
@@ -33,13 +35,24 @@ export class ChatMessageComponent {
   newMessageContent: string = '';
   private shouldScroll = false;
 
+  menuOpen: boolean = false;
+
   @ViewChild('bottom') bottomRef!: ElementRef;
 
   pollSubscription!: Subscription;
 
+  figures: Figure[] = [];
+  isTradeBoxOpen: boolean = false;
+  selectedOfferFigureId: number | null = null;
+  selectedRequestFigureId: number | null = null;
+  offerFigures: Figure[] = [];
+  requestFigures: Figure[] = [];
+
   constructor(
     private chatService: ChatService,
     private userService: UserService,
+    private figureService: FigureService,
+    private eRef: ElementRef
   ) {}
 
   ngOnInit() {
@@ -59,6 +72,10 @@ export class ChatMessageComponent {
       if (this.selectedUser) {
         this.loadMessages();
       }
+    });
+
+    this.figureService.getFigures().subscribe(figs => {
+      this.figures = figs;
     });
   }
 
@@ -148,5 +165,72 @@ export class ChatMessageComponent {
     });
   }
 
+  toggleMenu(): void {
+    this.menuOpen = !this.menuOpen;
+  }
 
+  @ViewChild('menuWrapper') menuWrapperRef!: ElementRef;
+  @HostListener('document:click', ['$event.target'])
+  onClickOutside(targetElement: HTMLElement) {
+    const clickedInsideMenu = this.menuWrapperRef?.nativeElement.contains(targetElement);
+    if (!clickedInsideMenu) {
+      this.menuOpen = false;
+    }
+  }
+
+  openTradeBox() {
+    this.isTradeBoxOpen = true;
+  }
+
+  closeTradeBox() {
+    this.isTradeBoxOpen = false;
+    this.selectedOfferFigureId = null;
+    this.selectedRequestFigureId = null;
+    this.offerFigures = [];
+    this.requestFigures = [];
+  }
+
+  addOfferFigure() {
+    if (!this.selectedOfferFigureId) return;
+
+    const id = Number(this.selectedOfferFigureId);  
+    const fig = this.figures.find(f => f.id === id);
+    if (fig && !this.offerFigures.some(f => f.id === fig.id)) {
+      this.offerFigures.push(fig);
+    }
+  }
+
+  removeOfferFigure(fig: Figure) {
+    this.offerFigures = this.offerFigures.filter(f => f.id !== fig.id);
+  }
+
+  addRequestFigure() {
+    if (!this.selectedRequestFigureId) return;
+
+    const id = Number(this.selectedRequestFigureId);  
+    const fig = this.figures.find(f => f.id === id);
+    if (fig && !this.requestFigures.some(f => f.id === fig.id)) {
+      this.requestFigures.push(fig);
+    }
+  }
+
+  removeRequestFigure(fig: Figure) {
+    this.requestFigures = this.requestFigures.filter(f => f.id !== fig.id);
+  }
+
+  confirmTrade() {
+    if (this.offerFigures.length === 0 || this.requestFigures.length === 0) {
+      alert('Musisz wybrać co najmniej jedną figurkę do wymiany i odbioru!');
+      return;
+    }
+
+    console.log('Propozycja wymiany wysłana:', {
+      offer: this.offerFigures,
+      request: this.requestFigures
+    });
+
+    console.log('Propozycja wymiany została wysłana!');
+
+    this.closeTradeBox();
+  }
 }
