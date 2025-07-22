@@ -235,6 +235,78 @@ $radius-message-box: 20px;
   background-color: #f5f5f5;
 }
 
+.trade-figure {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.08);
+}
+
+.figure-info {
+  display: flex;
+  flex-direction: column;
+  max-width: 65%;
+}
+
+.figure-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.figure-number {
+  font-size: 13px;
+  color: #777;
+}
+
+.figure-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-left: 12px;
+}
+
+.trade-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.accept-btn {
+  background-color: #4caf50; 
+  color: white;
+}
+
+.accept-btn:hover {
+  background-color: #43a047;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.reject-btn {
+  background-color: #f44336; 
+  color: white;
+}
+
+.reject-btn:hover {
+  background-color: #e53935;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
 /* TRADE BOX */
 .trade-box {
   width: 100%;

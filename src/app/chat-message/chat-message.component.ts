@@ -11,6 +11,14 @@ import { API_URL } from '../api/api-url';
 import { UserService } from '../api/user.service';
 import { FigureService } from '../api/figure.service';
 import { Figure } from '../api/figure.model';
+import { TradeService } from '../api/trade.service';
+
+// interface TradeRequest {
+//   offerFigureIds: number[];
+//   requestFigureIds: number[];
+//   initiatorId: number | null;
+//   recipientId: number;
+// }
 
 @Component({
   selector: 'app-chat-message',
@@ -52,7 +60,8 @@ export class ChatMessageComponent {
     private chatService: ChatService,
     private userService: UserService,
     private figureService: FigureService,
-    private eRef: ElementRef
+    private eRef: ElementRef,
+    private tradeService: TradeService
   ) {}
 
   ngOnInit() {
@@ -102,27 +111,33 @@ export class ChatMessageComponent {
     this.loadMessages();
   }
 
+  private lastMessagesJson = '';
+
   loadMessages() {
-    if (!this.selectedUser) {
+    if (!this.selectedUser || !this.loggedInUserId) {
       this.messages = [];
       return;
     }
-    if(this.loggedInUserId) {
-      this.chatService.getMessagesBetweenUsers(this.loggedInUserId, this.selectedUser.id).subscribe({
-        next: (msgs) => {
+
+    this.chatService.getMessagesBetweenUsers(this.loggedInUserId, this.selectedUser.id).subscribe({
+      next: (msgs) => {
+        const newJson = JSON.stringify(msgs);
+        if (newJson !== this.lastMessagesJson) {
           this.messages = msgs;
+          console.log(msgs);
+          this.lastMessagesJson = newJson;
           if (this.shouldScroll) {
             setTimeout(() => {
               this.scrollToBottom();
-              this.shouldScroll = false; 
+              this.shouldScroll = false;
             }, 0);
           }
-        },
-        error: (err) => {
-          console.error('Błąd przy pobieraniu wiadomości:', err);
-        },
-      });
-    }
+        }
+      },
+      error: (err) => {
+        console.error('Błąd przy pobieraniu wiadomości:', err);
+      },
+    });
   }
 
   scrollToBottom(): void {
@@ -134,7 +149,7 @@ export class ChatMessageComponent {
   sendMessage(): void {
     const recipient = this.selectedUser ?? this.chatService.getSelectedUser();
 
-  if (!recipient || !this.newMessageContent.trim() || this.loggedInUserId === null) return;
+    if (!recipient || !this.newMessageContent.trim() || this.loggedInUserId === null) return;
 
     const newMessage: ChatMessage = {
       sender: {
@@ -224,13 +239,66 @@ export class ChatMessageComponent {
       return;
     }
 
-    console.log('Propozycja wymiany wysłana:', {
-      offer: this.offerFigures,
-      request: this.requestFigures
+    const recipient = this.selectedUser ?? this.chatService.getSelectedUser();
+    console.log(recipient);
+    console.log(this.loggedInUserId);
+
+    if (!recipient || this.loggedInUserId === null) return;
+
+    const trade = {
+      id: -1,
+      status: 'pending',
+      initiatorFigures: this.offerFigures,
+      recipientFigures: this.requestFigures
+    };
+
+    const chatMessage: ChatMessage = {
+      id: null, 
+      sender: {
+        id: this.loggedInUserId,
+        username: '',  
+        avatarUrl: ''
+      },
+      recipient: {
+        id: recipient.id,
+        username: '',
+        avatarUrl: ''
+      },
+      content: "TRADE",
+      date: new Date().toISOString(),
+      seen: false,
+      trade: trade
+    };
+
+    console.log(chatMessage);
+
+    this.tradeService.proposeTrade(chatMessage).subscribe({
+      next: () => {
+        console.log('Propozycja wymiany została wysłana!');
+        this.closeTradeBox();
+        this.loadMessages();
+      },
+      error: (err) => {
+        console.error('Błąd przy wysyłaniu propozycji:', err);
+        alert('Wystąpił błąd podczas wysyłania propozycji wymiany.');
+      }
     });
 
-    console.log('Propozycja wymiany została wysłana!');
-
-    this.closeTradeBox();
+    this.scrollToBottom();
   }
+
+
+  acceptTrade(tradeId: number): void {
+    console.log(`Trade ${tradeId} został zaakceptowany.`);
+  }
+
+  rejectTrade(tradeId: number): void {
+    console.log(`Trade ${tradeId} został odrzucony.`);
+  }
+
+  trackById(index: number, item: Figure): number {
+    return item.id ?? -1;
+  }
+
+
 }

@@ -40,70 +40,113 @@
     </div>
 
     <ng-container *ngIf="!isTradeBoxOpen; else tradeView">
-    <div class="messages-list">
-      <div
-        *ngFor="let msg of messages"
-        [ngClass]="{
-          'message': true,
-          'sent': msg.sender.id === loggedInUserId,
-          'received': msg.sender.id !== loggedInUserId
-        }"
-      >
-        <div class="message-content">{{ msg.content }}</div>
-        <div class="message-date">{{ msg.date | date:'yyyy-MM-dd HH:mm' }}</div>
-      </div>
-      <div #bottom></div>
-    </div>
-  </ng-container>
+      <div class="messages-list">
+        <div
+          *ngFor="let msg of messages"
+          [ngClass]="{
+            'message': true,
+            'sent': msg.sender.id === loggedInUserId,
+            'received': msg.sender.id !== loggedInUserId
+          }"
+        >
+          <ng-container *ngIf="!msg.trade; else tradeMessageBox">
+            <div class="message-content">{{ msg.content }}</div>
+            <div class="message-date">{{ msg.date | date:'yyyy-MM-dd HH:mm' }}</div>
+          </ng-container>
 
-  <ng-template #tradeView>
-    <div class="messages-list trade-box">
-      <h3>Propozycja wymiany</h3>
+          <ng-template #tradeMessageBox>
+            <div *ngIf="msg.trade as trade" class="trade-message-box">
+              <h4>💬 Propozycja wymiany</h4>
+              
+              <div class="trade-preview">
+                <div class="preview-section">
+                  <strong>Figurki nadawcy:</strong>
+                  <ul>
+                    <div class="trade-figure" *ngFor="let fig of msg.trade?.initiatorFigures; trackBy: trackById">
+                      <div class="figure-info">
+                        <span class="figure-name">{{ fig.name }}</span>
+                        <span class="figure-number">#{{ fig.number }}</span>
+                      </div>
+                      <img [src]="apiUrl + fig.imageUrl" alt="{{ fig.name }}" class="figure-image" />
+                    </div>
+                  </ul>
+                </div>
+                <div class="preview-section">
+                  <strong>Oczekiwane figurki:</strong>
+                  <ul>
+                    <div class="trade-figure" *ngFor="let fig of msg.trade?.recipientFigures; trackBy: trackById">
+                      <div class="figure-info">
+                        <span class="figure-name">{{ fig.name }}</span>
+                        <span class="figure-number">#{{ fig.number }}</span>
+                      </div>
+                      <img [src]="apiUrl + fig.imageUrl" alt="{{ fig.name }}" class="figure-image" />
+                    </div>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="trade-actions" *ngIf="msg.recipient.id === loggedInUserId">
+                <button class="btn accept-btn" (click)="acceptTrade(msg.trade.id)">Akceptuj</button>
+                <button class="btn reject-btn" (click)="rejectTrade(msg.trade.id)">Odrzuć</button>
+              </div>
 
-      <div class="trade-section">
-        <label>Twoje figurki do wymiany:</label>
-        <select [(ngModel)]="selectedOfferFigureId">
-          <option [value]="null" disabled>Wybierz figurkę</option>
-          <option *ngFor="let fig of figures" [ngValue]="fig.id">{{ fig.name }}</option>
-        </select>
-        <button (click)="addOfferFigure()">Dodaj</button>
-        <div class="figures-list">
-          <span *ngFor="let fig of offerFigures" (click)="removeOfferFigure(fig)" class="figure-chip">
-            {{ fig.name }} ✕
-          </span>
+              <div class="message-date">{{ msg.date | date:'yyyy-MM-dd HH:mm' }}</div>
+            </div>
+          </ng-template>
         </div>
+        <div #bottom></div>
       </div>
+    </ng-container>
 
-      <div class="trade-section">
-        <label>Figurki do odbioru:</label>
-        <select [(ngModel)]="selectedRequestFigureId">
-          <option [value]="null" disabled>Wybierz figurkę</option>
-          <option *ngFor="let fig of figures" [ngValue]="fig.id">{{ fig.name }}</option>
-        </select>
-        <button (click)="addRequestFigure()">Dodaj</button>
-        <div class="figures-list">
-          <span *ngFor="let fig of requestFigures" (click)="removeRequestFigure(fig)" class="figure-chip">
-            {{ fig.name }} ✕
-          </span>
+
+    <ng-template #tradeView>
+      <div class="messages-list trade-box">
+        <h3>Propozycja wymiany</h3>
+
+        <div class="trade-section">
+          <label>Twoje figurki do wymiany:</label>
+          <select [(ngModel)]="selectedOfferFigureId">
+            <option [value]="null" disabled>Wybierz figurkę</option>
+            <option *ngFor="let fig of figures" [ngValue]="fig.id">{{ fig.name }} #{{ fig.number }}</option>
+          </select>
+          <button (click)="addOfferFigure()">Dodaj</button>
+          <div class="figures-list">
+            <span *ngFor="let fig of offerFigures" (click)="removeOfferFigure(fig)" class="figure-chip">
+              {{ fig.name }} ✕
+            </span>
+          </div>
         </div>
+
+        <div class="trade-section">
+          <label>Figurki do odbioru:</label>
+          <select [(ngModel)]="selectedRequestFigureId">
+            <option [value]="null" disabled>Wybierz figurkę</option>
+            <option *ngFor="let fig of figures" [ngValue]="fig.id">{{ fig.name }} #{{ fig.number }}</option>
+          </select>
+          <button (click)="addRequestFigure()">Dodaj</button>
+          <div class="figures-list">
+            <span *ngFor="let fig of requestFigures" (click)="removeRequestFigure(fig)" class="figure-chip">
+              {{ fig.name }} ✕
+            </span>
+          </div>
+        </div>
+
+        <div class="trade-preview">
+          <h4>Podgląd propozycji:</h4>
+          <div class="preview-section">
+            <strong>Twoje figurki:</strong>
+            <ul><li *ngFor="let fig of offerFigures">{{ fig.name }}</li></ul>
+          </div>
+          <div class="preview-section">
+            <strong>Figurki do odbioru:</strong>
+            <ul><li *ngFor="let fig of requestFigures">{{ fig.name }}</li></ul>
+          </div>
+        </div>
+
+        <button class="send-trade-btn" (click)="confirmTrade()">Wyślij propozycję</button>
+        <button class="cancel-trade-btn" (click)="closeTradeBox()">Anuluj</button>
       </div>
-
-      <div class="trade-preview">
-        <h4>Podgląd propozycji:</h4>
-        <div class="preview-section">
-          <strong>Twoje figurki:</strong>
-          <ul><li *ngFor="let fig of offerFigures">{{ fig.name }}</li></ul>
-        </div>
-        <div class="preview-section">
-          <strong>Figurki do odbioru:</strong>
-          <ul><li *ngFor="let fig of requestFigures">{{ fig.name }}</li></ul>
-        </div>
-      </div>
-
-      <button class="send-trade-btn" (click)="confirmTrade()">Wyślij propozycję</button>
-      <button class="cancel-trade-btn" (click)="closeTradeBox()">Anuluj</button>
-    </div>
-  </ng-template>
+    </ng-template>
 
 
     <form *ngIf="!isTradeBoxOpen;" class="message-form" (submit)="sendMessage()" #messageForm="ngForm">

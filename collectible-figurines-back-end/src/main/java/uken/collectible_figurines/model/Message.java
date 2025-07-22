@@ -22,11 +22,11 @@ public class Message {
 
   @ManyToOne
   @JoinColumn(name = "sender_id", nullable = false)
-  private User senderId;
+  private User sender;
 
   @ManyToOne
   @JoinColumn(name = "recipient_id", nullable = false)
-  private User recipientId;
+  private User recipient;
 
   @Column(name = "content")
   private String content;
@@ -37,24 +37,21 @@ public class Message {
   @Column(name = "seen")
   private boolean seen;
 
+  @ManyToOne
+  @JoinColumn(name = "trade_id")
+  private Trade trade;
+
+
   public Long getId() {
     return id;
   }
   public void setId(Long id) {
     this.id = id;
   }
-  public User getSenderId() {
-    return senderId;
-  }
-  public void setSenderId(User senderId) {
-    this.senderId = senderId;
-  }
-  public User getRecipientId() {
-    return recipientId;
-  }
-  public void setRecipient(User recipientId) {
-    this.recipientId = recipientId;
-  }
+  public User getSender() { return sender; }
+  public void setSender(User sender) { this.sender = sender; }
+  public User getRecipient() { return recipient; }
+  public void setRecipient(User recipient) { this.recipient = recipient; }
   public String getContent() {
     return content;
   }
@@ -72,5 +69,11 @@ public class Message {
   }
   public void setSeen(boolean seen) {
     this.seen = seen;
+  }
+  public Trade getTrade() {
+    return trade;
+  }
+  public void setTrade(Trade trade) {
+    this.trade = trade;
   }
 }

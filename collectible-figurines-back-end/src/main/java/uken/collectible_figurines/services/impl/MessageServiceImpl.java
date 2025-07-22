@@ -23,12 +23,12 @@ public class MessageServiceImpl implements MessageService {
   private final UserRepository userRepository;
 
   public List<PublicUserDTO> getUsersInConversationWith(Long userId) {
-    List<Message> messages = messageRepository.findAllBySenderId_IdOrRecipientId_Id(userId, userId);
+    List<Message> messages = messageRepository.findAllBySender_IdOrRecipient_Id(userId, userId);
 
     Map<Long, Message> latestMessageMap = new HashMap<>();
 
     for (Message msg : messages) {
-      User otherUser = msg.getSenderId().getId().equals(userId) ? msg.getRecipientId() : msg.getSenderId();
+      User otherUser = msg.getSender().getId().equals(userId) ? msg.getRecipient() : msg.getSender();
       Long otherUserId = otherUser.getId();
 
       Message existing = latestMessageMap.get(otherUserId);
@@ -40,7 +40,7 @@ public class MessageServiceImpl implements MessageService {
     return latestMessageMap.values().stream()
       .sorted(Comparator.comparing(Message::getDate).reversed())
       .map(msg -> {
-        User user = msg.getSenderId().getId().equals(userId) ? msg.getRecipientId() : msg.getSenderId();
+        User user = msg.getSender().getId().equals(userId) ? msg.getRecipient() : msg.getSender();
         return new PublicUserDTO(user.getId(), user.getUsername(), user.getAvatarUrl());
       })
       .toList();
@@ -56,10 +56,10 @@ public class MessageServiceImpl implements MessageService {
   public Message saveMessage(MessageDTO dto) {
     Message message = messageMapper.toMessage(dto, userRepository);
 
-    if (message.getSenderId() == null || message.getSenderId().getId() == null) {
+    if (message.getSender() == null || message.getSender().getId() == null) {
       throw new IllegalArgumentException("SenderId is null");
     }
-    if (message.getRecipientId() == null || message.getRecipientId().getId() == null) {
+    if (message.getRecipient() == null || message.getRecipient().getId() == null) {
       throw new IllegalArgumentException("RecipientId is null");
     }
 

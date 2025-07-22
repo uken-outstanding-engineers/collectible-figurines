@@ -5,12 +5,20 @@ import uken.collectible_figurines.model.Message;
 import uken.collectible_figurines.model.User;
 import uken.collectible_figurines.model.dto.MessageDTO;
 import uken.collectible_figurines.model.dto.PublicUserDTO;
+import uken.collectible_figurines.model.dto.TradeDTO;
 import uken.collectible_figurines.repository.UserRepository;
 
 import java.time.LocalDateTime;
 
 @Component
 public class MessageMapper {
+
+  private final TradeMapper tradeMapper;
+
+  public MessageMapper(TradeMapper tradeMapper) {
+    this.tradeMapper = tradeMapper;
+  }
+
   public PublicUserDTO toPublicUserDTO(User user) {
     if (user == null) return null;
     return new PublicUserDTO(
@@ -23,13 +31,19 @@ public class MessageMapper {
   public MessageDTO toMessageDTO(Message message) {
     if (message == null) return null;
 
+    TradeDTO tradeDTO = null;
+    if (message.getTrade() != null) {
+      tradeDTO = tradeMapper.toTradeDTO(message.getTrade());
+    }
+
     return new MessageDTO(
       message.getId(),
-      toPublicUserDTO(message.getSenderId()),
-      toPublicUserDTO(message.getRecipientId()),
+      toPublicUserDTO(message.getSender()),
+      toPublicUserDTO(message.getRecipient()),
       message.getContent(),
       message.getDate(),
-      message.isSeen()
+      message.isSeen(),
+      tradeDTO
     );
   }
 
@@ -50,8 +64,8 @@ public class MessageMapper {
 
     Message message = new Message();
     message.setId(dto.getId());
-    message.setSenderId(sender);
-    message.setRecipientId(recipient);
+    message.setSender(sender);
+    message.setRecipient(recipient);
     message.setContent(dto.getContent());
     message.setDate(dto.getDate() != null ? dto.getDate() : LocalDateTime.now());
     message.setSeen(dto.isSeen());

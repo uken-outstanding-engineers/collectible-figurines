@@ -10,13 +10,14 @@ import java.util.List;
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
   @Query("SELECT m FROM Message m " +
-    "WHERE (m.senderId.id = :userId1 AND m.recipientId.id = :userId2) " +
-    "   OR (m.senderId.id = :userId2 AND m.recipientId.id = :userId1) " +
+    "WHERE (m.sender.id = :userId1 AND m.recipient.id = :userId2) " +
+    "   OR (m.sender.id = :userId2 AND m.recipient.id = :userId1) " +
     "ORDER BY m.date ASC")
   List<Message> findConversationBetweenUsers(@Param("userId1") Long userId1,
                                              @Param("userId2") Long userId2);
 
-  List<Message> findAllBySenderId_IdOrRecipientId_Id(Long senderId, Long recipientId);
+  List<Message> findAllBySender_IdOrRecipient_Id(Long senderId, Long recipientId);
+
 
 }
 

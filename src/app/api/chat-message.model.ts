@@ -1,3 +1,5 @@
+import { Trade } from './trade.model';
+
 export interface PublicUser {
   id: number;
   username: string;
@@ -11,4 +13,5 @@ export interface ChatMessage {
   date: string;
   sender: PublicUser;
   recipient: PublicUser;
+  trade?: Trade;
 }
