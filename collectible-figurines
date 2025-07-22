@@ -21,6 +21,38 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: activity_logs; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.activity_logs (
+    id bigint NOT NULL,
+    action character varying(512),
+    user_id bigint NOT NULL,
+    date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    name character varying(512)
+);
+
+
+ALTER TABLE public.activity_logs OWNER TO postgres;
+
+--
+-- Name: chat_message; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.chat_message (
+    id bigint NOT NULL,
+    sender_id bigint NOT NULL,
+    recipient_id bigint NOT NULL,
+    content character varying(1024),
+    date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    seen boolean DEFAULT false,
+    trade_id bigint
+);
+
+
+ALTER TABLE public.chat_message OWNER TO postgres;
+
+--
 -- Name: fandoms; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -53,6 +85,78 @@ CREATE TABLE public.figurines (
 
 
 ALTER TABLE public.figurines OWNER TO postgres;
+
+--
+-- Name: friendships; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.friendships (
+    id bigint NOT NULL,
+    user_id_1 bigint NOT NULL,
+    user_id_2 bigint NOT NULL,
+    date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.friendships OWNER TO postgres;
+
+--
+-- Name: notifications; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.notifications (
+    id bigint NOT NULL,
+    sender_id bigint,
+    recipient_id bigint NOT NULL,
+    type character varying(512) NOT NULL,
+    seen boolean DEFAULT false,
+    date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.notifications OWNER TO postgres;
+
+--
+-- Name: seq_id_activity_logs; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seq_id_activity_logs
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.seq_id_activity_logs OWNER TO postgres;
+
+--
+-- Name: seq_id_activity_logs; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.seq_id_activity_logs OWNED BY public.activity_logs.id;
+
+
+--
+-- Name: seq_id_chat_message; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seq_id_chat_message
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 0
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.seq_id_chat_message OWNER TO postgres;
+
+--
+-- Name: seq_id_chat_message; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.seq_id_chat_message OWNED BY public.chat_message.id;
+
 
 --
 -- Name: seq_id_fandoms; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -94,6 +198,118 @@ ALTER SEQUENCE public.seq_id_figurines OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.seq_id_figurines OWNED BY public.figurines.id;
+
+
+--
+-- Name: seq_id_friendships; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seq_id_friendships
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 0
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.seq_id_friendships OWNER TO postgres;
+
+--
+-- Name: seq_id_friendships; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.seq_id_friendships OWNED BY public.friendships.id;
+
+
+--
+-- Name: seq_id_notifications; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seq_id_notifications
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 0
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.seq_id_notifications OWNER TO postgres;
+
+--
+-- Name: seq_id_notifications; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.seq_id_notifications OWNED BY public.notifications.id;
+
+
+--
+-- Name: trade; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.trade (
+    id bigint NOT NULL,
+    initiator_id bigint NOT NULL,
+    recipient_id bigint NOT NULL,
+    status character varying(64)
+);
+
+
+ALTER TABLE public.trade OWNER TO postgres;
+
+--
+-- Name: seq_id_trade; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seq_id_trade
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 0
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.seq_id_trade OWNER TO postgres;
+
+--
+-- Name: seq_id_trade; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.seq_id_trade OWNED BY public.trade.id;
+
+
+--
+-- Name: trade_item; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.trade_item (
+    id bigint NOT NULL,
+    trade_id bigint NOT NULL,
+    figure_id bigint NOT NULL,
+    owner_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.trade_item OWNER TO postgres;
+
+--
+-- Name: seq_id_trade_item; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seq_id_trade_item
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 0
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.seq_id_trade_item OWNER TO postgres;
+
+--
+-- Name: seq_id_trade_item; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.seq_id_trade_item OWNED BY public.trade_item.id;
 
 
 --
@@ -205,6 +421,20 @@ ALTER SEQUENCE public.seq_id_users OWNED BY public.users.id;
 
 
 --
+-- Name: activity_logs id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.activity_logs ALTER COLUMN id SET DEFAULT nextval('public.seq_id_activity_logs'::regclass);
+
+
+--
+-- Name: chat_message id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.chat_message ALTER COLUMN id SET DEFAULT nextval('public.seq_id_chat_message'::regclass);
+
+
+--
 -- Name: fandoms id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -216,6 +446,34 @@ ALTER TABLE ONLY public.fandoms ALTER COLUMN id SET DEFAULT nextval('public.seq_
 --
 
 ALTER TABLE ONLY public.figurines ALTER COLUMN id SET DEFAULT nextval('public.seq_id_figurines'::regclass);
+
+
+--
+-- Name: friendships id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.friendships ALTER COLUMN id SET DEFAULT nextval('public.seq_id_friendships'::regclass);
+
+
+--
+-- Name: notifications id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notifications ALTER COLUMN id SET DEFAULT nextval('public.seq_id_notifications'::regclass);
+
+
+--
+-- Name: trade id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.trade ALTER COLUMN id SET DEFAULT nextval('public.seq_id_trade'::regclass);
+
+
+--
+-- Name: trade_item id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.trade_item ALTER COLUMN id SET DEFAULT nextval('public.seq_id_trade_item'::regclass);
 
 
 --
@@ -240,6 +498,35 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.seq_id
 
 
 --
+-- Data for Name: activity_logs; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.activity_logs (id, action, user_id, date, name) FROM stdin;
+6	ADD_FIGURINE	1	2025-07-16 02:51:57.443993	CARAXES
+7	EDIT_FIGURINE	1	2025-07-16 02:58:14.432862	CARAXES
+8	ADD_FIGURINE	1	2025-07-16 03:25:44.985548	123
+9	DELETE_FIGURINE	1	2025-07-16 03:32:21.080681	123
+10	ADD_FANDOM	1	2025-07-16 16:07:09.995934	Fandom_test
+11	EDIT_FANDOM	1	2025-07-16 16:07:52.380317	Fandom_test123
+12	DELETE_FANDOM	1	2025-07-16 16:15:00.818141	Fandom_test123
+13	ADD_FIGURINE	5	2025-07-16 20:46:50.760053	FIGURKA OD HUNTERA
+\.
+
+
+--
+-- Data for Name: chat_message; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.chat_message (id, sender_id, recipient_id, content, date, seen, trade_id) FROM stdin;
+91	1	2	dzień dobry, jak mija panu dzień?	2025-07-20 21:07:25.66924	f	\N
+92	1	2	siemka	2025-07-21 03:35:37.268185	f	\N
+108	1	2	TRADE	2025-07-22 02:11:04.792688	f	15
+109	1	2	TRADE	2025-07-22 02:11:13.59208	f	16
+110	1	2	aha	2025-07-22 02:12:13.559215	f	\N
+\.
+
+
+--
 -- Data for Name: fandoms; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -248,6 +535,12 @@ COPY public.fandoms (id, name, image_url) FROM stdin;
 2	Harry Potter	/api/images/fandoms-images/9368477a-eb89-4a9b-90f9-470df1c6e062_harry-potter.jpg
 3	Marvel Universe	/api/images/fandoms-images/eb1e29a9-7425-4f0b-97cb-95beb38d47d4_marvel.jpg
 4	House Of The Dragon	/api/images/fandoms-images/058be4f8-14b9-4f9f-a9a9-2a8dc2ced3e6_house-of-the-dragon.jpg
+22	Naruto: Shippuden	/api/images/fandoms-images/8528af62-58c5-4071-a6f5-1de9aff4d353_naruto_shippuden_logo_by_otacuichi_d177w5p-fullview.jpg
+25	123	/api/images/fandoms-images/efd39712-83ae-4751-b3fa-91ee542edcae_000000009a.jpg
+27	test1	/api/images/fandoms-images/dbd7c422-ab4d-409f-ab20-1673c388bcd3_000000009b.jpg
+26	1234	/api/images/fandoms-images/8052acfa-428c-4667-9137-cc55de41528a_caraxes2.jpg
+24	test2	/api/images/fandoms-images/97926456-2bbb-47d6-a5d4-702cf68b4a26_000000009c.jpg
+23	test33	/api/images/fandoms-images/f911ecdc-87a8-4581-adfb-42ed0a67ce15_000000009c.jpg
 \.
 
 
@@ -268,6 +561,54 @@ COPY public.figurines (id, name, series, image_url, hover_image_url, chase, glow
 2	THRAWN'S NIGHT TROOPER	STAR WARS	/api/images/figurines-images/2377bd1d-e1a9-4051-a760-40f8ef8b9573_000000001a.jpg	/api/images/figurines-images/a594c34b-3f7e-4efb-bbbc-594cf728fd83_000000001b.jpg	\N	\N	\N	\N	1	685
 9	NARUTO (SIX PATH SAGE)	NARUTO SHIPPUDEN	/api/images/figurines-images/dd4c6681-f5cd-4245-b0ba-ddfde8ed665f_000000009a.jpg	/api/images/figurines-images/fc3ec6ab-3951-4c82-a2ea-5e9d4a2d895d_000000009b.jpg	\N	t	\N	\N	\N	932
 8	SHREK	SHREK	/api/images/figurines-images/c73153dc-e5e6-4e28-a774-2c7268177710_000000008a.jpg	/api/images/figurines-images/251e872f-2d8e-4e32-9dc8-0a5d8b767f00_000000008b.jpg	\N	\N	\N	\N	\N	1594
+102	FIGURKA OD HUNTERA	PINGU PINGU	/api/images/figurines-images/e480fef1-eea2-4cb0-9e44-0b6aece31a10_Pingwin.jpg	/api/images/figurines-images/3a7f2015-925e-4d64-bc2e-e13837bf26ff_Pingwin.jpg	f	t	f	f	\N	1543
+\.
+
+
+--
+-- Data for Name: friendships; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.friendships (id, user_id_1, user_id_2, date) FROM stdin;
+9	1	2	2025-07-19 17:47:42.235286
+10	1	3	2025-07-19 18:06:54.360417
+\.
+
+
+--
+-- Data for Name: notifications; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.notifications (id, sender_id, recipient_id, type, seen, date) FROM stdin;
+24	5	1	FRIEND_REQUEST	f	2025-07-17 02:59:03.568411
+25	\N	1	SYSTEM	f	2025-07-17 16:41:17.148062
+26	5	1	TRADE_REQUEST	f	2025-07-17 18:20:37.893832
+27	8	1	FRIEND_REQUEST	f	2025-07-19 00:25:31.623047
+29	2	3	FRIEND_REQUEST	f	2025-07-19 19:53:14.404178
+\.
+
+
+--
+-- Data for Name: trade; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.trade (id, initiator_id, recipient_id, status) FROM stdin;
+15	1	2	pending
+16	1	2	pending
+\.
+
+
+--
+-- Data for Name: trade_item; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.trade_item (id, trade_id, figure_id, owner_id) FROM stdin;
+8	15	10	1
+9	15	5	2
+10	15	3	2
+11	15	4	2
+12	16	11	1
+13	16	3	2
 \.
 
 
@@ -279,11 +620,26 @@ COPY public.user_figurine_list_items (id, list_id, figurine_id, date) FROM stdin
 4	5	3	2025-02-06
 5	3	3	2025-02-06
 6	6	10	2025-02-06
-187	18	59	2025-02-21
 188	1	6	2025-02-21
 189	2	5	2025-02-21
+190	4	5	2025-02-21
+191	3	11	2025-02-21
+192	3	10	2025-02-21
+193	3	9	2025-02-21
+194	3	8	2025-02-21
+195	3	7	2025-02-21
+196	3	6	2025-02-21
 139	3	59	2025-02-19
+197	4	59	2025-02-21
+198	1	11	2025-02-21
+199	1	9	2025-02-21
+201	18	11	2025-02-21
+204	18	10	2025-02-21
+206	1	59	2025-02-21
 31	7	2	2025-02-10
+209	18	2	2025-02-23
+212	18	59	2025-07-14
+213	1	102	2025-07-16
 181	18	1	2025-02-20
 \.
 
@@ -320,6 +676,12 @@ COPY public.user_figurine_lists (id, user_id, name, type) FROM stdin;
 43	18	Liked	LIKED
 44	18	Wanted	WANTED
 45	18	Owned	OWNED
+46	19	Liked	LIKED
+47	19	Wanted	WANTED
+48	19	Owned	OWNED
+52	21	Liked	LIKED
+53	21	Wanted	WANTED
+54	21	Owned	OWNED
 \.
 
 
@@ -329,52 +691,112 @@ COPY public.user_figurine_lists (id, user_id, name, type) FROM stdin;
 
 COPY public.users (id, email, username, passwd, permission, last_login, avatar_url) FROM stdin;
 18	test222@222	test222@222	$2a$10$4cAw2s9fMfXpuoC2GegVOefc3tY8nhLRnUEltJVEOWckJbDomltzK	USER	2025-02-21 02:25:05.891554+01	\N
-2	user1@figurines.pl	user1	$2a$10$IuB/tjGS74DgjEsjHELiNeXhfqKh4my9uhkJxVAQeHrZ8TVEiMRuq	USER	2025-02-20 19:07:29.899802+01	/api/images/avatars-images/6219be83-e418-4110-996d-2afd55cd06f8_000000009c.jpg
+21	dsadasd@dsadas	NADIA	$2a$10$l9mNYMNmUpmGuCTY06wl5uzath2nbtJOf4pvzBASmtbQnI6dh4JfK	USER	2025-03-08 22:14:07.930301+01	\N
 6	uwu@gmail.com	Nadia	$2a$10$6xVBhmqMgBt5kY4jpOIZw.f8QVmPFmepI9mJyK1qi85FPIQxWWN/S	USER	2025-02-11 16:54:55.96833+01	\N
-1	admin123@figurines.pl	admin	$2a$10$0O1wUGgyW.uMbr3KWVmZ1eiGCbRbQEdhQRBw1I5gc4muDgehdu1Ui	ADMIN	2025-02-21 02:50:08.423091+01	/api/images/avatars-images/eb11a7b5-f24c-427f-8e48-bb0e3a9b85c4_000000005c.jpg
+3	user2@figurines.pl	user2	$2a$10$xT3JQ8Ng09fI4owzMuFmdeyvgZOliXHaMXAlI489MdR3SbYbKKulm	USER	2025-07-19 19:54:16.324976+02	\N
+1	admin@figurines.pl	admin	$2a$10$0O1wUGgyW.uMbr3KWVmZ1eiGCbRbQEdhQRBw1I5gc4muDgehdu1Ui	ADMIN	2025-07-22 02:09:25.601257+02	/api/images/avatars-images/06215e4a-0b1a-4547-81df-bc906193ff0c_000000005c.jpg
+5	hunterodim@lusterko.com	Hunter O Dim	$2a$10$0O1wUGgyW.uMbr3KWVmZ1eiGCbRbQEdhQRBw1I5gc4muDgehdu1Ui	ADMIN	2025-07-17 03:03:33.904038+02	/api/images/avatars-images/bf70798b-cd7b-420d-8cd9-8fea2184dd73_Pingwin.jpg
+2	user1@figurines.pl	user1	$2a$10$IuB/tjGS74DgjEsjHELiNeXhfqKh4my9uhkJxVAQeHrZ8TVEiMRuq	USER	2025-07-21 23:42:41.719279+02	/api/images/avatars-images/6219be83-e418-4110-996d-2afd55cd06f8_000000009c.jpg
 14	test@test	test@test	$2a$10$d4Yi5cpRs71JK6PNH7anDuwSMgFNVmB0UD5f6CTVWAVs03cjPJUgK	USER	2025-02-21 02:12:58.005555+01	\N
-3	user2@figurines.pl	user2	$2a$10$xT3JQ8Ng09fI4owzMuFmdeyvgZOliXHaMXAlI489MdR3SbYbKKulm	USER	2025-02-15 00:14:32.534437+01	\N
 15	test2@test	test2@test	$2a$10$ckFQN9tLM26/qGHUcxMDsOdNQ7rn/Q6hoicLkCVOdHAWKxGvl76Ti	USER	2025-02-21 02:13:49.158657+01	\N
 16	adin2@3123	adin2	$2a$10$qDqT0IWJ1.UrOy1qFstjOOE3yonRkT5SbsCroLjkAIRSviFLaSdu2	USER	2025-02-21 02:17:52.601648+01	\N
 8	kzyhu@kzyhu.com	kzyhu	$2a$10$4nNCgJ6YPoYdRWZR9wpbsOtD.3RIairCQc04xtd3QDdLSuXWGMxU6	ADMIN	2025-02-16 16:53:41.554997+01	\N
 17	test@test2	test@test2	$2a$10$0.iIpR590ZtDRkYjMT9NA.87p8aRkfJp2N.Ybc67l/6UAKh024gBK	USER	2025-02-21 02:19:43.938969+01	\N
-5	hunterodim@lusterko.com	Hunter O Dim	$2a$10$06lgojoka.ZJsKvzF8EDxucC7qyp4MhPpwVGqWExg/X/993KAFMAe	USER	2025-02-11 22:14:39.007068+01	\N
+19	test@test222	test@test22	$2a$10$rSgvAAzBI1.cwpT6nnCVKucAWL9D8PJc2gkUzQD3AQwRM14ybhSmG	USER	2025-02-23 18:00:35.349842+01	\N
 \.
+
+
+--
+-- Name: seq_id_activity_logs; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.seq_id_activity_logs', 13, true);
+
+
+--
+-- Name: seq_id_chat_message; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.seq_id_chat_message', 110, true);
 
 
 --
 -- Name: seq_id_fandoms; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_id_fandoms', 19, true);
+SELECT pg_catalog.setval('public.seq_id_fandoms', 28, true);
 
 
 --
 -- Name: seq_id_figurines; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_id_figurines', 86, true);
+SELECT pg_catalog.setval('public.seq_id_figurines', 102, true);
+
+
+--
+-- Name: seq_id_friendships; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.seq_id_friendships', 10, true);
+
+
+--
+-- Name: seq_id_notifications; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.seq_id_notifications', 29, true);
+
+
+--
+-- Name: seq_id_trade; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.seq_id_trade', 16, true);
+
+
+--
+-- Name: seq_id_trade_item; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.seq_id_trade_item', 13, true);
 
 
 --
 -- Name: seq_id_user_figurine_list_items; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_id_user_figurine_list_items', 189, true);
+SELECT pg_catalog.setval('public.seq_id_user_figurine_list_items', 213, true);
 
 
 --
 -- Name: seq_id_user_figurine_lists; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_id_user_figurine_lists', 45, true);
+SELECT pg_catalog.setval('public.seq_id_user_figurine_lists', 54, true);
 
 
 --
 -- Name: seq_id_users; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_id_users', 18, true);
+SELECT pg_catalog.setval('public.seq_id_users', 21, true);
+
+
+--
+-- Name: activity_logs activity_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.activity_logs
+    ADD CONSTRAINT activity_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chat_message chat_message_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.chat_message
+    ADD CONSTRAINT chat_message_pkey PRIMARY KEY (id);
 
 
 --
@@ -394,6 +816,46 @@ ALTER TABLE ONLY public.figurines
 
 
 --
+-- Name: friendships friendships_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.friendships
+    ADD CONSTRAINT friendships_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: friendships friendships_user_id_1_user_id_2_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.friendships
+    ADD CONSTRAINT friendships_user_id_1_user_id_2_key UNIQUE (user_id_1, user_id_2);
+
+
+--
+-- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notifications
+    ADD CONSTRAINT notifications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: trade_item trade_item_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.trade_item
+    ADD CONSTRAINT trade_item_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: trade trade_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.trade
+    ADD CONSTRAINT trade_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: user_figurine_list_items user_figurine_list_items_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -410,6 +872,14 @@ ALTER TABLE ONLY public.user_figurine_lists
 
 
 --
+-- Name: friendships user_order; Type: CHECK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.friendships
+    ADD CONSTRAINT user_order CHECK ((user_id_1 < user_id_2)) NOT VALID;
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -423,6 +893,110 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.figurines
     ADD CONSTRAINT fandom_id FOREIGN KEY (fandom_id) REFERENCES public.fandoms(id) NOT VALID;
+
+
+--
+-- Name: trade_item figure_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.trade_item
+    ADD CONSTRAINT figure_id FOREIGN KEY (figure_id) REFERENCES public.figurines(id);
+
+
+--
+-- Name: trade initiator_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.trade
+    ADD CONSTRAINT initiator_id FOREIGN KEY (initiator_id) REFERENCES public.users(id);
+
+
+--
+-- Name: trade_item owner_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.trade_item
+    ADD CONSTRAINT owner_id FOREIGN KEY (owner_id) REFERENCES public.users(id);
+
+
+--
+-- Name: notifications recipient_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notifications
+    ADD CONSTRAINT recipient_id FOREIGN KEY (recipient_id) REFERENCES public.users(id) NOT VALID;
+
+
+--
+-- Name: chat_message recipient_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.chat_message
+    ADD CONSTRAINT recipient_id FOREIGN KEY (recipient_id) REFERENCES public.users(id);
+
+
+--
+-- Name: trade recipient_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.trade
+    ADD CONSTRAINT recipient_id FOREIGN KEY (recipient_id) REFERENCES public.users(id);
+
+
+--
+-- Name: notifications sender_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notifications
+    ADD CONSTRAINT sender_id FOREIGN KEY (sender_id) REFERENCES public.users(id);
+
+
+--
+-- Name: chat_message sender_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.chat_message
+    ADD CONSTRAINT sender_id FOREIGN KEY (sender_id) REFERENCES public.users(id);
+
+
+--
+-- Name: chat_message trade_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.chat_message
+    ADD CONSTRAINT trade_id FOREIGN KEY (trade_id) REFERENCES public.trade(id) NOT VALID;
+
+
+--
+-- Name: trade_item trade_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.trade_item
+    ADD CONSTRAINT trade_id FOREIGN KEY (trade_id) REFERENCES public.trade(id) NOT VALID;
+
+
+--
+-- Name: activity_logs user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.activity_logs
+    ADD CONSTRAINT "user" FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: friendships user1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.friendships
+    ADD CONSTRAINT user1 FOREIGN KEY (user_id_1) REFERENCES public.users(id);
+
+
+--
+-- Name: friendships user2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.friendships
+    ADD CONSTRAINT user2 FOREIGN KEY (user_id_2) REFERENCES public.users(id);
 
 
 --
