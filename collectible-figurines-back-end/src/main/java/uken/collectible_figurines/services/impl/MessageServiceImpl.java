@@ -68,4 +68,15 @@ public class MessageServiceImpl implements MessageService {
     return messageRepository.save(message);
   }
 
+  public int countUnreadMessage(Long recipientId) {
+    return messageRepository.findByRecipientIdAndSeenFalse(recipientId).size();
+  }
+
+  public void markAllAsRead(Long userId) {
+    List<Message> messages = messageRepository.findByRecipientIdAndSeenFalse(userId);
+    for (Message m : messages) {
+      m.setSeen(true);
+    }
+    messageRepository.saveAll(messages);
+  }
 }

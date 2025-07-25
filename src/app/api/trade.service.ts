@@ -16,4 +16,12 @@ export class TradeService {
         return this.http.post<ChatMessage>(`${this.API_URL}/propose`, messageWithTrade);
     }
 
+    acceptTrade(tradeId: number): Observable<void> {
+        return this.http.put<void>(`${this.API_URL}/${tradeId}/accept`, null);
+    }
+
+    cancelTrade(tradeId: number): Observable<void> {
+        return this.http.put<void>(`${this.API_URL}/${tradeId}/cancel`, null);
+    }
+
 }

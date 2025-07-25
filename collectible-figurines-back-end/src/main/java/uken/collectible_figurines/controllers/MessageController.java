@@ -38,5 +38,14 @@ public class MessageController {
     return messageService.saveMessage(message);
   }
 
+  @GetMapping("/unread/count/{userId}")
+  public int getUnreadMessageCount(@PathVariable Long userId) {
+    return messageService.countUnreadMessage(userId);
+  }
 
+  @PutMapping("/mark-as-read/{userId}")
+  public String markMessagesAsRead(@PathVariable Long userId) {
+    messageService.markAllAsRead(userId);
+    return "Messages marked as read";
+  }
 }

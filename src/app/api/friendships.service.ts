@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { API_URL } from './api-url';
+import { PublicUser } from './user-public.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,4 +25,7 @@ export class FriendshipsService {
     return this.http.get<boolean>(`${this.API_URL}/check/${userId1}/${userId2}`);
   }
 
+  getFriends(userId: number): Observable<PublicUser[]> {
+    return this.http.get<PublicUser[]>(`${this.API_URL}/friends/${userId}`);
+  }
 }

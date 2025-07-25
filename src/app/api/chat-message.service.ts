@@ -27,6 +27,14 @@ export class ChatService {
         return this.http.post<ChatMessage>(`${this.API_URL}/send`, message);
     }
 
+    getUnreadMessagesCount(userId: number): Observable<number> {
+        return this.http.get<number>(`${this.API_URL}/unread/count/${userId}`);
+    }
+
+    markMessagesAsRead(userId: number): Observable<string> {
+        return this.http.put(`${this.API_URL}/mark-as-read/${userId}`, {}, { responseType: 'text' });
+    }
+
     setSelectedUser(user: PublicUser) {
         this.selectedUser = user;
     }

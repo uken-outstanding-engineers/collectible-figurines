@@ -8,7 +8,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router'; 
 
 import { UserService } from '../api/user.service';
-import { User } from '../api/user.model';
 import { PublicUser } from '../api/user-public.model'
 import { API_URL } from '../api/api-url';
 import { Figure } from '../api/figure.model';
@@ -17,6 +16,7 @@ import { TranslationService } from '../services/translation.service';
 import { NotificationService } from '../api/notification.service'
 import { FriendshipsService } from '../api/friendships.service';
 import { ChatService } from '../api/chat-message.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-profile',
@@ -59,6 +59,7 @@ export class ProfileComponent {
     private notificationService: NotificationService,
     private friendshipService: FriendshipsService,
     private chatService: ChatService,
+    private snackBarService: SnackbarService,
   ) {}
 
   ngOnInit(): void {
@@ -108,12 +109,6 @@ export class ProfileComponent {
     });
   }
 
-  // getShareableLink(): string {
-  //   if (!this.user) return '';
-  //   const shareId = this.userService.generateHashedShareId(this.user.id);
-  //   return `${window.location.origin}/profile/${shareId}`;
-  // }
-
   addFriend(): void {
     if (this.user?.id) {
       const payload = {
@@ -122,11 +117,17 @@ export class ProfileComponent {
       };
 
       this.notificationService.sendFriendRequest(payload).subscribe({
-        next: (res) => {
-          this.checkFriendRequestStatus();
-        },
-        error: (err) => console.error('Error:', err),
-      });
+      next: (res) => {
+        this.friendshipService.checkFriendship(this.loggedInUserId!, this.user!.id).subscribe(isFriend => {
+          this.isFriend = isFriend;
+
+          if (!isFriend) {
+            this.checkFriendRequestStatus();
+          }
+        });
+      },
+      error: (err) => console.error('Error:', err),
+    });
     }
   }
 
@@ -179,14 +180,6 @@ export class ProfileComponent {
     this.router.navigate(['/message']);
   }
 
-  proposeTrade(): void {
-    console.log("Propzycja wymiany");
-  }
-
-  cancelTradeRequest(): void {
-    console.log("Anulowanie wymiany");
-  }
-
   setActive(item: string) {
     this.activeItem = item;
   }
@@ -218,5 +211,18 @@ export class ProfileComponent {
         );
       });
     };
+  }
+
+  copyOwnProfileLink(): void {
+    if (!this.loggedInUserId) return;
+
+    const shareId = this.userService.generateHashedShareId(this.loggedInUserId);
+    const url = `${window.location.origin}/profile/${shareId}`;
+
+    navigator.clipboard.writeText(url).then(() => {
+      this.snackBarService.showSuccess("Link do Twojego profilu został skopiowany!")
+    }).catch(() => {
+      this.snackBarService.showError("Nie udało się skopiować linku.")
+    });
   }
 }

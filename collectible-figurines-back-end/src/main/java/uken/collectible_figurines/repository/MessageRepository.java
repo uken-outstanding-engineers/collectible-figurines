@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import uken.collectible_figurines.model.Message;
+import uken.collectible_figurines.model.Notification;
 
 import java.util.List;
 
@@ -17,7 +18,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
                                              @Param("userId2") Long userId2);
 
   List<Message> findAllBySender_IdOrRecipient_Id(Long senderId, Long recipientId);
-
-
+  List<Message> findByRecipientIdAndSeenFalse(Long recipientId);
 }
 

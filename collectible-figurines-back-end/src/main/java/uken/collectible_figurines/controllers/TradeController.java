@@ -1,10 +1,7 @@
 package uken.collectible_figurines.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uken.collectible_figurines.model.Message;
 import uken.collectible_figurines.model.dto.MessageDTO;
 import uken.collectible_figurines.services.MessageService;
@@ -28,6 +25,14 @@ public class TradeController {
     return messageMapper.toMessageDTO(savedMessage);
   }
 
+  @PutMapping("/{tradeId}/accept")
+  public void acceptTrade(@PathVariable Long tradeId) {
+    tradeService.acceptTrade(tradeId);
+  }
 
+  @PutMapping("/{tradeId}/cancel")
+  public void cancelTrade(@PathVariable Long tradeId) {
+    tradeService.cancelTrade(tradeId);
+  }
 
 }

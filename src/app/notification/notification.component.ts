@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { API_URL } from '../api/api-url';
 import { NotificationService } from '../api/notification.service';
-import { Notification } from '../api/notification.model';
+import { Notification, PublicUser } from '../api/notification.model';
 import { UserService } from '../api/user.service';
 import { FriendshipsService } from '../api/friendships.service';
+import { ChatService } from '../api/chat-message.service';
 
 @Component({
   selector: 'app-notification',
@@ -23,10 +24,13 @@ export class NotificationComponent {
   loggedInUserId: number | null = null;
   isLoggedIn: boolean = false;
 
+
   constructor(
     private notificationService: NotificationService,
     private friendshipsService: FriendshipsService,
     private userService: UserService,
+    private chatService: ChatService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -75,7 +79,6 @@ export class NotificationComponent {
     });
   }
 
-
   rejectFriendRequest(notification: Notification): void {
     if (this.loggedInUserId && notification.sender?.id) {
       const payload = {
@@ -90,6 +93,15 @@ export class NotificationComponent {
         error: err => console.error('Błąd przy anulowaniu:', err)
       });
     }  
+  }
+
+  openChatWith(user: PublicUser): void {
+    this.chatService.setSelectedUser(user);
+    this.router.navigate(['/message']);
+  }
+
+  getShareId(hash: number): string {
+    return this.userService.generateHashedShareId(hash);
   }
 
   // markAsSeen(notificationId: number): void {

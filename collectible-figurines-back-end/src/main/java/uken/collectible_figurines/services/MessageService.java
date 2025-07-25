@@ -12,4 +12,6 @@ public interface MessageService {
   List<MessageDTO> getMessagesBetweenUsers(Long userId1, Long userId2);
   List<PublicUserDTO> getUsersInConversationWith(Long userId);
   Message saveMessage(MessageDTO dto);
+  int countUnreadMessage(Long recipientId);
+  void markAllAsRead(Long userId);
 }

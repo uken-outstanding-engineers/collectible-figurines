@@ -188,6 +188,7 @@ export class UserService {
   logout(): void {
     this.loggedInUser.next(null);
     localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('selectedUserId');
   }
 
   getLoggedInUser(): Observable<User | null> {

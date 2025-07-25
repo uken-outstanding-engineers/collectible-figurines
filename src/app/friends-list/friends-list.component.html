@@ -1,0 +1,57 @@
+<div class="friends-list-container" *ngIf="friends.length > 0; else noFriends">
+    <div *ngFor="let friend of friends" class="friend-card">
+
+        <a [routerLink]="['/profile', friend.id]" class="friend-avatar">
+            <img *ngIf="friend.avatarUrl; else defaultAvatar" [src]="apiUrl + friend.avatarUrl" alt="avatar" />
+            <ng-template #defaultAvatar>
+            <img src="avatar-images/default_avatar.jpg" alt="{{ friend.username || 'User' }}" />
+            </ng-template>
+        </a>
+
+        <a [routerLink]="['/profile', getShareId(friend.id)]" class="friend-username">{{ friend.username }}</a>
+
+        <div class="friend-actions">
+            <button class="chat-button" (click)="openChat(friend)">Otwórz chat</button>
+
+            <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button">
+            <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="askRemoveFriend(friend.id, friend.username)">
+                <mat-icon>person_remove</mat-icon>
+                <span>Usuń znajomego</span>
+                </button>
+            </mat-menu>
+        </div>
+    </div>
+</div>
+
+<ng-template #noFriends>
+  <p class="empty-message">Nie masz jeszcze żadnych znajomych.</p>
+</ng-template>
+
+<div class="dialog-delete-container" *ngIf="friendToRemoveId">
+  <div class="dialog-backdrop" (click)="cancelRemove()"></div>
+  <div class="dialog">
+    <button class="close-btn" (click)="cancelRemove()">×</button>
+    <h2>Potwierdzenie</h2>
+    <div class="warning-message">
+      <mat-icon class="warning-icon">warning</mat-icon>
+      <p>Czy na pewno chcesz usunąć <strong>{{selectedFriendUsername}}</strong> ze swoich znajomych?</p>
+    </div>
+    <div class="button-group">
+      <button class="no" (click)="cancelRemove()">Nie</button>
+      <button class="yes" (click)="confirmRemoveFriend()">Tak</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- <div *ngIf="friendToRemoveId !== null" class="confirm-modal">
+  <div class="confirm-modal-content">
+    <mat-icon>warning</mat-icon>
+    <p>Czy na pewno chcesz usunąć tego znajomego?</p>
+    <button (click)="confirmRemoveFriend()" class="confirm-button">Tak</button>
+    <button (click)="cancelRemove()" class="cancel-button">Nie</button>
+  </div>
+</div> -->

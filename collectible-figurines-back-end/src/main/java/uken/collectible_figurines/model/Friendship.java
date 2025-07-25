@@ -34,6 +34,30 @@ public class Friendship {
       this.user2 = user1;
     }
   }
+  public Long getId() {
+    return id;
+  }
+  public void setId(Long id) {
+    this.id = id;
+  }
+  public User getUser1() {
+    return user1;
+  }
+  public void setUser1(User user1) {
+    this.user1 = user1;
+  }
+  public User getUser2() {
+    return user2;
+  }
+  public void setUser2(User user2) {
+    this.user2 = user2;
+  }
+  public LocalDateTime getDate() {
+    return date;
+  }
+  public void setDate(LocalDateTime date) {
+    this.date = date;
+  }
 
-  // Gettery & settery...
+
 }

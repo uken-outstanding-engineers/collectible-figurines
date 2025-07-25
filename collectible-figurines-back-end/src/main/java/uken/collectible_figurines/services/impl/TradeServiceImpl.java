@@ -2,11 +2,7 @@ package uken.collectible_figurines.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uken.collectible_figurines.model.Message;
-import uken.collectible_figurines.model.Trade;
-import uken.collectible_figurines.model.TradeItem;
-import uken.collectible_figurines.model.User;
-import uken.collectible_figurines.model.Figurine;
+import uken.collectible_figurines.model.*;
 import uken.collectible_figurines.model.dto.MessageDTO;
 import uken.collectible_figurines.repository.*;
 import uken.collectible_figurines.services.TradeService;
@@ -20,19 +16,19 @@ public class TradeServiceImpl implements TradeService {
 
   private final MessageRepository messageRepository;
   private final TradeRepository tradeRepository;
-  private final TradeItemRepository tradeItemRepository;
   private final UserRepository userRepository;
   private final FigurineRepository figurineRepository;
+  private final NotificationRepository notificationRepository;
   public TradeServiceImpl(MessageRepository messageRepository,
                           TradeRepository tradeRepository,
-                          TradeItemRepository tradeItemRepository,
                           UserRepository userRepository,
-                          FigurineRepository figurineRepository) {
+                          FigurineRepository figurineRepository,
+                          NotificationRepository notificationRepository) {
     this.messageRepository = messageRepository;
     this.tradeRepository = tradeRepository;
-    this.tradeItemRepository = tradeItemRepository;
     this.userRepository = userRepository;
     this.figurineRepository = figurineRepository;
+    this.notificationRepository = notificationRepository;
   }
 
   public Message proposeTrade(MessageDTO messageDTO) {
@@ -78,6 +74,39 @@ public class TradeServiceImpl implements TradeService {
     message.setTrade(trade);
     message.setContent(messageDTO.getContent());
 
+    Notification notification = new Notification();
+    notification.setSender(sender);
+    notification.setRecipient(recipient);
+    notification.setType("TRADE_REQUEST");
+    notification.setDate(LocalDateTime.now());
+
+    notificationRepository.save(notification);
+
     return messageRepository.save(message);
   }
+
+  public void acceptTrade(Long tradeId) {
+    Trade trade = tradeRepository.findById(tradeId)
+      .orElseThrow(() -> new RuntimeException("Trade not found"));
+
+    trade.setStatus("ACCEPTED");
+    tradeRepository.save(trade);
+
+    Notification notification = new Notification();
+    notification.setSender(trade.getRecipient());
+    notification.setRecipient(trade.getInitiator());
+    notification.setType("TRADE_ACCEPTED");
+    notification.setDate(LocalDateTime.now());
+
+    notificationRepository.save(notification);
+  }
+
+  public void cancelTrade(Long tradeId) {
+    Trade trade = tradeRepository.findById(tradeId)
+      .orElseThrow(() -> new RuntimeException("Trade not found"));
+
+    trade.setStatus("CANCELED");
+    tradeRepository.save(trade);
+  }
+
 }

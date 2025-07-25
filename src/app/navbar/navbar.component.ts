@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { debounceTime, delay, distinctUntilChanged, filter, of, Subject, switchMap } from 'rxjs';
+import { MatBadgeModule } from '@angular/material/badge';
 
 //import { LanguageModule } from '../language/language.module';
 
@@ -20,6 +21,8 @@ import { UserService } from '../api/user.service';
 import { User } from '../api/user.model';
 import { API_URL } from '../api/api-url';
 import { Figure } from '../api/figure.model';
+import { NotificationService } from '../api/notification.service';
+import { ChatService } from '../api/chat-message.service'; 
 
 @Component({
   selector: 'app-navbar',
@@ -34,7 +37,8 @@ import { Figure } from '../api/figure.model';
     MatIconModule,
     FormsModule,
     MatInputModule,
-    TranslateModule  
+    TranslateModule,
+    MatBadgeModule  
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
@@ -52,12 +56,17 @@ export class NavbarComponent {
   private lastSearchTerm: string = '';
   private searchSubject = new Subject<string>();
 
+  unreadNotificationCount: number = 0;
+  unreadMessagesCount: number = 0;
+
   constructor(
     private figureService: FigureService, 
     private router: Router,
     private languageService: LanguageService,
     private translate: TranslateService,
-    private userService: UserService
+    private userService: UserService,
+    private notificationService: NotificationService,
+    private chatService: ChatService
   ) {
     this.translatedText = this.translate.instant('collectible_figures');
   } 
@@ -78,14 +87,18 @@ export class NavbarComponent {
       } else {
         this.shareId = null;
       }
+
+      if (user && user.id) {
+        this.notificationService.getUnreadNotificationsCount(user.id).subscribe(count => {
+          this.unreadNotificationCount = count;
+        });
+
+        this.chatService.getUnreadMessagesCount(user.id).subscribe(count => {
+          this.unreadMessagesCount = count;
+        });
+      }
     });
     
-  
-    // this.isLoggedIn = !!this.userService.getUser(); 
-    // this.currentUser = this.userService.getUser();
-    // console.log("Login: " + this.isLoggedIn);
-    // console.log("User: " + this.currentUser?.avatarUrl);
-
     const savedLanguage = localStorage.getItem('language') || 'pl';
     this.currentLanguage = savedLanguage;
     this.languageService.switchLanguage(savedLanguage);
@@ -161,4 +174,23 @@ export class NavbarComponent {
     this.showResults = false;
     this.router.navigate(['/figure', figure.id]);
   }
+
+  goToNotifications(): void {
+    if (this.currentUser) {
+      this.notificationService.markNotificationsAsRead(this.currentUser.id).subscribe(() => {
+        this.unreadNotificationCount = 0;
+        this.router.navigate(['/notification']);
+      });
+    }
+  }
+
+  goToMessages(): void {
+    if (this.currentUser) {
+      this.chatService.markMessagesAsRead(this.currentUser.id).subscribe(() => {
+        this.unreadMessagesCount = 0;
+        this.router.navigate(['/message']);
+      });
+    }
+  }
+
 }

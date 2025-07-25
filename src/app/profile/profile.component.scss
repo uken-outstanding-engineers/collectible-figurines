@@ -71,6 +71,32 @@
     font-weight: bold;
 }
 
+.share-profile-button {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;  
+  background-color: #2a2a2a;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.1s ease;
+
+  &:hover {
+    background-color: #3a3a3a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+  }
+}
+
+.share-profile-container {
+  margin-top: 12px;
+}
+
 .add-friend-container {
   margin-top: 20px;
   display: flex;
@@ -138,10 +164,6 @@
     }
   }
 }
-
-
-
-
 
 .trade-action-container {
   margin-top: 20px;

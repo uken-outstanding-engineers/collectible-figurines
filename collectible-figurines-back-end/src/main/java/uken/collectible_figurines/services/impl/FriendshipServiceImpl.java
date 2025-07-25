@@ -9,6 +9,7 @@ import uken.collectible_figurines.services.FriendshipService;
 import uken.collectible_figurines.repository.UserRepository;
 import uken.collectible_figurines.services.NotificationService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,7 +35,7 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     friendshipRepository.save(new Friendship(u1, u2));
     notificationService.cancelFriendRequest(userId2, userId1);
-    notificationService.cancelFriendRequest(userId1, userId2); //to delete in future
+    notificationService.sendNotification(u2.getId(), u1.getId(), "FRIEND_REQUEST_ACCEPTED");
 
     return "Friend added.";
   }
@@ -57,4 +58,15 @@ public class FriendshipServiceImpl implements FriendshipService {
     User u2 = userRepository.findById(userId2).orElseThrow();
     return friendshipRepository.findBetweenUsers(u1, u2).isPresent();
   }
+
+  public List<User> getFriends(Long userId) {
+    User user = userRepository.findById(userId).orElseThrow();
+
+    List<Friendship> friendships = friendshipRepository.findAllByUser1OrUser2(user, user);
+
+    return friendships.stream()
+      .map(f -> f.getUser1().equals(user) ? f.getUser2() : f.getUser1())
+      .toList();
+  }
+
 }

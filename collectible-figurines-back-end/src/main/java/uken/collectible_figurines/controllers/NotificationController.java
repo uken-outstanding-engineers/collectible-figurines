@@ -38,20 +38,16 @@ public class NotificationController {
     return notificationService.getNotificationsForUser(recipientId);
   }
 
+  @GetMapping("/unread/count/{userId}")
+  public int getUnreadNotificationCount(@PathVariable Long userId) {
+    return notificationService.countUnreadNotifications(userId);
+  }
 
-//  @GetMapping("/user/{userId}")
-//  public List<NotificationDTO> getNotificationsForUser(@PathVariable Long userId) {
-//    return notificationService.getNotificationsForUser(userId);
-//  }
-//
-//  @PostMapping
-//  public NotificationDTO createNotification(@RequestBody CreateNotificationRequest request) {
-//    return notificationService.createNotification(request);
-//  }
-//
-//  @PutMapping("/{id}/seen")
-//  public void markAsSeen(@PathVariable Long id) {
-//    notificationService.markAsSeen(id);
-//  }
+  @PutMapping("/mark-as-read/{userId}")
+  public String markNotificationsAsRead(@PathVariable Long userId) {
+    notificationService.markAllAsRead(userId);
+    return "Marked as read";
+  }
+
 
 }

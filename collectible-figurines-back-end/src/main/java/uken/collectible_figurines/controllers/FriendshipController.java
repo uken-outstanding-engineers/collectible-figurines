@@ -7,6 +7,7 @@ import uken.collectible_figurines.repository.FriendshipRepository;
 import uken.collectible_figurines.repository.UserRepository;
 import uken.collectible_figurines.services.FriendshipService;
 
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -41,5 +42,11 @@ public class FriendshipController {
   public boolean checkFriendship(@PathVariable Long userId1, @PathVariable Long userId2) {
     return friendshipService.areFriends(userId1, userId2);
   }
+
+  @GetMapping("/friends/{userId}")
+  public List<User> getFriends(@PathVariable Long userId) {
+    return friendshipService.getFriends(userId);
+  }
+
 
 }

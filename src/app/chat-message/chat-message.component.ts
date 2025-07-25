@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 import { PublicUser } from '../api/user-public.model';
 import { ChatMessage } from '../api/chat-message.model';
@@ -12,6 +13,7 @@ import { UserService } from '../api/user.service';
 import { FigureService } from '../api/figure.service';
 import { Figure } from '../api/figure.model';
 import { TradeService } from '../api/trade.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 // interface TradeRequest {
 //   offerFigureIds: number[];
@@ -26,7 +28,8 @@ import { TradeService } from '../api/trade.service';
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    MatIconModule
   ],
   templateUrl: './chat-message.component.html',
   styleUrl: './chat-message.component.scss'
@@ -45,6 +48,9 @@ export class ChatMessageComponent {
 
   menuOpen: boolean = false;
 
+  showUsersList: boolean = true;
+  isWideScreen: boolean = window.innerWidth > 1024;
+
   @ViewChild('bottom') bottomRef!: ElementRef;
 
   pollSubscription!: Subscription;
@@ -56,12 +62,15 @@ export class ChatMessageComponent {
   offerFigures: Figure[] = [];
   requestFigures: Figure[] = [];
 
+  shareId: string | null = null;
+
   constructor(
     private chatService: ChatService,
     private userService: UserService,
     private figureService: FigureService,
     private eRef: ElementRef,
-    private tradeService: TradeService
+    private tradeService: TradeService,
+    private snackBarService: SnackbarService,
   ) {}
 
   ngOnInit() {
@@ -75,6 +84,22 @@ export class ChatMessageComponent {
     if (passedUser) {
       this.selectUser(passedUser);
       this.chatService.clear();
+    }
+
+    const savedUserId = localStorage.getItem('selectedUserId');
+
+    if (savedUserId) {
+      const parsedId = Number(savedUserId);
+
+      this.chatService.getChatContacts(this.loggedInUserId!).subscribe({
+        next: (users) => {
+          this.users = users;
+          const found = users.find(u => u.id === parsedId);
+          if (found) {
+            this.selectUser(found);
+          }
+        }
+      });
     }
 
     this.pollSubscription = interval(1000).subscribe(() => {
@@ -93,10 +118,23 @@ export class ChatMessageComponent {
   }
 
   loadUsers() {
-    if(this.loggedInUserId) {
+    if (this.loggedInUserId) {
       this.chatService.getChatContacts(this.loggedInUserId).subscribe({
         next: (users) => {
           this.users = users;
+
+          const storedUserId = localStorage.getItem('selectedUserId');
+          if (storedUserId) {
+            const foundUser = users.find(u => u.id === +storedUserId);
+            if (foundUser) {
+              this.selectUser(foundUser);
+              return;
+            }
+          }
+
+          if (users.length > 0 && !this.selectedUser) {
+            this.selectUser(users[0]);
+          }
         },
         error: (err) => {
           console.error('Błąd przy pobieraniu użytkowników:', err);
@@ -108,7 +146,12 @@ export class ChatMessageComponent {
   selectUser(user: PublicUser) {
     this.selectedUser = user;
     this.shouldScroll = true;
+    this.closeTradeBox();
     this.loadMessages();
+
+    this.shareId = this.userService.generateHashedShareId(user.id);
+
+    localStorage.setItem('selectedUserId', user.id.toString());
   }
 
   private lastMessagesJson = '';
@@ -124,7 +167,6 @@ export class ChatMessageComponent {
         const newJson = JSON.stringify(msgs);
         if (newJson !== this.lastMessagesJson) {
           this.messages = msgs;
-          console.log(msgs);
           this.lastMessagesJson = newJson;
           if (this.shouldScroll) {
             setTimeout(() => {
@@ -235,13 +277,11 @@ export class ChatMessageComponent {
 
   confirmTrade() {
     if (this.offerFigures.length === 0 || this.requestFigures.length === 0) {
-      alert('Musisz wybrać co najmniej jedną figurkę do wymiany i odbioru!');
+      this.snackBarService.showMessage("Musisz wybrać co najmniej jedną figurkę do wymiany i odbioru!");
       return;
     }
 
     const recipient = this.selectedUser ?? this.chatService.getSelectedUser();
-    console.log(recipient);
-    console.log(this.loggedInUserId);
 
     if (!recipient || this.loggedInUserId === null) return;
 
@@ -270,17 +310,15 @@ export class ChatMessageComponent {
       trade: trade
     };
 
-    console.log(chatMessage);
-
     this.tradeService.proposeTrade(chatMessage).subscribe({
       next: () => {
-        console.log('Propozycja wymiany została wysłana!');
         this.closeTradeBox();
         this.loadMessages();
+        this.snackBarService.showSuccess("Propozycja wymiany została wysłana.");
       },
       error: (err) => {
         console.error('Błąd przy wysyłaniu propozycji:', err);
-        alert('Wystąpił błąd podczas wysyłania propozycji wymiany.');
+        this.snackBarService.showError("Wystąpił błąd podczas wysyłania propozycji wymiany.");
       }
     });
 
@@ -288,17 +326,46 @@ export class ChatMessageComponent {
   }
 
 
-  acceptTrade(tradeId: number): void {
-    console.log(`Trade ${tradeId} został zaakceptowany.`);
+  acceptTrade(tradeId: number) {
+    this.tradeService.acceptTrade(tradeId).subscribe({
+      next: () => {
+        const msg = this.messages.find(m => m.trade?.id === tradeId);
+        if (msg && msg.trade) {
+          msg.trade.status = 'ACCEPTED';
+        }
+      },
+      error: (err) => {
+        console.error('Błąd przy akceptacji:', err);
+      }
+    });
   }
 
   rejectTrade(tradeId: number): void {
-    console.log(`Trade ${tradeId} został odrzucony.`);
+    this.tradeService.cancelTrade(tradeId).subscribe({
+      next: () => {
+        const msg = this.messages.find(m => m.trade?.id === tradeId);
+        if (msg && msg.trade) {
+          msg.trade.status = 'CANCELED'; 
+        }
+      },
+      error: (err) => {
+        console.error('Błąd przy anulowaiu:', err);
+      }
+    });
   }
 
   trackById(index: number, item: Figure): number {
     return item.id ?? -1;
   }
 
+  toggleUsersList() {
+    this.showUsersList = !this.showUsersList;
+  }
 
+  @HostListener('window:resize')
+  onResize() {
+    this.isWideScreen = window.innerWidth > 1024;
+
+    if (this.isWideScreen) this.showUsersList = true;
+  }
 }

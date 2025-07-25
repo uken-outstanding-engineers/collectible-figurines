@@ -1,7 +1,12 @@
 <div class="chat-container">
   <aside class="users-list">
-    <div class="users-header">Wiadomości</div>
-    <ul>
+    <div class="users-header">
+      Wiadomości
+      <button class="toggle-users-btn" (click)="toggleUsersList()" aria-label="Pokaż/ukryj listę użytkowników">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <ul [ngClass]="{ 'collapsed': !showUsersList, 'expanded': showUsersList }">
       <li
         *ngFor="let user of users"
         (click)="selectUser(user)"
@@ -25,7 +30,7 @@
 
     <div class="messages-header header-with-menu">
       <div class="username-wrapper">
-        <a [routerLink]="['/profile', selectedUser.id]">
+        <a [routerLink]="['/profile', shareId]">
           <strong>{{ selectedUser.username }}</strong>
         </a>
       </div>
@@ -56,7 +61,9 @@
 
           <ng-template #tradeMessageBox>
             <div *ngIf="msg.trade as trade" class="trade-message-box">
-              <h4>💬 Propozycja wymiany</h4>
+              <h4 *ngIf="msg.trade.status === 'pending'">Propozycja wymiany</h4>
+              <h4 *ngIf="msg.trade.status === 'ACCEPTED'">Propozycja zaakceptowana</h4>
+              <h4 *ngIf="msg.trade.status === 'CANCELED'">Propozycja anulowana</h4>
               
               <div class="trade-preview">
                 <div class="preview-section">
@@ -85,7 +92,7 @@
                 </div>
               </div>
               
-              <div class="trade-actions" *ngIf="msg.recipient.id === loggedInUserId">
+              <div class="trade-actions" *ngIf="msg.recipient.id === loggedInUserId && msg.trade.status === 'pending'">
                 <button class="btn accept-btn" (click)="acceptTrade(msg.trade.id)">Akceptuj</button>
                 <button class="btn reject-btn" (click)="rejectTrade(msg.trade.id)">Odrzuć</button>
               </div>

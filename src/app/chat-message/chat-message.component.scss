@@ -24,10 +24,21 @@ $radius-message-box: 20px;
         margin-bottom: 1rem;
     }
 
+    ul.collapsed {
+      opacity: 0;
+      transform: scaleY(0);
+      pointer-events: none;
+    }
+
     ul {
         list-style: none;
         margin: 10px 0;
         padding: 0.5rem 1rem;
+        overflow: hidden;
+        transform-origin: top;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        opacity: 1;
+        transform: scaleY(1);
 
         li {
             display: flex;
@@ -70,6 +81,7 @@ $radius-message-box: 20px;
     flex-direction: column;
     background-color: #f1f3f5;
     border-radius: $radius-message-box;
+    max-height: 800px;
     //padding: 0 1rem 1rem 1rem;
 
     .messages-list {
@@ -155,12 +167,29 @@ $radius-message-box: 20px;
 }
 
 .users-header {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
   font-size: 1.2rem;
   font-weight: bold;
   padding: 1rem;
   border-bottom: 2px solid #ccc;
   background-color: white;
 }
+
+.toggle-users-btn {
+  position: absolute;
+  right: 10px;
+  top: 11px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #333;
+  font-weight: bold;
+  font-size: 28px;
+}
+
 
 .messages-header {
   font-size: 1.2rem;
@@ -463,5 +492,151 @@ $radius-message-box: 20px;
 
   .cancel-trade-btn {
     margin-top: 14px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .chat-container {
+    flex-direction: column;
+    height: auto;
+    margin: 20px;
+  }
+
+  .users-list {
+    width: 100%;
+    border-right: none;
+    border-bottom: 2px solid #ddd;
+    border-top-left-radius: $radius-message-box;
+    border-top-right-radius: $radius-message-box;
+    border-bottom-left-radius: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: top;
+  }
+
+  .users-list ul {
+    max-height: 200px;
+  }
+
+  .messages-panel {
+    border-top-right-radius: 0;
+    border-bottom-left-radius: $radius-message-box;
+    border-bottom-right-radius: $radius-message-box;
+  }
+
+  .menu-wrapper {
+    right: 16px;
+  }
+
+  .messages-header {
+    border-top-right-radius: 0px;
+  }
+
+  .users-list ul.collapsed {
+    display: none;
+  }
+
+  .chat-container {
+    position: relative;
+  }
+}
+
+@media (max-width: 768px) {
+  .chat-container {
+    margin: 10px;
+  }
+
+  .messages-list {
+    padding: 0.75rem;
+  }
+
+  .message-form {
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .send-button {
+      width: 100%;
+      height: 48px;
+      padding: auto 3rem !important;
+    }
+  }
+
+  .message {
+    font-size: 0.9rem;
+    max-width: 85%;
+
+    .message-date {
+      font-size: 0.7rem;
+    }
+  }
+
+  .trade-box {
+    padding: 15px;
+
+    .trade-section {
+      select {
+        font-size: 0.9rem;
+      }
+
+      button {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+      }
+    }
+
+    .send-trade-btn,
+    .cancel-trade-btn {
+      font-size: 0.95rem;
+      padding: 10px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .users-list li {
+    padding: 0.4rem;
+    
+    .avatar {
+      width: 32px;
+      height: 32px;
+      margin-right: 0.4rem;
+    }
+
+    span {
+      font-size: 0.85rem;
+    }
+  }
+
+  .menu-dots {
+    font-size: 1.2rem;
+  }
+
+  .menu-dropdown li {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+
+  .message {
+    font-size: 0.85rem;
+  }
+
+  .figure-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .figure-name {
+    font-size: 13px;
+  }
+
+  .figure-number {
+    font-size: 12px;
+  }
+
+  .trade-box h3 {
+    font-size: 1rem;
+  }
+
+  .trade-box .trade-section label {
+    font-size: 0.75rem;
   }
 }

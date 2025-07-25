@@ -121,6 +121,22 @@
   }
 }
 
+  .open-chat-button {
+    background-color: #42a5f5; // niebieski (np. "wymiana")
+    color: white;
+
+    &:hover {
+      background-color: #1e88e5;
+      box-shadow: 0 4px 10px rgba(66, 165, 245, 0.4);
+    }
+
+    &:active {
+      background-color: #1565c0;
+      box-shadow: 0 2px 6px rgba(66, 165, 245, 0.3);
+      transform: scale(0.97);
+    }
+  }
+
 .empty-message {
   text-align: center;
   font-size: 16px;

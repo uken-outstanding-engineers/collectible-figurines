@@ -22,6 +22,11 @@
             </div>
         </div>
     </div>
+    <div *ngIf="isLoggedIn && loggedInUserId === user?.id" class="share-profile-container">
+        <button class="share-profile-button" (click)="copyOwnProfileLink()">
+            Udostępnij profil
+        </button>
+    </div>
     <div class="add-friend-container" *ngIf="isLoggedIn && loggedInUserId !== user?.id">
         <div *ngIf="!isFriend">
             <button class="add-friend-button" *ngIf="!isFriendRequestSent" (click)="addFriend()">
@@ -48,10 +53,11 @@
     <div class="trade-action-container" *ngIf="isLoggedIn && loggedInUserId !== user?.id">
         <div *ngIf="isFriend">
             <button class="propose-trade-button" *ngIf="!isTradeRequestSent" (click)="openChatWith(user!)">
-            Napisz wiadomość
+                Napisz wiadomość
             </button>
         </div>
     </div>
+
 
 </div>
 

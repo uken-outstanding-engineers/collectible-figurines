@@ -38,4 +38,13 @@ export class NotificationService {
   getNotificationsForUser(recipientId: number): Observable<Notification[]> {
     return this.http.get<Notification[]>(`${this.API_URL}/user/${recipientId}`);
   }
+
+  getUnreadNotificationsCount(userId: number): Observable<number> {
+    return this.http.get<number>(`${this.API_URL}/unread/count/${userId}`);
+  }
+
+  markNotificationsAsRead(userId: number): Observable<string> {
+    return this.http.put(`${this.API_URL}/mark-as-read/${userId}`, {}, { responseType: 'text' });
+  }
+
 }

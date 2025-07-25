@@ -1,0 +1,235 @@
+.friends-list-container {
+  max-width: 800px;
+  margin: 20px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.friend-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+  padding: 15px 20px;
+  border-left: 6px solid transparent;
+}
+
+// .friend-card:hover {
+//   border-left-color: #357ABD;
+// }
+
+.friend-avatar {
+  margin: 0 15px 0 0;
+  flex-shrink: 0;
+  display: block;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  border: 2px solid transparent;
+  text-decoration: none;
+}
+
+.friend-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friend-avatar:hover {
+  //transform: scale(1.1);
+  border-color: #357ABD;
+}
+
+.friend-username {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.friend-username:hover {
+  text-decoration: underline;
+}
+
+.friend-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 15px;
+}
+
+.chat-button {
+  background-color: #42a5f5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.25s ease;
+  white-space: nowrap;
+}
+
+.chat-button:hover {
+  background-color: #1e88e5;
+  box-shadow: 0 4px 10px rgba(66, 165, 245, 0.4);
+}
+
+.chat-button:active {
+  background-color: #1565c0;
+  box-shadow: 0 2px 6px rgba(66, 165, 245, 0.3);
+  transform: scale(0.97);
+}
+
+.menu-button {
+  border: none;
+  background-color: transparent;
+  color: #555;
+  transition: color 0.25s ease;
+  display: flex;          
+  justify-content: center; 
+  align-items: center;     
+  width: 36px;             
+  height: 36px;
+  padding: 0;              
+  cursor: pointer;
+}
+
+.menu-button:hover {
+  color: #357ABD;
+  background-color: rgba(53, 122, 189, 0.1);
+}
+
+.empty-message {
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+  padding: 40px 0;
+}
+
+.dialog-delete-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.dialog-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+}
+
+.dialog {
+  position: relative;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1001;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 32px;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.close-btn:hover {
+  color: #f44336;
+}
+
+h2 {
+  margin: 0 0 15px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333333;
+  text-align: left;
+}
+
+.warning-message {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.warning-icon {
+  color: #ff9800;
+  font-size: 22px;
+  margin-right: 10px;
+}
+
+.button-group {
+  text-align: right;
+}
+
+.button-group button {
+  flex: 1;
+  padding: 8px 16px;
+  margin: 0 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase; 
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 70px;
+}
+
+.button-group button.yes {
+  background: linear-gradient(90deg, #4caf50, #66bb6a); /* zielony gradient */
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button-group button.yes:hover {
+  background: linear-gradient(90deg, #43a047, #5cb85c);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button-group button.no {
+  background: linear-gradient(90deg, #f44336, #e57373); /* czerwony gradient */
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button-group button.no:hover {
+  background: linear-gradient(90deg, #e53935, #d32f2f);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+

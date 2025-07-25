@@ -40,6 +40,11 @@
             [matMenuTriggerFor]="menu" 
             [matMenuTriggerData]="{ xPosition: 'center', yPosition: 'above' }"
             *ngIf="isLoggedIn; else loginRedirect"
+            matBadge="{{ unreadNotificationCount + unreadMessagesCount }}"
+            matBadgeColor="warn"
+            [matBadgeHidden]="(unreadNotificationCount + unreadMessagesCount) === 0"
+            matBadgeOverlap="false"
+            matBadgePosition="above after"
         >
             <ng-container *ngIf="!this.currentUser?.avatarUrl; else avatarImage">
                 <mat-icon fontIcon="person"></mat-icon>
@@ -77,16 +82,36 @@
                 <span>{{ 'navbar.profile' | translate }}</span>
             </button>
 
+            <button mat-menu-item [routerLink]="['/friends']">
+                <mat-icon>group</mat-icon>
+                <span>Znajomi</span>
+            </button>
+
              <!-- Notification -->
-            <button mat-menu-item [routerLink]="['/notification']">
-                <mat-icon>notifications</mat-icon>
+            <button mat-menu-item [routerLink]="['/notification']" (click)="goToNotifications()">
+                <mat-icon 
+                    matBadge="{{ unreadNotificationCount }}"
+                    matBadgeColor="warn"
+                    matBadgeHidden="{{ unreadNotificationCount === 0 }}"
+                    matBadgePosition="above after"
+                >
+                    notifications
+                </mat-icon>
                 <span>Powiadomienia</span>
             </button>
 
-            <button mat-menu-item [routerLink]="['/message']">
-                <mat-icon>message</mat-icon>
+            <button mat-menu-item [routerLink]="['/message']" (click)="goToMessages()">
+                <mat-icon
+                    matBadge="{{ unreadMessagesCount }}"
+                    matBadgeColor="warn"
+                    matBadgeHidden="{{ unreadMessagesCount === 0 }}"
+                    matBadgePosition="above after"
+                >
+                    message
+                </mat-icon>
                 <span>Wiadomości</span>
             </button>
+
     
             <!-- Settings -->
             <button mat-menu-item routerLink="/settings">
