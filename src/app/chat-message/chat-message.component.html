@@ -61,19 +61,28 @@
 
           <ng-template #tradeMessageBox>
             <div *ngIf="msg.trade as trade" class="trade-message-box">
-              <h4 *ngIf="msg.trade.status === 'pending'">Propozycja wymiany</h4>
-              <h4 *ngIf="msg.trade.status === 'ACCEPTED'">Propozycja zaakceptowana</h4>
-              <h4 *ngIf="msg.trade.status === 'CANCELED'">Propozycja anulowana</h4>
+              <h4 [ngSwitch]="msg.trade.status" [ngClass]="{
+                'status-pending': msg.trade.status === 'pending',
+                'status-accepted': msg.trade.status === 'ACCEPTED',
+                'status-canceled': msg.trade.status === 'CANCELED'
+              }">
+                <ng-container *ngSwitchCase="'pending'">Propozycja wymiany</ng-container>
+                <ng-container *ngSwitchCase="'ACCEPTED'">Propozycja zaakceptowana</ng-container>
+                <ng-container *ngSwitchCase="'CANCELED'">Propozycja anulowana</ng-container>
+                <ng-container *ngSwitchDefault>Status nieznany</ng-container>
+              </h4>
+
               
               <div class="trade-preview">
                 <div class="preview-section">
                   <strong>Figurki nadawcy:</strong>
                   <ul>
                     <div class="trade-figure" *ngFor="let fig of msg.trade?.initiatorFigures; trackBy: trackById">
-                      <div class="figure-info">
+                      <div class="figure-info" [ngClass]="{ 'canceled': msg.trade.status === 'CANCELED' }">
                         <span class="figure-name">{{ fig.name }}</span>
                         <span class="figure-number">#{{ fig.number }}</span>
                       </div>
+
                       <img [src]="apiUrl + fig.imageUrl" alt="{{ fig.name }}" class="figure-image" />
                     </div>
                   </ul>
@@ -82,7 +91,7 @@
                   <strong>Oczekiwane figurki:</strong>
                   <ul>
                     <div class="trade-figure" *ngFor="let fig of msg.trade?.recipientFigures; trackBy: trackById">
-                      <div class="figure-info">
+                      <div class="figure-info" [ngClass]="{ 'canceled': msg.trade.status === 'CANCELED' }">
                         <span class="figure-name">{{ fig.name }}</span>
                         <span class="figure-number">#{{ fig.number }}</span>
                       </div>

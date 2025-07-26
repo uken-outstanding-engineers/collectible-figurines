@@ -11,6 +11,8 @@ import { ActivityLog } from '../api/activity-logs.model';
 import { ActivityLogsService } from '../api/activity-logs.service';
 import { API_URL } from '../api/api-url';
 
+import { TranslationService } from '../services/translation.service';
+
 @Component({
   selector: 'app-admin-panel-log-list',
   standalone: true,
@@ -35,7 +37,16 @@ export class AdminPanelLogListComponent implements OnInit {
   displayedColumns: string[] = [
     'date', 'action', 'name', 'username',
   ];
-  
+
+  actionLabels: Record<string, string> = {
+    ADD_FIGURINE: 'Dodano figurkę',
+    EDIT_FIGURINE: 'Edytowano figurkę',
+    DELETE_FIGURINE: 'Usunięto figurkę',
+    ADD_FANDOM: 'Dodano fandom',
+    EDIT_FANDOM: 'Edytowano fandom',
+    DELETE_FANDOM: 'Usunięto fandom',
+  };
+
   constructor(private activityLogsService: ActivityLogsService) {}
 
   ngOnInit(): void {

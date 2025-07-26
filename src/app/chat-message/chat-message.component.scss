@@ -336,6 +336,24 @@ $radius-message-box: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+.status-accepted {
+  color: #4caf50;
+}
+
+.status-canceled {
+  color: #f44336;
+}
+
+.figure-info.canceled {
+  opacity: 0.6;
+}
+
+.figure-info.canceled .figure-name,
+.figure-info.canceled .figure-number {
+  text-decoration: line-through;
+}
+
+
 /* TRADE BOX */
 .trade-box {
   width: 100%;
@@ -442,7 +460,7 @@ $radius-message-box: 20px;
       border-bottom: 1px solid #eee;
       margin-bottom: 12px;
       padding-bottom: 6px;
-      color: #2a2a2a;
+      //color: #2a2a2a;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
